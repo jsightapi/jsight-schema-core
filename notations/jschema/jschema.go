@@ -23,7 +23,7 @@ type JSchema struct {
 
 	Rules map[string]schema.Rule
 
-	UsedUserTypes_ *StringSet // TODO private
+	UsedUserTypes_ *StringSet
 
 	LenOnce     sync.ErrOnceWithValue[uint]
 	LoadOnce    sync.ErrOnce
@@ -53,6 +53,25 @@ func FromFile(f *fs.File, oo ...Option) *JSchema {
 	}
 
 	return s
+}
+
+func FromRSchema(s *regex.RSchema) (*JSchema, error) {
+	pattern, err := s.Pattern()
+	if err != nil {
+		return nil, err
+	}
+
+	example, err := s.Example()
+	if err != nil {
+		return nil, fmt.Errorf("generate example for Regex type: %w", err)
+	}
+
+	ss := New(s.File.Name(), fmt.Sprintf("%q // {regex: %q}", example, pattern))
+	if err = ss.load(); err != nil {
+		return nil, fmt.Errorf("load added type: %w", err)
+	}
+
+	return ss, nil
 }
 
 type Option func(s *JSchema)
@@ -106,19 +125,9 @@ func (s *JSchema) AddType(name string, sc schema.Schema) (err error) {
 
 		s.Inner.AddNamedType(name, typ.Inner, s.File, 0)
 	case *regex.RSchema:
-		pattern, err := typ.Pattern()
+		typSc, err := FromRSchema(typ)
 		if err != nil {
 			return err
-		}
-
-		example, err := typ.Example()
-		if err != nil {
-			return fmt.Errorf("generate example for Regex type: %w", err)
-		}
-
-		typSc := New(name, fmt.Sprintf("%q // {regex: %q}", example, pattern))
-		if err := typSc.load(); err != nil {
-			return fmt.Errorf("load added type: %w", err)
 		}
 
 		s.Inner.AddNamedType(name, typSc.Inner, s.File, 0)

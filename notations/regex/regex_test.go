@@ -127,6 +127,7 @@ func TestSchema_GetAST(t *testing.T) {
 		assert.Equal(t, schema.ASTNode{
 			TokenType:  schema.TokenTypeString,
 			SchemaType: string(schema.SchemaTypeString),
+			Rules:      &schema.RuleASTNodes{},
 			Value:      "/" + complexRegexPattern + "/",
 		}, actual)
 	})

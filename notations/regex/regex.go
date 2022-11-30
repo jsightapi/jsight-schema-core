@@ -113,7 +113,7 @@ func (s *RSchema) GetAST() (schema.ASTNode, error) {
 		IsKeyShortcut: false,
 		TokenType:     schema.TokenTypeString,
 		SchemaType:    string(schema.SchemaTypeString),
-		Rules:         nil,
+		Rules:         &schema.RuleASTNodes{},
 		Value:         "/" + s.pattern + "/",
 	}, nil
 }
