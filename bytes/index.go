@@ -1,8 +1,23 @@
 package bytes
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 type Index uint
+
+func (i Index) Int() int {
+	return int(i)
+}
+
+func (i Index) Uint() uint {
+	return uint(i)
+}
+
+func (i Index) String() string {
+	return strconv.Itoa(i.Int())
+}
 
 type Indexer interface {
 	int | uint | Index
