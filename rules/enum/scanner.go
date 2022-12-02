@@ -4,9 +4,10 @@ import (
 	stdErrors "errors"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/fs"
 	"github.com/jsightapi/jsight-schema-core/internal/ds"
+	"github.com/jsightapi/jsight-schema-core/kit"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 )
 
@@ -214,7 +215,7 @@ func (s *scanner) processTail() (lexeme.LexEvent, error) {
 		return s.processingFoundLexeme(lexeme.MultiLineAnnotationTextEnd)
 	}
 
-	err := errors.NewDocumentError(s.file, errors.ErrUnexpectedEOF)
+	err := kit.NewJSchemaError(s.file, errs.ErrUnexpectedEOF.F())
 	err.SetIndex(s.dataSize - 1)
 	return lexeme.LexEvent{}, err
 }
@@ -227,7 +228,7 @@ func (s *scanner) stateBegin(c byte) (state, error) {
 	}
 
 	if c != '[' {
-		err := errors.NewDocumentError(s.file, errors.ErrEnumArrayExpected)
+		err := kit.NewJSchemaError(s.file, errs.ErrEnumArrayExpected.F())
 		err.SetIndex(s.index - 1)
 		return scanSkip, err
 	}
@@ -374,8 +375,8 @@ func (s *scanner) validateValue() error {
 	v := s.file.Content().Sub(begin, s.index-1)
 	key := newEnumItem(v)
 	if _, ok := s.uniqueValues[key]; ok {
-		e := errors.Format(errors.ErrDuplicationInEnumRule, v.String())
-		err := errors.NewDocumentError(s.file, e)
+		e := errs.ErrDuplicationInEnumRule.F(v.String())
+		err := kit.NewJSchemaError(s.file, e)
 		err.SetIndex(begin)
 		return err
 	}
@@ -759,12 +760,12 @@ func (s *scanner) shiftFound() (lexeme.LexEventType, error) {
 	return lexType, nil
 }
 
-func (s *scanner) newDocumentErrorAtCharacter(context string) errors.DocumentError {
+func (s *scanner) newDocumentErrorAtCharacter(context string) kit.JSchemaError {
 	// Make runes (utf8 symbols) from current index to last of slice s.data.
 	// Get first rune. Then make string with format ' symbol '
 	r := s.data.SubLow(s.index - 1).DecodeRune()
-	e := errors.Format(errors.ErrInvalidCharacter, string(r), context)
-	err := errors.NewDocumentError(s.file, e)
+	e := errs.ErrInvalidCharacter.F(string(r), context)
+	err := kit.NewJSchemaError(s.file, e)
 	err.SetIndex(s.index - 1)
 	return err
 }

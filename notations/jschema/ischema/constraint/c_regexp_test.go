@@ -5,11 +5,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/jsightapi/jsight-schema-core/test"
+
+	"github.com/jsightapi/jsight-schema-core/errs"
+
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/json"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
 )
 
 func TestNewRegex(t *testing.T) {
@@ -57,7 +60,7 @@ func TestRegex_Validate(t *testing.T) {
 	})
 
 	t.Run("not valid", func(t *testing.T) {
-		assert.PanicsWithValue(t, errors.ErrDoesNotMatchRegularExpression, func() {
+		test.PanicsWithErr(t, errs.ErrDoesNotMatchRegularExpression.F(), func() {
 			cnstr.Validate(bytes.NewBytes("foo-"))
 		})
 	})

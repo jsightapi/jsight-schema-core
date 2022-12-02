@@ -1,23 +1,24 @@
-package errors
+package kit
 
 import (
 	"fmt"
 	"strings"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/fs"
 )
 
-// DocumentError contains methods for forming a detailed description of the error
+// JSchemaError contains methods for forming a detailed description of the error
 // for a person.
 // The resulting message will contain the filename, line number, and where the error
 // occurred.
-type DocumentError struct {
+type JSchemaError struct {
 	// A file containing jSchema or JSON data.
 	file              *fs.File
 	message           string
 	incorrectUserType string
-	code              ErrorCode
+	code              errs.Code
 
 	// index of the byte in which the error was found.
 	index bytes.Index
@@ -40,69 +41,65 @@ type DocumentError struct {
 }
 
 var (
-	_ Error = DocumentError{}
-	_ error = DocumentError{}
+	_ Error = JSchemaError{}
+	_ error = JSchemaError{}
 )
 
-func NewDocumentError(file *fs.File, err Err) DocumentError {
-	return DocumentError{
-		code:    err.Code(),
-		message: err.Error(),
+func NewJSchemaError(file *fs.File, e *errs.Err) JSchemaError {
+	return JSchemaError{
+		code:    e.Code(),
+		message: e.Error(),
 		file:    file,
 	}
 }
 
-func (e DocumentError) Code() ErrorCode {
+func (e JSchemaError) Code() errs.Code {
 	return e.code
 }
 
-func (e DocumentError) ErrCode() int {
+func (e JSchemaError) ErrCode() int {
 	return int(e.code)
 }
 
-func (e DocumentError) Filename() string {
+func (e JSchemaError) Filename() string {
 	if e.file == nil {
 		return ""
 	}
 	return e.file.Name()
 }
 
-func (e DocumentError) Message() string {
+func (e JSchemaError) Message() string {
 	return e.message
 }
 
-func (e DocumentError) Position() uint {
-	return uint(e.index)
+func (e JSchemaError) Index() uint {
+	return e.index.Uint()
 }
 
-func (e DocumentError) Index() bytes.Index {
-	return e.index
-}
-
-func (e *DocumentError) SetIndex(index bytes.Index) {
+func (e *JSchemaError) SetIndex(index bytes.Index) {
 	e.index = index
 	e.hasIndex = true
 	e.countLineAndColumn()
 }
 
-func (e DocumentError) IncorrectUserType() string {
+func (e JSchemaError) IncorrectUserType() string {
 	return e.incorrectUserType
 }
 
-func (e *DocumentError) SetIncorrectUserType(s string) {
+func (e *JSchemaError) SetIncorrectUserType(s string) {
 	e.incorrectUserType = s
 }
 
-func (e *DocumentError) SetFile(file *fs.File) {
+func (e *JSchemaError) SetFile(file *fs.File) {
 	e.file = file
 }
 
-func (e *DocumentError) SetMessage(message string) {
+func (e *JSchemaError) SetMessage(message string) {
 	e.message = message
 }
 
 // The method performs preparatory calculations, the results of which are used in other methods.
-func (e *DocumentError) preparation() {
+func (e *JSchemaError) preparation() {
 	if e.prepared {
 		return
 	}
@@ -119,7 +116,7 @@ func (e *DocumentError) preparation() {
 
 // lineBeginning
 // Before calling this method, you must run the e.preparation().
-func (e DocumentError) lineBeginning() bytes.Index {
+func (e JSchemaError) lineBeginning() bytes.Index {
 	content := e.file.Content()
 	i := e.index
 	if content.LenIndex() <= i {
@@ -143,7 +140,7 @@ func (e DocumentError) lineBeginning() bytes.Index {
 
 // lineEnd
 // Before calling this method, you must run the e.preparation().
-func (e DocumentError) lineEnd() bytes.Index {
+func (e JSchemaError) lineEnd() bytes.Index {
 	content := e.file.Content()
 	i := e.index
 	if content.LenIndex() <= i {
@@ -166,15 +163,15 @@ func (e DocumentError) lineEnd() bytes.Index {
 }
 
 // Line returns 0 if the line number cannot be determined, or 1+ if it can.
-func (e DocumentError) Line() uint {
+func (e JSchemaError) Line() uint {
 	return uint(e.line)
 }
 
-func (e DocumentError) Column() uint {
+func (e JSchemaError) Column() uint {
 	return uint(e.column)
 }
 
-func (e *DocumentError) countLineAndColumn() {
+func (e *JSchemaError) countLineAndColumn() {
 	if e.file == nil {
 		e.line = 0
 		e.column = 0
@@ -184,7 +181,7 @@ func (e *DocumentError) countLineAndColumn() {
 }
 
 // SourceSubString returns empty string, if cannot determine the source sub-string.
-func (e *DocumentError) SourceSubString() string {
+func (e *JSchemaError) SourceSubString() string {
 	const maxLength = 200
 
 	if e.file == nil || e.file.Content().Len() == 0 {
@@ -205,7 +202,7 @@ func (e *DocumentError) SourceSubString() string {
 	return content.Sub(begin, end).TrimSpacesFromLeft().String()
 }
 
-func (e *DocumentError) pointerToTheErrorCharacter() string {
+func (e *JSchemaError) pointerToTheErrorCharacter() string {
 	e.preparation()
 
 	content := e.file.Content()
@@ -216,13 +213,13 @@ func (e *DocumentError) pointerToTheErrorCharacter() string {
 	return strings.Repeat("-", i) + "^"
 }
 
-func (e DocumentError) Error() string {
+func (e JSchemaError) Error() string {
 	return e.String()
 }
 
-func (e *DocumentError) String() string {
+func (e *JSchemaError) String() string {
 	var prefix string
-	if e.code == ErrGeneric {
+	if e.code == errs.ErrGeneric {
 		prefix = "ERROR"
 	} else {
 		prefix = "ERROR (code " + e.code.Itoa() + ")"

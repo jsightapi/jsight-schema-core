@@ -5,11 +5,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/jsightapi/jsight-schema-core/test"
+
+	"github.com/jsightapi/jsight-schema-core/errs"
+
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
 	"github.com/jsightapi/jsight-schema-core/fs"
 	"github.com/jsightapi/jsight-schema-core/internal/mocks"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
@@ -98,7 +101,7 @@ func TestEnumValueLoader_begin(t *testing.T) {
 			l := &enumValueLoader{}
 
 			if shouldPanic {
-				assert.PanicsWithValue(t, errors.ErrInvalidValueInEnumRule, func() {
+				test.PanicsWithErr(t, errs.ErrInvalidValueInEnumRule.F(), func() {
 					l.begin(newFakeLexEvent(typ))
 				})
 			} else {
@@ -210,7 +213,7 @@ func TestEnumValueLoader_arrayItemBeginOrArrayEnd(t *testing.T) {
 			}
 
 			if c.shouldPanic {
-				assert.PanicsWithValue(t, errors.ErrLoader, func() {
+				test.PanicsWithErr(t, errs.ErrLoader.F(), func() {
 					l.arrayItemBeginOrArrayEnd(newFakeLexEvent(typ))
 				})
 			} else {
@@ -259,7 +262,7 @@ func TestEnumValueLoader_commentStart(t *testing.T) {
 			l := &enumValueLoader{}
 
 			if shouldPanic {
-				assert.PanicsWithValue(t, errors.ErrLoader, func() {
+				test.PanicsWithErr(t, errs.ErrLoader.F(), func() {
 					l.commentStart(newFakeLexEvent(typ))
 				})
 			} else {
@@ -310,7 +313,7 @@ func TestEnumValueLoader_commentEnd(t *testing.T) {
 			l := newEnumValueLoader(c, nil)
 
 			if shouldPanic {
-				assert.PanicsWithValue(t, errors.ErrLoader, func() {
+				test.PanicsWithErr(t, errs.ErrLoader.F(), func() {
 					l.commentEnd(newFakeLexEvent(typ))
 				})
 			} else {
@@ -373,7 +376,7 @@ func TestEnumValueLoader_annotationEnd(t *testing.T) {
 			l := &enumValueLoader{}
 
 			if shouldPanic {
-				assert.PanicsWithValue(t, errors.ErrLoader, func() {
+				test.PanicsWithErr(t, errs.ErrLoader.F(), func() {
 					l.annotationEnd(newFakeLexEvent(typ))
 				})
 			} else {
@@ -416,7 +419,7 @@ func TestEnumValueLoader_literal(t *testing.T) {
 
 	for _, typ := range shouldPanics {
 		t.Run(typ.String(), func(t *testing.T) {
-			assert.PanicsWithValue(t, errors.ErrIncorrectArrayItemTypeInEnumRule, func() {
+			test.PanicsWithErr(t, errs.ErrIncorrectArrayItemTypeInEnumRule.F(), func() {
 				(&enumValueLoader{}).literal(newFakeLexEvent(typ))
 			})
 		})
@@ -489,7 +492,7 @@ func TestEnumValueLoader_arrayItemEnd(t *testing.T) {
 			l := &enumValueLoader{}
 
 			if shouldPanic {
-				assert.PanicsWithValue(t, errors.ErrLoader, func() {
+				test.PanicsWithErr(t, errs.ErrLoader.F(), func() {
 					l.arrayItemEnd(newFakeLexEvent(typ))
 				})
 			} else {
@@ -537,7 +540,7 @@ func TestEnumValueLoader_ruleNameBegin(t *testing.T) {
 			l := &enumValueLoader{}
 
 			if shouldPanic {
-				assert.PanicsWithValue(t, errors.ErrLoader, func() {
+				test.PanicsWithErr(t, errs.ErrLoader.F(), func() {
 					l.ruleNameBegin(newFakeLexEvent(typ))
 				})
 			} else {
@@ -596,7 +599,7 @@ func TestEnumValueLoader_ruleName(t *testing.T) {
 
 		for _, typ := range types {
 			t.Run(typ.String(), func(t *testing.T) {
-				assert.PanicsWithValue(t, errors.ErrLoader, func() {
+				test.PanicsWithErr(t, errs.ErrLoader.F(), func() {
 					(&enumValueLoader{}).ruleName(newFakeLexEvent(typ))
 				})
 			})
@@ -659,7 +662,7 @@ func TestEnumValueLoader_endOfLoading(t *testing.T) {
 
 	for _, typ := range types {
 		t.Run(typ.String(), func(t *testing.T) {
-			assert.PanicsWithValue(t, errors.ErrLoader, func() {
+			test.PanicsWithErr(t, errs.ErrLoader.F(), func() {
 				(&enumValueLoader{}).endOfLoading(newFakeLexEvent(typ))
 			})
 		})

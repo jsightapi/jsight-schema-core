@@ -5,15 +5,15 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
 )
 
-func addShortcutConstraint(node ischema.Node, rootSchema *ischema.ISchema, lex lexeme.LexEvent) error {
+func addShortcutConstraint(node ischema.Node, rootSchema *ischema.ISchema, lex lexeme.LexEvent) *errs.Err {
 	if lex.Type() != lexeme.TypesShortcutEnd {
-		return errors.ErrLoader
+		return errs.ErrLoader.F()
 	}
 
 	// At this point lexeme value is valid, and we can safely use it.

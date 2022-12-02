@@ -2,8 +2,8 @@ package loader
 
 import (
 	schema "github.com/jsightapi/jsight-schema-core"
+	"github.com/jsightapi/jsight-schema-core/errs"
 
-	"github.com/jsightapi/jsight-schema-core/errors"
 	"github.com/jsightapi/jsight-schema-core/json"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
@@ -66,7 +66,7 @@ func (a *orValueLoader) Load(lex lexeme.LexEvent) bool {
 func (a *orValueLoader) nodeTypesListConstraint() *constraint.TypesList {
 	c := a.node.Constraint(constraint.TypesListConstraintType)
 	if c == nil {
-		panic(errors.ErrLoader) // constraint not found
+		panic(errs.ErrLoader.F()) // constraint not found
 	}
 	return c.(*constraint.TypesList)
 }
@@ -74,7 +74,7 @@ func (a *orValueLoader) nodeTypesListConstraint() *constraint.TypesList {
 // begin of array "["
 func (a *orValueLoader) begin(lex lexeme.LexEvent) {
 	if lex.Type() != lexeme.ArrayBegin {
-		panic(errors.ErrArrayWasExpectedInOrRule)
+		panic(errs.ErrArrayWasExpectedInOrRule.F())
 	}
 	a.stateFunc = a.itemBeginOrArrayEnd
 }
@@ -90,14 +90,14 @@ func (a *orValueLoader) itemBeginOrArrayEnd(lex lexeme.LexEvent) {
 	case lexeme.ArrayEnd:
 		switch a.nodeTypesListConstraint().Len() {
 		case 0:
-			panic(errors.ErrEmptyArrayInOrRule)
+			panic(errs.ErrEmptyArrayInOrRule.F())
 		case 1:
-			panic(errors.ErrOneElementInArrayInOrRule)
+			panic(errs.ErrOneElementInArrayInOrRule.F())
 		}
 		a.stateFunc = a.endOfLoading
 		a.inProgress = false
 	default:
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 }
 
@@ -113,7 +113,7 @@ func (a *orValueLoader) itemInner(lex lexeme.LexEvent) {
 		a.ruleSetLoader.Load(lex)
 		a.stateFunc = a.itemEnd
 	default:
-		panic(errors.ErrIncorrectArrayItemTypeInOrRule) // ex: array
+		panic(errs.ErrIncorrectArrayItemTypeInOrRule.F()) // ex: array
 	}
 }
 
@@ -122,11 +122,11 @@ func (a *orValueLoader) itemInner(lex lexeme.LexEvent) {
 // ex: ["string" <--
 func (a *orValueLoader) literal(lex lexeme.LexEvent) {
 	if lex.Type() != lexeme.LiteralEnd {
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 
 	if json.Guess(lex.Value()).LiteralJsonType() != json.TypeString {
-		panic(errors.ErrIncorrectArrayItemTypeInOrRule)
+		panic(errs.ErrIncorrectArrayItemTypeInOrRule.F())
 	}
 
 	val := lex.Value().Unquote()
@@ -165,7 +165,7 @@ func (a *orValueLoader) literal(lex lexeme.LexEvent) {
 // ex: [{...} <--
 func (a *orValueLoader) itemEnd(lex lexeme.LexEvent) {
 	if lex.Type() != lexeme.ArrayItemEnd {
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 	a.stateFunc = a.itemBeginOrArrayEnd
 }
@@ -173,5 +173,5 @@ func (a *orValueLoader) itemEnd(lex lexeme.LexEvent) {
 // endOfLoading the method should not be called during normal operation. Ensures
 // that the loader will not continue to work after the load is complete.
 func (*orValueLoader) endOfLoading(lexeme.LexEvent) {
-	panic(errors.ErrLoader)
+	panic(errs.ErrLoader.F())
 }

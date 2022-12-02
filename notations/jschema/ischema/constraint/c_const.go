@@ -5,7 +5,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -30,7 +30,7 @@ func NewConst(value, nodeValue bytes.Bytes) *Const {
 
 	var err error
 	if c.apply, err = value.ParseBool(); err != nil {
-		panic(errors.Format(errors.ErrInvalidValueOfConstraint, ConstConstraintType.String()))
+		panic(errs.ErrInvalidValueOfConstraint.F(ConstConstraintType.String()))
 	}
 	return &c
 }
@@ -60,7 +60,7 @@ func (c Const) Validate(v bytes.Bytes) {
 	}
 
 	if v.String() != c.nodeValue.String() {
-		panic(errors.Format(errors.ErrInvalidConst, c.nodeValue.String()))
+		panic(errs.ErrInvalidConst.F(c.nodeValue.String()))
 	}
 }
 

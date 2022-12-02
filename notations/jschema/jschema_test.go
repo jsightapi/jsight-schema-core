@@ -275,7 +275,7 @@ func TestSchema_AddType(t *testing.T) {
 
 			require.NotNil(t, root.Inner)
 			actualType, err := root.Inner.Type("@foo")
-			require.NoError(t, err)
+			require.Nil(t, err)
 			assert.Equal(t, typ.Inner, actualType)
 		})
 
@@ -4122,7 +4122,7 @@ line
 				}
 
 				_, err := s.GetAST()
-				assert.EqualError(t, err, expected)
+				assert.Equal(t, err.Error(), expected)
 			})
 		}
 	})

@@ -5,7 +5,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -22,7 +22,7 @@ func NewExclusiveMaximum(ruleValue bytes.Bytes) *ExclusiveMaximum {
 	c := ExclusiveMaximum{}
 	var err error
 	if c.exclusive, err = ruleValue.ParseBool(); err != nil {
-		panic(errors.Format(errors.ErrInvalidValueOfConstraint, ExclusiveMaximumConstraintType.String()))
+		panic(errs.ErrInvalidValueOfConstraint.F(ExclusiveMaximumConstraintType.String()))
 	}
 	return &c
 }

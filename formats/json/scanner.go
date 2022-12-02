@@ -2,9 +2,10 @@ package json
 
 import (
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/fs"
 	"github.com/jsightapi/jsight-schema-core/internal/ds"
+	"github.com/jsightapi/jsight-schema-core/kit"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 )
 
@@ -157,7 +158,7 @@ func (s *scanner) Next() (lexeme.LexEvent, bool) {
 		case lexeme.InlineAnnotationTextBegin:
 			return s.processingFoundLexeme(lexeme.InlineAnnotationTextEnd), true
 		}
-		err := errors.NewDocumentError(s.file, errors.ErrUnexpectedEOF)
+		err := kit.NewJSchemaError(s.file, errs.ErrUnexpectedEOF.F())
 		err.SetIndex(s.dataSize - 1)
 		panic(err)
 	}
@@ -738,12 +739,12 @@ func stateNul(s *scanner, c byte) state {
 	panic(s.newDocumentErrorAtCharacter("in literal null (expecting 'l')"))
 }
 
-func (s *scanner) newDocumentErrorAtCharacter(context string) errors.DocumentError {
+func (s *scanner) newDocumentErrorAtCharacter(context string) kit.JSchemaError {
 	// Make runes (utf8 symbols) from current index to last of slice s.data.
 	// Get first rune. Then make string with format ' symbol '
 	r := s.data.SubLow(s.index - 1).DecodeRune()
-	e := errors.Format(errors.ErrInvalidCharacter, string(r), context)
-	err := errors.NewDocumentError(s.file, e)
+	e := errs.ErrInvalidCharacter.F(string(r), context)
+	err := kit.NewJSchemaError(s.file, e)
 	err.SetIndex(s.index - 1)
 	return err
 }

@@ -7,7 +7,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -39,7 +39,7 @@ func (UUID) String() string {
 func (UUID) Validate(value bytes.Bytes) {
 	err := parseBytes(value.Unquote().Data())
 	if err != nil {
-		panic(errors.Format(errors.ErrInvalidUuid, err))
+		panic(errs.ErrInvalidUuid.F(err))
 	}
 }
 

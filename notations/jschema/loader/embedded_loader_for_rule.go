@@ -2,7 +2,7 @@ package loader
 
 import (
 	schema "github.com/jsightapi/jsight-schema-core"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
@@ -69,7 +69,7 @@ func (rl *ruleLoader) begin(lex lexeme.LexEvent) {
 		rl.stateFunc = rl.ruleKeyOrObjectEnd
 
 	default:
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 }
 
@@ -81,7 +81,7 @@ func (rl *ruleLoader) commentTextBegin(lex lexeme.LexEvent) {
 	case lexeme.InlineAnnotationTextBegin, lexeme.MultiLineAnnotationTextBegin:
 		rl.stateFunc = rl.commentTextEnd
 	default:
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 }
 
@@ -93,7 +93,7 @@ func (rl *ruleLoader) commentTextEnd(lex lexeme.LexEvent) {
 		}
 		rl.stateFunc = rl.endOfLoading
 	default:
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 }
 
@@ -106,7 +106,7 @@ func (rl *ruleLoader) ruleKeyOrObjectEnd(lex lexeme.LexEvent) {
 	case lexeme.ObjectEnd:
 		rl.stateFunc = rl.commentTextBegin
 	default:
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 }
 
@@ -119,22 +119,22 @@ func (rl *ruleLoader) objectEndAfterRuleName(lex lexeme.LexEvent) {
 	case lexeme.ObjectEnd:
 		rl.stateFunc = rl.commentTextBegin
 	default:
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 }
 
 func (rl *ruleLoader) ruleValueBegin(lex lexeme.LexEvent) {
 	if lex.Type() != lexeme.ObjectValueBegin {
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 	rl.stateFunc = rl.ruleValue
 }
 
 func (rl *ruleLoader) ruleValue(lex lexeme.LexEvent) {
 	if rl.nodesPerCurrentLineCount == 0 {
-		panic(errors.ErrIncorrectRuleWithoutExample)
+		panic(errs.ErrIncorrectRuleWithoutExample.F())
 	} else if rl.nodesPerCurrentLineCount != 1 {
-		panic(errors.ErrIncorrectRuleForSeveralNode)
+		panic(errs.ErrIncorrectRuleForSeveralNode.F())
 	}
 
 	ruleName := rl.ruleNameLex.Value().TrimSpaces().Unquote().String()
@@ -163,7 +163,7 @@ func (rl *ruleLoader) ruleValue(lex lexeme.LexEvent) {
 
 	default:
 		if lex.Type() != lexeme.LiteralBegin {
-			panic(errors.ErrIncorrectRuleValueType)
+			panic(errs.ErrIncorrectRuleValueType.F())
 		}
 
 		rl.stateFunc = rl.ruleValueLiteral
@@ -172,7 +172,7 @@ func (rl *ruleLoader) ruleValue(lex lexeme.LexEvent) {
 
 func (rl *ruleLoader) ruleValueLiteral(ruleValue lexeme.LexEvent) {
 	if ruleValue.Type() != lexeme.LiteralEnd {
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 	c := constraint.NewConstraintFromRule(rl.ruleNameLex, ruleValue.Value(), rl.node.Value()) // can panic
 	rl.node.AddConstraint(c)
@@ -197,12 +197,12 @@ func (rl *ruleLoader) ruleValueEnd(lex lexeme.LexEvent) {
 	case lexeme.MixedValueEnd:
 		rl.stateFunc = rl.objectEndAfterRuleName
 	default:
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 }
 
 // The method should not be called during normal operation. Ensures that the loader will not continue to work after
 // the load is complete.
 func (*ruleLoader) endOfLoading(lexeme.LexEvent) {
-	panic(errors.ErrLoader)
+	panic(errs.ErrLoader.F())
 }

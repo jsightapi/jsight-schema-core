@@ -1,13 +1,14 @@
 package checker
 
 import (
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
+	"github.com/jsightapi/jsight-schema-core/kit"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
 )
 
 type nodeChecker interface {
-	Check(lexeme.LexEvent) errors.Error
+	Check(lexeme.LexEvent) kit.Error
 }
 
 func newNodeChecker(node ischema.Node) (nodeChecker, error) {
@@ -25,6 +26,6 @@ func newNodeChecker(node ischema.Node) (nodeChecker, error) {
 		return newMixedChecker(node), nil
 
 	default:
-		return nil, errors.ErrImpossible
+		return nil, errs.ErrImpossible.F()
 	}
 }

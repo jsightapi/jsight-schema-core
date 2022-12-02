@@ -3,7 +3,7 @@ package checker
 import (
 	"strings"
 
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
 )
 
@@ -129,7 +129,7 @@ func (c *recursionChecker) check(node ischema.Node, types map[string]ischema.Typ
 		}
 
 	default:
-		return errors.ErrImpossible
+		return errs.ErrImpossible.F()
 	}
 
 	return nil
@@ -143,16 +143,16 @@ func (c *recursionChecker) checkMixedValueNode(
 
 	// We should check all types and return an error only if all paths leads
 	// to infinity recursion.
-	errs := make([]error, 0, len(tt))
+	ee := make([]error, 0, len(tt))
 	for _, t := range tt {
 		if err := c.checkType(t, types); err != nil {
-			errs = append(errs, err)
+			ee = append(ee, err)
 		}
 	}
 
-	if len(errs) > 0 && len(errs) == len(tt) {
+	if len(ee) > 0 && len(ee) == len(tt) {
 		// Just return first found error.
-		return errs[0]
+		return ee[0]
 	}
 	return nil
 }
@@ -190,5 +190,5 @@ func (c *recursionChecker) leave(typeName string) {
 }
 
 func (c *recursionChecker) createError() error {
-	return errors.Format(errors.ErrInfinityRecursionDetected, strings.Join(c.path, " -> "))
+	return errs.ErrInfinityRecursionDetected.F(strings.Join(c.path, " -> "))
 }

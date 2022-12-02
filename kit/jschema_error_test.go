@@ -1,4 +1,4 @@
-package errors
+package kit
 
 import (
 	"fmt"
@@ -14,7 +14,7 @@ import (
 func TestDocumentError_preparation(t *testing.T) {
 	t.Run("positive", func(t *testing.T) {
 		t.Run("not prepared", func(t *testing.T) {
-			e := DocumentError{file: fs.NewFile("", "123456")}
+			e := JSchemaError{file: fs.NewFile("", "123456")}
 			e.preparation()
 
 			assert.EqualValues(t, 6, e.length)
@@ -24,7 +24,7 @@ func TestDocumentError_preparation(t *testing.T) {
 
 	t.Run("negative", func(t *testing.T) {
 		assert.PanicsWithValue(t, "The file is not specified", func() {
-			(&DocumentError{}).preparation()
+			(&JSchemaError{}).preparation()
 		})
 	})
 }
@@ -216,8 +216,8 @@ func TestDocumentError_SourceSubString(t *testing.T) {
 	})
 }
 
-func newFakeDocumentError(f *fs.File, idx bytes.Index) DocumentError {
-	e := DocumentError{}
+func newFakeDocumentError(f *fs.File, idx bytes.Index) JSchemaError {
+	e := JSchemaError{}
 	e.SetFile(f)
 	e.SetIndex(idx)
 	e.preparation()

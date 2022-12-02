@@ -6,11 +6,12 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/internal/mocks"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
+	"github.com/jsightapi/jsight-schema-core/test"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -427,7 +428,7 @@ func TestSchemaCompiler_emptyArray(t *testing.T) {
 
 		for n, given := range cc {
 			t.Run(n, func(t *testing.T) {
-				assert.PanicsWithValue(t, errors.ErrIncorrectConstraintValueForEmptyArray, func() {
+				test.PanicsWithErr(t, errs.ErrIncorrectConstraintValueForEmptyArray.F(), func() {
 					schemaCompiler{}.emptyArray(given)
 				})
 			})

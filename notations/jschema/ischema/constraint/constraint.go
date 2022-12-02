@@ -3,7 +3,7 @@ package constraint
 import (
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 )
@@ -80,5 +80,5 @@ func NewConstraintFromRule( //nolint:gocyclo // For now it's okay.
 	case "const":
 		return NewConst(ruleValue, nodeValue)
 	}
-	panic(lexeme.NewLexEventError(ruleNameLex, errors.Format(errors.ErrUnknownRule, str)))
+	panic(lexeme.NewError(ruleNameLex, errs.ErrUnknownRule.F(str)))
 }

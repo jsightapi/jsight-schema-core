@@ -2,8 +2,8 @@ package ischema
 
 import (
 	schema "github.com/jsightapi/jsight-schema-core"
+	"github.com/jsightapi/jsight-schema-core/errs"
 
-	"github.com/jsightapi/jsight-schema-core/errors"
 	"github.com/jsightapi/jsight-schema-core/json"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 )
@@ -70,7 +70,7 @@ func (n ArrayNode) Len() int {
 func (n ArrayNode) Child(i uint) Node {
 	length := uint(len(n.children))
 	if length == 0 {
-		panic(errors.ErrElementNotFoundInArray)
+		panic(errs.ErrElementNotFoundInArray.F())
 	} else if i >= length {
 		i = length - 1
 	}

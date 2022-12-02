@@ -5,10 +5,13 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/jsightapi/jsight-schema-core/test"
+
+	"github.com/jsightapi/jsight-schema-core/errs"
+
 	"github.com/jsightapi/jsight-schema-core/json"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
 )
 
 func TestNewDateTime(t *testing.T) {
@@ -73,7 +76,7 @@ func TestDateTime_Validate(t *testing.T) {
 
 		for _, value := range tests {
 			t.Run(value, func(t *testing.T) {
-				assert.PanicsWithValue(t, errors.ErrInvalidDateTime, func() {
+				test.PanicsWithErr(t, errs.ErrInvalidDateTime.F(), func() {
 					NewDateTime().Validate(bytes.NewBytes(value))
 				})
 			})

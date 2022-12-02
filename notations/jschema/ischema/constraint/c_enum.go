@@ -6,7 +6,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -31,7 +31,7 @@ func (v enumItemValue) String() string {
 	if v.jsonType == json.TypeString {
 		b, err := stdJson.Marshal(v.value)
 		if err != nil {
-			panic(errors.ErrImpossible)
+			panic(errs.ErrImpossible.F())
 		}
 		return string(b)
 	} else {
@@ -88,7 +88,7 @@ func (c Enum) String() string {
 
 func (c *Enum) Append(i EnumItem) int {
 	if _, ok := c.uniqueIdx[i.enumItemValue]; ok {
-		panic(errors.Format(errors.ErrDuplicationInEnumRule, i.src.String()))
+		panic(errs.ErrDuplicationInEnumRule.F(i.src.String()))
 	}
 	idx := len(c.items)
 	c.items = append(c.items, i)
@@ -115,7 +115,7 @@ func (c Enum) Validate(a bytes.Bytes) {
 			return
 		}
 	}
-	panic(errors.ErrDoesNotMatchAnyOfTheEnumValues)
+	panic(errs.ErrDoesNotMatchAnyOfTheEnumValues.F())
 }
 
 func (c Enum) ASTNode() schema.RuleASTNode {

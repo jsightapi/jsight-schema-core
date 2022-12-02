@@ -1,7 +1,7 @@
 package loader
 
 import (
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
 )
@@ -45,7 +45,7 @@ func (l *allOfValueLoader) begin(lex lexeme.LexEvent) {
 	case lexeme.LiteralBegin:
 		l.stateFunc = l.scalarValue
 	default:
-		panic(errors.ErrUnacceptableValueInAllOfRule)
+		panic(errs.ErrUnacceptableValueInAllOfRule.F())
 	}
 }
 
@@ -58,7 +58,7 @@ func (l *allOfValueLoader) arrayItemBeginOrArrayEnd(lex lexeme.LexEvent) {
 		l.stateFunc = l.endOfLoading
 		l.inProgress = false
 	default:
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 }
 
@@ -70,20 +70,20 @@ func (l *allOfValueLoader) arrayItemValue(lex lexeme.LexEvent) {
 		l.allOfConstraint.Append(lex.Value())
 		l.stateFunc = l.arrayItemEnd
 	default:
-		panic(errors.ErrUnacceptableValueInAllOfRule)
+		panic(errs.ErrUnacceptableValueInAllOfRule.F())
 	}
 }
 
 func (l *allOfValueLoader) arrayItemEnd(lex lexeme.LexEvent) {
 	if lex.Type() != lexeme.ArrayItemEnd {
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 	l.stateFunc = l.arrayItemBeginOrArrayEnd
 }
 
 func (l *allOfValueLoader) scalarValue(lex lexeme.LexEvent) {
 	if lex.Type() != lexeme.LiteralEnd {
-		panic(errors.ErrUnacceptableValueInAllOfRule)
+		panic(errs.ErrUnacceptableValueInAllOfRule.F())
 	}
 	l.allOfConstraint.Append(lex.Value())
 	l.stateFunc = l.endOfLoading
@@ -93,5 +93,5 @@ func (l *allOfValueLoader) scalarValue(lex lexeme.LexEvent) {
 // endOfLoading the method should not be called during normal operation. Ensures
 // that the loader will not continue to work after the load is complete.
 func (*allOfValueLoader) endOfLoading(lexeme.LexEvent) {
-	panic(errors.ErrLoader)
+	panic(errs.ErrLoader.F())
 }

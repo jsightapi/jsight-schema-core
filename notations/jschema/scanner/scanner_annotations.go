@@ -2,7 +2,8 @@ package scanner
 
 import (
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
+	"github.com/jsightapi/jsight-schema-core/kit"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 )
 
@@ -25,7 +26,7 @@ func (*Scanner) isAnnotationStart(c byte) bool {
 
 func (s *Scanner) switchToAnnotation() {
 	if !s.allowAnnotation {
-		err := errors.NewDocumentError(s.file, errors.Format(errors.ErrAnnotationNotAllowed))
+		err := kit.NewJSchemaError(s.file, errs.ErrAnnotationNotAllowed.F())
 		err.SetIndex(s.index - 1)
 		panic(err)
 	}
@@ -269,7 +270,7 @@ func stateBeginAnnotationObjectKey(s *Scanner, c byte) state {
 
 func stateInAnnotationObjectKeyFirstLetter(s *Scanner, c byte) state {
 	if (s.boundary == 0 && (c == ':' || bytes.IsNewLine(c) || c == '\\')) || c == s.boundary || c < 0x20 {
-		panic(s.newDocumentError(errors.ErrInvalidCharacterInAnnotationObjectKey, c))
+		panic(s.newDocumentError(errs.ErrInvalidCharacterInAnnotationObjectKey, c))
 	}
 	s.step = stateInAnnotationObjectKey
 	return scanContinue
@@ -287,7 +288,7 @@ func stateInAnnotationObjectKey(s *Scanner, c byte) state {
 		s.step = stateInAnnotationObjectKeyAfter
 
 	case c < 0x20 || (c == '"' || bytes.IsNewLine(c)):
-		panic(s.newDocumentError(errors.ErrInvalidCharacterInAnnotationObjectKey, c))
+		panic(s.newDocumentError(errs.ErrInvalidCharacterInAnnotationObjectKey, c))
 	}
 	return scanContinue
 }
@@ -300,5 +301,5 @@ func stateInAnnotationObjectKeyAfter(s *Scanner, c byte) state {
 	case c == ' ':
 		return scanContinue
 	}
-	panic(s.newDocumentError(errors.ErrInvalidCharacterInAnnotationObjectKey, c))
+	panic(s.newDocumentError(errs.ErrInvalidCharacterInAnnotationObjectKey, c))
 }

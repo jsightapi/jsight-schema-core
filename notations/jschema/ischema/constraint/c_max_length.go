@@ -5,7 +5,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -41,8 +41,7 @@ func (c MaxLength) String() string {
 func (c MaxLength) Validate(value bytes.Bytes) {
 	length := uint(value.Unquote().Len())
 	if length > c.value {
-		panic(errors.Format(
-			errors.ErrConstraintStringLengthValidation,
+		panic(errs.ErrConstraintStringLengthValidation.F(
 			MaxLengthConstraintType.String(),
 			strconv.FormatUint(uint64(c.value), 10),
 		))

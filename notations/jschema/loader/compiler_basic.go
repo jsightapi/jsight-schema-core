@@ -2,9 +2,9 @@ package loader
 
 import (
 	schema "github.com/jsightapi/jsight-schema-core"
+	"github.com/jsightapi/jsight-schema-core/errs"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
 	"github.com/jsightapi/jsight-schema-core/json"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
@@ -80,7 +80,7 @@ func (schemaCompiler) orConstraint(node ischema.Node) {
 	}
 
 	if node.Constraint(constraint.TypesListConstraintType) == nil {
-		panic(errors.ErrLoader) // Links to the schema not found
+		panic(errs.ErrLoader.F()) // Links to the schema not found
 	}
 
 	// check for a permissible constraints
@@ -98,11 +98,11 @@ func (schemaCompiler) orConstraint(node ischema.Node) {
 	if typeConstraint := node.Constraint(constraint.TypeConstraintType); typeConstraint != nil {
 		n--
 		if t := typeConstraint.(*constraint.TypeConstraint).Bytes().String(); t != `"mixed"` {
-			panic(errors.Format(errors.ErrInvalidValueInTheTypeRule, t))
+			panic(errs.ErrInvalidValueInTheTypeRule.F(t))
 		}
 	}
 	if n != 0 {
-		panic(errors.ErrShouldBeNoOtherRulesInSetWithOr)
+		panic(errs.ErrShouldBeNoOtherRulesInSetWithOr.F())
 	}
 
 	ensureCanUseORConstraint(node)
@@ -127,13 +127,13 @@ func ensureCanUseORConstraint(node ischema.Node) {
 
 	ssl := node.Constraint(constraint.TypesListConstraintType).(*constraint.TypesList)
 	if ssl.HasUserTypes() {
-		panic(errors.ErrInvalidChildNodeTogetherWithOrRule)
+		panic(errs.ErrInvalidChildNodeTogetherWithOrRule.F())
 	}
 }
 
 func checkBranchNodeWithOrConstraint(schemaNode ischema.Node, jsonNode ischema.BranchNode) {
 	if jsonNode.Len() != 0 {
-		panic(errors.ErrInvalidChildNodeTogetherWithOrRule)
+		panic(errs.ErrInvalidChildNodeTogetherWithOrRule.F())
 	}
 
 	// Since "req.jschema.rules.or" we didn't allow empty object and arrays for
@@ -153,7 +153,7 @@ func checkBranchNodeWithOrConstraint(schemaNode ischema.Node, jsonNode ischema.B
 	}
 
 	if hasUserTypeInOr {
-		panic(errors.ErrInvalidChildNodeTogetherWithOrRule)
+		panic(errs.ErrInvalidChildNodeTogetherWithOrRule.F())
 	}
 }
 
@@ -177,11 +177,11 @@ func (schemaCompiler) enumConstraint(node ischema.Node) {
 	if typeConstraint := node.Constraint(constraint.TypeConstraintType); typeConstraint != nil {
 		n--
 		if t := typeConstraint.(*constraint.TypeConstraint).Bytes().String(); t != `"enum"` {
-			panic(errors.Format(errors.ErrInvalidValueInTheTypeRule, t))
+			panic(errs.ErrInvalidValueInTheTypeRule.F(t))
 		}
 	}
 	if n != 0 {
-		panic(errors.ErrShouldBeNoOtherRulesInSetWithEnum)
+		panic(errs.ErrShouldBeNoOtherRulesInSetWithEnum.F())
 	}
 }
 
@@ -216,17 +216,17 @@ func (schemaCompiler) typeConstraintForUserType(
 		n--
 	}
 	if n != 1 {
-		panic(errors.ErrCannotSpecifyOtherRulesWithTypeReference)
+		panic(errs.ErrCannotSpecifyOtherRulesWithTypeReference.F())
 	}
 
 	if _, ok := node.(ischema.BranchNode); ok {
 		// Since "req.jschema.rules.type.reference 0.2" we didn't allow
 		// empty object and arrays as well for the type constraint.
-		panic(errors.ErrInvalidChildNodeTogetherWithTypeReference)
+		panic(errs.ErrInvalidChildNodeTogetherWithTypeReference.F())
 	}
 
 	if _, ok := node.(*ischema.MixedValueNode); ok && !typeConstraint.IsGenerated() {
-		panic(errors.ErrInvalidChildNodeTogetherWithTypeReference)
+		panic(errs.ErrInvalidChildNodeTogetherWithTypeReference.F())
 	}
 
 	c := constraint.NewTypesList(schema.RuleASTNodeSourceManual)
@@ -246,11 +246,11 @@ func (schemaCompiler) typeConstraintForJSONTypes(node ischema.Node, val bytes.By
 		if mixedNode, ok := node.(*ischema.MixedNode); ok { // defined json type for mixed node
 			mixedNode.SetJsonType(t)
 		} else if t != node.Type() { // check json type for non-mixed node
-			panic(errors.Format(errors.ErrIncompatibleTypes, t.String()))
+			panic(errs.ErrIncompatibleTypes.F(t.String()))
 		}
 	}
 	if !node.SetRealType(valStr) {
-		panic(errors.Format(errors.ErrIncompatibleTypes, valStr))
+		panic(errs.ErrIncompatibleTypes.F(valStr))
 	}
 }
 
@@ -258,17 +258,17 @@ var jsonTypesHandler = map[string]func(node ischema.Node){
 	"mixed": func(node ischema.Node) {
 		typesListConstraint := node.Constraint(constraint.TypesListConstraintType)
 		if typesListConstraint == nil {
-			panic(errors.ErrNotFoundRuleOr)
+			panic(errs.ErrNotFoundRuleOr.F())
 		}
 
 		if typesListConstraint.(*constraint.TypesList).Len() < 2 {
-			panic(errors.ErrNotFoundRuleOr)
+			panic(errs.ErrNotFoundRuleOr.F())
 		}
 	},
 
 	constraint.EnumConstraintType.String(): func(node ischema.Node) {
 		if node.Constraint(constraint.EnumConstraintType) == nil {
-			panic(errors.ErrNotFoundRuleEnum)
+			panic(errs.ErrNotFoundRuleEnum.F())
 		}
 	},
 
@@ -278,7 +278,7 @@ var jsonTypesHandler = map[string]func(node ischema.Node){
 
 	"decimal": func(node ischema.Node) {
 		if node.Constraint(constraint.PrecisionConstraintType) == nil {
-			panic(errors.ErrNotFoundRulePrecision)
+			panic(errs.ErrNotFoundRulePrecision.F())
 		}
 	},
 
@@ -345,7 +345,7 @@ func (schemaCompiler) allowedConstraintCheck(node ischema.Node) (err error) {
 		if node.Constraint(t) != nil {
 			for _, bt := range tt {
 				if node.Constraint(bt) != nil {
-					return errors.Format(errors.ErrUnexpectedConstraint, bt.String(), t.String())
+					return errs.ErrUnexpectedConstraint.F(bt.String(), t.String())
 				}
 			}
 		}
@@ -371,12 +371,12 @@ func (schemaCompiler) anyConstraint(node ischema.Node) {
 		n--
 	}
 	if n != 0 {
-		panic(errors.ErrShouldBeNoOtherRulesInSetWithAny)
+		panic(errs.ErrShouldBeNoOtherRulesInSetWithAny.F())
 	}
 
 	if branchNode, ok := node.(ischema.BranchNode); ok {
 		if branchNode.Len() != 0 {
-			panic(errors.ErrInvalidNestedElementsFoundForTypeAny)
+			panic(errs.ErrInvalidNestedElementsFoundForTypeAny.F())
 		}
 	}
 }
@@ -411,19 +411,11 @@ func (schemaCompiler) checkMinAndMax(node ischema.Node) error {
 
 	if min.Exclusive() || max.Exclusive() {
 		if min.Value().GreaterThanOrEqual(max.Value()) {
-			return errors.Format(
-				errors.ErrValueOfOneConstraintGreaterOrEqualToAnother,
-				"min",
-				"max",
-			)
+			return errs.ErrValueOfOneConstraintGreaterOrEqualToAnother.F("min", "max")
 		}
 	} else {
 		if min.Value().GreaterThan(max.Value()) {
-			return errors.Format(
-				errors.ErrValueOfOneConstraintGreaterThanAnother,
-				"min",
-				"max",
-			)
+			return errs.ErrValueOfOneConstraintGreaterThanAnother.F("min", "max")
 		}
 	}
 	return nil
@@ -441,8 +433,7 @@ func (schemaCompiler) checkMinLengthAndMaxLength(node ischema.Node) error {
 	maxLength := maxLengthRaw.(*constraint.MaxLength)
 
 	if minLength.Value() > maxLength.Value() {
-		return errors.Format(
-			errors.ErrValueOfOneConstraintGreaterThanAnother,
+		return errs.ErrValueOfOneConstraintGreaterThanAnother.F(
 			"minLength",
 			"maxLength",
 		)
@@ -462,8 +453,7 @@ func (schemaCompiler) checkMinItemsAndMaxItems(node ischema.Node) error {
 	maxItems := maxItemsRaw.(*constraint.MaxItems)
 
 	if minItems.Value() > maxItems.Value() {
-		return errors.Format(
-			errors.ErrValueOfOneConstraintGreaterThanAnother,
+		return errs.ErrValueOfOneConstraintGreaterThanAnother.F(
 			"minItems",
 			"maxItems",
 		)
@@ -476,7 +466,7 @@ func (schemaCompiler) exclusiveMinimumConstraint(node ischema.Node) {
 	if exclusiveMin != nil {
 		min := node.Constraint(constraint.MinConstraintType)
 		if min == nil {
-			panic(errors.ErrConstraintMinNotFound)
+			panic(errs.ErrConstraintMinNotFound.F())
 		}
 		if exclusiveMin.(*constraint.ExclusiveMinimum).IsExclusive() {
 			min.(*constraint.Min).SetExclusive(true)
@@ -490,7 +480,7 @@ func (schemaCompiler) exclusiveMaximumConstraint(node ischema.Node) {
 	if exclusiveMax != nil {
 		max := node.Constraint(constraint.MaxConstraintType)
 		if max == nil {
-			panic(errors.ErrConstraintMaxNotFound)
+			panic(errs.ErrConstraintMaxNotFound.F())
 		}
 		if exclusiveMax.(*constraint.ExclusiveMaximum).IsExclusive() {
 			max.(*constraint.Max).SetExclusive(true)
@@ -510,7 +500,7 @@ func (compile schemaCompiler) optionalConstraints(node ischema.Node, indexOfNode
 		}
 	} else {
 		if !ok {
-			panic(errors.ErrRuleOptionalAppliesOnlyToObjectProperties)
+			panic(errs.ErrRuleOptionalAppliesOnlyToObjectProperties.F())
 		}
 
 		if !optional.(constraint.BoolKeeper).Bool() {
@@ -531,7 +521,7 @@ func (schemaCompiler) precisionConstraint(node ischema.Node) {
 
 	t := c.(*constraint.TypeConstraint).Bytes().Unquote().String()
 	if t != "decimal" {
-		panic(errors.Format(errors.ErrUnexpectedConstraint, constraint.PrecisionConstraintType, t))
+		panic(errs.ErrUnexpectedConstraint.F(constraint.PrecisionConstraintType, t))
 	}
 }
 
@@ -544,12 +534,12 @@ func (schemaCompiler) emptyArray(node ischema.Node) {
 
 	if min := node.Constraint(constraint.MinItemsConstraintType); min != nil {
 		if min.(constraint.ArrayValidator).Value() != 0 {
-			panic(errors.ErrIncorrectConstraintValueForEmptyArray)
+			panic(errs.ErrIncorrectConstraintValueForEmptyArray.F())
 		}
 	}
 	if max := node.Constraint(constraint.MaxItemsConstraintType); max != nil {
 		if max.(constraint.ArrayValidator).Value() != 0 {
-			panic(errors.ErrIncorrectConstraintValueForEmptyArray)
+			panic(errs.ErrIncorrectConstraintValueForEmptyArray.F())
 		}
 	}
 }

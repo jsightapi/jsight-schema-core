@@ -5,7 +5,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -38,7 +38,7 @@ func (Uri) Validate(value bytes.Bytes) {
 	val := value.Unquote().String()
 	u, err := url.ParseRequestURI(val)
 	if err != nil || !u.IsAbs() || u.Hostname() == "" {
-		panic(errors.Format(errors.ErrInvalidUri, val))
+		panic(errs.ErrInvalidUri.F(val))
 	}
 }
 

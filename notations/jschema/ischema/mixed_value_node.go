@@ -5,7 +5,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
@@ -65,7 +65,7 @@ func (n *MixedValueNode) addTypeConstraint(c *constraint.TypeConstraint) {
 	newVal := c.Bytes().Unquote().String()
 	existsVal := exists.(constraint.BytesKeeper).Bytes().Unquote().String()
 	if newVal != existsVal && newVal != "mixed" {
-		panic(errors.Format(errors.ErrDuplicateRule, c.Type().String()))
+		panic(errs.ErrDuplicateRule.F(c.Type().String()))
 	}
 	n.constraints.Set(c.Type(), c)
 	n.schemaType = "mixed"

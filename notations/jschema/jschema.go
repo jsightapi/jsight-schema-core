@@ -6,9 +6,10 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/fs"
 	"github.com/jsightapi/jsight-schema-core/internal/sync"
+	"github.com/jsightapi/jsight-schema-core/kit"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/checker"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/loader"
@@ -102,7 +103,7 @@ func (s *JSchema) Example() (b []byte, err error) {
 	}
 
 	if s.Inner.RootNode() == nil {
-		return nil, errors.NewDocumentError(s.File, errors.ErrEmptySchema)
+		return nil, kit.NewJSchemaError(s.File, errs.ErrEmptySchema.F())
 	}
 
 	return newExampleBuilder(s.Inner.TypesList()).Build(s.Inner.RootNode())

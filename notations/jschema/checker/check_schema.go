@@ -1,8 +1,10 @@
 package checker
 
 import (
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/bytes"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
+	"github.com/jsightapi/jsight-schema-core/kit"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
@@ -45,9 +47,9 @@ func (c *checkSchema) checkType(name string, typ ischema.Type, ss map[string]isc
 		}
 
 		// Return an error with the full set of bytes of the root schema.
-		if documentError, ok := r.(errors.DocumentError); ok {
+		if documentError, ok := r.(kit.JSchemaError); ok {
 			documentError.SetFile(typ.RootFile)
-			documentError.SetIndex(documentError.Index() + typ.Begin)
+			documentError.SetIndex(bytes.Index(documentError.Index()) + typ.Begin)
 			documentError.SetIncorrectUserType(name)
 			panic(documentError)
 		}
@@ -93,7 +95,7 @@ func (c checkSchema) checkNode(node ischema.Node, ss map[string]ischema.Type) {
 		c.checkCompatibilityOfConstraints(node)
 		c.checkLinksOfNode(node, ss) // can panic
 	default:
-		panic(errors.ErrImpossible)
+		panic(errs.ErrImpossible.F())
 	}
 
 	if branchingNode, ok := node.(ischema.BranchNode); ok {
@@ -106,7 +108,7 @@ func (c checkSchema) checkNode(node ischema.Node, ss map[string]ischema.Type) {
 func (c checkSchema) checkLiteralNode(node ischema.Node, ss map[string]ischema.Type) {
 	checkerList := c.checkerList(node, ss)
 	errorsCount := 0
-	var err errors.Error
+	var err kit.Error
 
 	for _, checker := range checkerList {
 		err = checker.Check(node.BasisLexEventOfSchemaForNode())
@@ -119,7 +121,10 @@ func (c checkSchema) checkLiteralNode(node ischema.Node, ss map[string]ischema.T
 		if len(checkerList) == 1 {
 			panic(err)
 		} else {
-			panic(lexeme.NewLexEventError(node.BasisLexEventOfSchemaForNode(), errors.ErrOrRuleSetValidation))
+			panic(lexeme.NewError(
+				node.BasisLexEventOfSchemaForNode(),
+				errs.ErrOrRuleSetValidation.F(),
+			))
 		}
 	}
 }
@@ -169,7 +174,7 @@ func (checkSchema) checkCompatibilityOfConstraints(node ischema.Node) {
 
 	err := node.ConstraintMap().Each(func(k constraint.Type, v constraint.Constraint) error {
 		if !v.IsJsonTypeCompatible(node.Type()) && !isMixed && !isMixedValue {
-			return errors.Format(errors.ErrUnexpectedConstraint, v.Type().String(), node.RealType())
+			return errs.ErrUnexpectedConstraint.F(v.Type().String(), node.RealType())
 		}
 		return nil
 	})
@@ -192,7 +197,7 @@ func (c *checkSchema) checkLinksOfNode(node ischema.Node, ss map[string]ischema.
 
 	c.collectAllowedJsonTypes(node, ss)
 	if _, ok := c.allowedJsonTypes[node.Type()]; !ok {
-		panic(errors.ErrIncorrectUserType)
+		panic(errs.ErrIncorrectUserType.F())
 	}
 }
 
@@ -204,14 +209,14 @@ func (c *checkSchema) ensureShortcutKeysAreValid(node *ischema.ObjectNode) error
 
 		s, err := c.rootSchema.Type(v.Key)
 		if err != nil {
-			return lexeme.NewLexEventError(v.Lex, err)
+			return lexeme.NewError(v.Lex, err)
 		}
 		actualType := actualRootType(s, c.rootSchema)
 
 		if actualType != json.TypeString {
-			return lexeme.NewLexEventError(
+			return lexeme.NewError(
 				v.Lex,
-				errors.Format(errors.ErrInvalidKeyShortcutType, v.Key, actualType),
+				errs.ErrInvalidKeyShortcutType.F(v.Key, actualType),
 			)
 		}
 	}
@@ -269,7 +274,7 @@ func (c *checkSchema) collectAllowedJsonTypes(node ischema.Node, ss map[string]i
 
 	for _, typeName := range typesConstraint.(*constraint.TypesList).Names() {
 		if _, ok := c.foundTypeNames[typeName]; ok {
-			panic(errors.Format(errors.ErrImpossibleToDetermineTheJsonTypeDueToRecursion, typeName))
+			panic(errs.ErrImpossibleToDetermineTheJsonTypeDueToRecursion.F(typeName))
 		}
 		c.foundTypeNames[typeName] = struct{}{}
 		c.collectAllowedJsonTypes(getType(typeName, c.rootSchema, ss).RootNode(), ss) // can panic
@@ -300,7 +305,7 @@ func getType(n string, rootSchema *ischema.ISchema, ss map[string]ischema.Type) 
 	getFromMap := func() *ischema.ISchema {
 		s, ok := ss[n]
 		if !ok {
-			panic(errors.Format(errors.ErrTypeNotFound, n))
+			panic(errs.ErrTypeNotFound.F(n))
 		}
 		return s.Schema
 	}

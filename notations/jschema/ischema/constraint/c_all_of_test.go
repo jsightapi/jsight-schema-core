@@ -6,11 +6,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/jsightapi/jsight-schema-core/test"
+
+	"github.com/jsightapi/jsight-schema-core/errs"
+
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/json"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
 )
 
 func Test_NewAllOf(t *testing.T) {
@@ -50,7 +53,7 @@ func TestAllOf_Append(t *testing.T) {
 
 	t.Run("negative", func(t *testing.T) {
 		t.Run("not a string", func(t *testing.T) {
-			assert.PanicsWithValue(t, errors.ErrUnacceptableValueInAllOfRule, func() {
+			test.PanicsWithErr(t, errs.ErrUnacceptableValueInAllOfRule.F(), func() {
 				NewAllOf().Append(bytes.NewBytes("@foo"))
 			})
 		})

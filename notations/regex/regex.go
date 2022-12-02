@@ -5,9 +5,10 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/fs"
 	"github.com/jsightapi/jsight-schema-core/internal/sync"
+	"github.com/jsightapi/jsight-schema-core/kit"
 
 	"github.com/lucasjones/reggen"
 )
@@ -133,7 +134,7 @@ func (s *RSchema) doCompile() error {
 	content := s.File.Content()
 
 	if content.Byte(0) != '/' {
-		return s.newDocumentError(errors.ErrRegexUnexpectedStart, 0, content.Byte(0))
+		return s.newDocumentError(errs.ErrRegexUnexpectedStart, 0, content.Byte(0))
 	}
 
 	var escaped bool
@@ -158,23 +159,23 @@ loop:
 
 	if s.pattern == "" {
 		idx := uint(content.Len() - 1)
-		return s.newDocumentError(errors.ErrRegexUnexpectedEnd, idx, content.Byte(idx))
+		return s.newDocumentError(errs.ErrRegexUnexpectedEnd, idx, content.Byte(idx))
 	}
 
 	var err error
 
 	if s.RE, err = regexp.Compile(s.pattern); err != nil {
-		e := errors.Format(errors.ErrRegexInvalid, content)
-		err := errors.NewDocumentError(s.File, e)
+		e := errs.ErrRegexInvalid.F(content)
+		err := kit.NewJSchemaError(s.File, e)
 		err.SetIndex(bytes.Index(0))
 		return err
 	}
 	return nil
 }
 
-func (s *RSchema) newDocumentError(code errors.ErrorCode, idx uint, c byte) errors.DocumentError {
-	e := errors.Format(code, bytes.QuoteChar(c))
-	err := errors.NewDocumentError(s.File, e)
+func (s *RSchema) newDocumentError(code errs.Code, idx uint, c byte) kit.JSchemaError {
+	e := code.F(bytes.QuoteChar(c))
+	err := kit.NewJSchemaError(s.File, e)
 	err.SetIndex(bytes.Index(idx))
 	return err
 }

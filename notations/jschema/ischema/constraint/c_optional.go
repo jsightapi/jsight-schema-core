@@ -5,7 +5,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -25,7 +25,7 @@ func NewOptional(ruleValue bytes.Bytes) *Optional {
 
 	var err error
 	if c.value, err = ruleValue.ParseBool(); err != nil {
-		panic(errors.Format(errors.ErrInvalidValueOfConstraint, OptionalConstraintType.String()))
+		panic(errs.ErrInvalidValueOfConstraint.F(OptionalConstraintType.String()))
 	}
 	return &c
 }

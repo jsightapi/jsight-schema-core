@@ -7,9 +7,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/jsightapi/jsight-schema-core/errs"
+
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
 
-	"github.com/jsightapi/jsight-schema-core/errors"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/internal/mocks"
 )
 
@@ -41,7 +42,7 @@ func Test_newNodeChecker(t *testing.T) {
 		for n, c := range cc {
 			t.Run(n, func(t *testing.T) {
 				_, err := newNodeChecker(c)
-				assert.ErrorIs(t, err, errors.ErrImpossible)
+				assert.Equal(t, err.Error(), errs.ErrImpossible.F().Error())
 			})
 		}
 	})

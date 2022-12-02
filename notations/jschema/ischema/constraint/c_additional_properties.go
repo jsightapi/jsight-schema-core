@@ -5,7 +5,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -78,7 +78,7 @@ func NewAdditionalProperties(ruleValue bytes.Bytes) *AdditionalProperties {
 		c.schemaType = schema.SchemaType(txtStr)
 
 	default:
-		panic(errors.Format(errors.ErrUnknownJSchemaType, txtStr))
+		panic(errs.ErrUnknownJSchemaType.F(txtStr))
 	}
 	return c
 }
@@ -109,7 +109,7 @@ func (c AdditionalProperties) String() string {
 		buf.WriteString("false")
 
 	default:
-		panic(errors.Format(errors.ErrGeneric, "Constraint error"))
+		panic(errs.ErrGeneric.F("Constraint error"))
 	}
 
 	return buf.String()

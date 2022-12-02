@@ -3,7 +3,7 @@ package json
 
 import (
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 )
 
 type Type uint8
@@ -42,7 +42,7 @@ func NewJsonType(b bytes.Bytes) Type {
 	case nullStr:
 		return TypeNull
 	}
-	panic(errors.Format(errors.ErrUnknownType, b.String()))
+	panic(errs.ErrUnknownType.F(b.String()))
 }
 
 var AllTypes = []Type{

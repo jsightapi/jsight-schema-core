@@ -5,7 +5,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -40,7 +40,7 @@ func (c MaxItems) String() string {
 
 func (c MaxItems) ValidateTheArray(numberOfChildren uint) {
 	if numberOfChildren > c.value {
-		panic(errors.ErrConstraintMaxItemsValidation)
+		panic(errs.ErrConstraintMaxItemsValidation.F())
 	}
 }
 

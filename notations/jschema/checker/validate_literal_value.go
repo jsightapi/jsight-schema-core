@@ -4,7 +4,7 @@ import (
 	"sort"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
@@ -54,6 +54,6 @@ func checkJsonType(node ischema.Node, value bytes.Bytes) {
 	if !(jsonType == schemaType ||
 		(jsonType == json.TypeInteger && schemaType == json.TypeFloat) ||
 		(jsonType == json.TypeNull && node.Constraint(constraint.NullableConstraintType) != nil)) {
-		panic(errors.Format(errors.ErrInvalidValueType, jsonType.String(), schemaType.String()))
+		panic(errs.ErrInvalidValueType.F(jsonType.String(), schemaType.String()))
 	}
 }

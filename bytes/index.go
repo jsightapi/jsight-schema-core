@@ -1,8 +1,9 @@
 package bytes
 
 import (
-	"fmt"
 	"strconv"
+
+	"github.com/jsightapi/jsight-schema-core/errs"
 )
 
 type Index uint
@@ -19,10 +20,6 @@ func (i Index) String() string {
 	return strconv.Itoa(i.Int())
 }
 
-type Indexer interface {
-	int | uint | Index
-}
-
 func Int(i any) int {
 	switch ii := i.(type) {
 	case Index:
@@ -34,9 +31,13 @@ func Int(i any) int {
 	}
 	// This might happen only when we extend `Indexer` interface and forget
 	// to add new case to the type switch above this point.
-	panic(fmt.Sprintf("Unhandled content type %T", i))
+	panic(errs.ErrUnhandledContentType.F(i))
 }
 
+// type Indexer interface {
+// 	int | uint | Index
+// }
+//
 // func NewIndex[T Indexer](i T) Index {
 // 	switch ii := any(i).(type) {
 // 	case Index:

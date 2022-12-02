@@ -3,13 +3,13 @@ package kit
 import (
 	"fmt"
 
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/fs"
 )
 
 type Error interface {
 	Filename() string
-	Position() uint
+	Index() uint
 	Line() uint
 	Column() uint
 	Message() string
@@ -18,14 +18,17 @@ type Error interface {
 }
 
 // ConvertError converts error to Error interface.
+// Used in JSight API Core.
 func ConvertError(f *fs.File, err any) Error {
 	switch e := err.(type) {
-	case errors.DocumentError:
+	case JSchemaError:
 		return e
-	case errors.Err:
-		return errors.NewDocumentError(f, e)
+	case errs.Code:
+		return NewJSchemaError(f, e.F())
+	case *errs.Err:
+		return NewJSchemaError(f, e)
 	case error:
-		return errors.NewDocumentError(f, errors.Format(errors.ErrGeneric, e.Error()))
+		return NewJSchemaError(f, errs.ErrGeneric.F(e.Error()))
 	}
-	return errors.NewDocumentError(f, errors.Format(errors.ErrGeneric, fmt.Sprintf("%s", err)))
+	return NewJSchemaError(f, errs.ErrGeneric.F(fmt.Sprintf("%s", err)))
 }

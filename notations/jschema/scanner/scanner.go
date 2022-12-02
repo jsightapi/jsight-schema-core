@@ -4,9 +4,10 @@ import (
 	"fmt"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/fs"
 	"github.com/jsightapi/jsight-schema-core/internal/ds"
+	"github.com/jsightapi/jsight-schema-core/kit"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 )
 
@@ -195,19 +196,19 @@ func (s *Scanner) Length() uint {
 	return length
 }
 
-func (s *Scanner) newDocumentError(code errors.ErrorCode, c byte) errors.DocumentError {
-	e := errors.Format(code, bytes.QuoteChar(c))
-	err := errors.NewDocumentError(s.file, e)
+func (s *Scanner) newDocumentError(code errs.Code, c byte) kit.JSchemaError {
+	e := code.F(bytes.QuoteChar(c))
+	err := kit.NewJSchemaError(s.file, e)
 	err.SetIndex(s.index - 1)
 	return err
 }
 
-func (s *Scanner) newDocumentErrorAtCharacter(context string) errors.DocumentError {
+func (s *Scanner) newDocumentErrorAtCharacter(context string) kit.JSchemaError {
 	// Make runes (utf8 symbols) from current index to last of slice s.data.
 	// Get first rune. Then make string with format ' symbol '
 	r := s.data.SubLow(s.index - 1).DecodeRune()
-	e := errors.Format(errors.ErrInvalidCharacter, string(r), context)
-	err := errors.NewDocumentError(s.file, e)
+	e := errs.ErrInvalidCharacter.F(string(r), context)
+	err := kit.NewJSchemaError(s.file, e)
 	err.SetIndex(s.index - 1)
 	return err
 }
@@ -251,7 +252,7 @@ func (s *Scanner) Next() (lexeme.LexEvent, bool) {
 			s.found(lexeme.MixedValueEnd)
 			return s.processingFoundLexeme(lexeme.TypesShortcutEnd), true
 		}
-		err := errors.NewDocumentError(s.file, errors.ErrUnexpectedEOF)
+		err := kit.NewJSchemaError(s.file, errs.ErrUnexpectedEOF.F())
 		err.SetIndex(s.dataSize - 1)
 		panic(err)
 	}

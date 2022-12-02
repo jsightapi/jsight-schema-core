@@ -5,7 +5,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -38,24 +38,24 @@ func (Email) Validate(email bytes.Bytes) {
 	email = email.Unquote()
 
 	if email.Len() == 0 {
-		panic(errors.ErrEmptyEmail)
+		panic(errs.ErrEmptyEmail.F())
 	}
 
 	char := email.FirstByte()
 	if char == ' ' || char == '<' {
-		panic(errors.Format(errors.ErrInvalidEmail, email.String()))
+		panic(errs.ErrInvalidEmail.F(email.String()))
 	}
 
 	char = email.LastByte()
 	if char == ' ' || char == '>' {
-		panic(errors.Format(errors.ErrInvalidEmail, email.String()))
+		panic(errs.ErrInvalidEmail.F(email.String()))
 	}
 
 	emailStr := email.String()
 
 	_, err := mail.ParseAddress(emailStr)
 	if err != nil {
-		panic(errors.Format(errors.ErrInvalidEmail, emailStr))
+		panic(errs.ErrInvalidEmail.F(emailStr))
 	}
 }
 

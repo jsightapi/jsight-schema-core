@@ -5,7 +5,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -40,7 +40,7 @@ func (c MinItems) String() string {
 
 func (c MinItems) ValidateTheArray(numberOfChildren uint) {
 	if numberOfChildren < c.value {
-		panic(errors.ErrConstraintMinItemsValidation)
+		panic(errs.ErrConstraintMinItemsValidation.F())
 	}
 }
 

@@ -5,7 +5,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -38,13 +38,13 @@ func (c AllOf) String() string {
 
 func (c *AllOf) Append(scalar bytes.Bytes) {
 	if !json.Guess(scalar).IsString() {
-		panic(errors.ErrUnacceptableValueInAllOfRule)
+		panic(errs.ErrUnacceptableValueInAllOfRule.F())
 	}
 
 	s := scalar.Unquote()
 
 	if !s.IsUserTypeName() {
-		panic(errors.Format(errors.ErrInvalidSchemaNameInAllOfRule, s))
+		panic(errs.ErrInvalidSchemaNameInAllOfRule.F(s))
 	}
 	c.schemaName = append(c.schemaName, s.String())
 }

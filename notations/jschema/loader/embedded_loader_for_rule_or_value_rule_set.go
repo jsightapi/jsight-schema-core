@@ -2,7 +2,7 @@ package loader
 
 import (
 	schema "github.com/jsightapi/jsight-schema-core"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
@@ -48,7 +48,7 @@ func newOrRuleSetLoader(
 	rules map[string]schema.Rule,
 ) *orRuleSetLoader {
 	if _, ok := node.(*ischema.MixedValueNode); ok {
-		panic(errors.ErrCannotSpecifyOtherRulesWithTypeReference)
+		panic(errs.ErrCannotSpecifyOtherRulesWithTypeReference.F())
 	}
 
 	s := &orRuleSetLoader{
@@ -80,7 +80,7 @@ func (s *orRuleSetLoader) embeddedLoad(lex lexeme.LexEvent) {
 
 func (s *orRuleSetLoader) afterShortcutEnd(lex lexeme.LexEvent) {
 	if lex.Type() != lexeme.MixedValueEnd {
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 	s.stateFunc = s.valueEnd
 }
@@ -88,7 +88,7 @@ func (s *orRuleSetLoader) afterShortcutEnd(lex lexeme.LexEvent) {
 // objectBegin begin of object "{"
 func (s *orRuleSetLoader) objectBegin(lex lexeme.LexEvent) {
 	if lex.Type() != lexeme.ObjectBegin {
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 	s.stateFunc = s.keyOrObjectEnd
 }
@@ -111,7 +111,7 @@ func (s *orRuleSetLoader) keyOrObjectEnd(lex lexeme.LexEvent) {
 		s.inProgress = false
 		s.makeTypeFromRuleSet()
 	default:
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 }
 
@@ -119,14 +119,14 @@ func (s *orRuleSetLoader) keyOrObjectEnd(lex lexeme.LexEvent) {
 // ex: {"key": <--
 func (s *orRuleSetLoader) valueBegin(lex lexeme.LexEvent) {
 	if lex.Type() != lexeme.ObjectValueBegin {
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 	s.stateFunc = s.valueLiteral
 }
 
 func (s *orRuleSetLoader) enumValueBegin(lex lexeme.LexEvent) {
 	if lex.Type() != lexeme.ObjectValueBegin {
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 	enumConstraint := constraint.NewEnum()
 	s.typeRoot.AddConstraint(enumConstraint)
@@ -145,7 +145,7 @@ func (s *orRuleSetLoader) valueLiteral(lex lexeme.LexEvent) {
 		s.typeRoot.AddConstraint(c)
 		s.stateFunc = s.valueEnd
 	default:
-		panic(errors.ErrLiteralValueExpected)
+		panic(errs.ErrLiteralValueExpected.F())
 	}
 }
 
@@ -153,7 +153,7 @@ func (s *orRuleSetLoader) valueLiteral(lex lexeme.LexEvent) {
 // ex: {"key": "value" <--
 func (s *orRuleSetLoader) valueEnd(lex lexeme.LexEvent) {
 	if lex.Type() != lexeme.ObjectValueEnd {
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 	s.stateFunc = s.keyOrObjectEnd
 }
@@ -161,14 +161,14 @@ func (s *orRuleSetLoader) valueEnd(lex lexeme.LexEvent) {
 // endOfLoading the method should not be called during normal operation. Ensures
 // that the loader will not continue to work after the load is complete.
 func (*orRuleSetLoader) endOfLoading(lexeme.LexEvent) {
-	panic(errors.ErrLoader)
+	panic(errs.ErrLoader.F())
 }
 
 // return TypesList constraint for node
 func (s *orRuleSetLoader) nodeTypesListConstraint() *constraint.TypesList {
 	c := s.node.Constraint(constraint.TypesListConstraintType)
 	if c == nil {
-		panic(errors.ErrLoader) // constraint not found
+		panic(errs.ErrLoader.F()) // constraint not found
 	}
 	return c.(*constraint.TypesList)
 }
@@ -176,7 +176,7 @@ func (s *orRuleSetLoader) nodeTypesListConstraint() *constraint.TypesList {
 // makeTypeFromRuleSet appends new type based on rule-set.
 func (s *orRuleSetLoader) makeTypeFromRuleSet() {
 	if s.typeRoot.NumberOfConstraints() == 0 {
-		panic(errors.ErrEmptyRuleSet)
+		panic(errs.ErrEmptyRuleSet.F())
 	}
 
 	c := s.nodeTypesListConstraint()

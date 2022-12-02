@@ -3,7 +3,8 @@ package lexeme
 import (
 	"fmt"
 
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
+	"github.com/jsightapi/jsight-schema-core/kit"
 )
 
 func CatchLexEventError(lex LexEvent) {
@@ -11,14 +12,19 @@ func CatchLexEventError(lex LexEvent) {
 	if r == nil {
 		return
 	}
+	panic(ConvertError(lex, r))
+}
 
-	switch val := r.(type) {
-	case errors.DocumentError:
-		panic(r)
-	case errors.Err:
-		panic(NewLexEventError(lex, val))
+func ConvertError(lex LexEvent, err any) kit.JSchemaError {
+	switch e := err.(type) {
+	case kit.JSchemaError:
+		return e
+	case errs.Code:
+		return NewError(lex, e.F())
+	case *errs.Err:
+		return NewError(lex, e)
 	default:
-		panic(NewLexEventError(lex, errors.Format(errors.ErrGeneric, fmt.Sprintf("%s", r))))
+		return NewError(lex, errs.ErrGeneric.F(fmt.Sprintf("%s", err)))
 	}
 }
 
@@ -33,21 +39,25 @@ func CatchLexEventErrorWithIncorrectUserType(lex LexEvent, name string) {
 	}
 
 	switch val := r.(type) {
-	case errors.DocumentError:
+	case kit.JSchemaError:
 		panic(r)
-	case errors.Err:
-		e := NewLexEventError(lex, val)
+	case errs.Code:
+		e := NewError(lex, val.F())
+		e.SetIncorrectUserType(name)
+		panic(e)
+	case *errs.Err:
+		e := NewError(lex, val)
 		e.SetIncorrectUserType(name)
 		panic(e)
 	default:
-		e := NewLexEventError(lex, errors.Format(errors.ErrGeneric, fmt.Sprintf("%s", r)))
+		e := NewError(lex, errs.ErrGeneric.F(fmt.Sprintf("%s", r)))
 		e.SetIncorrectUserType(name)
 		panic(e)
 	}
 }
 
-func NewLexEventError(lex LexEvent, err errors.Err) errors.DocumentError {
-	e := errors.NewDocumentError(lex.File(), err)
-	e.SetIndex(lex.Begin())
-	return e
+func NewError(lex LexEvent, e *errs.Err) kit.JSchemaError {
+	ee := kit.NewJSchemaError(lex.File(), e)
+	ee.SetIndex(lex.Begin())
+	return ee
 }

@@ -1,166 +1,166 @@
-package errors
+package errs
 
 import (
 	"strconv"
-	"strings"
 )
 
-type ErrorCode int //nolint:errname // This is okay.
+type Code int
 
 const (
-	ErrGeneric    ErrorCode = 0
-	ErrImpossible ErrorCode = 1
+	ErrGeneric              Code = 0
+	ErrImpossible           Code = 1
+	ErrUnhandledContentType Code = 2
 
 	// Main & common.
 
-	ErrUserTypeFound             ErrorCode = 101
-	ErrUnknownType               ErrorCode = 102
-	ErrUnknownJSchemaType        ErrorCode = 103
-	ErrInfinityRecursionDetected ErrorCode = 104
-	ErrNodeTypeCantBeGuessed     ErrorCode = 105
+	ErrUserTypeFound             Code = 101
+	ErrUnknownType               Code = 102
+	ErrUnknownJSchemaType        Code = 103
+	ErrInfinityRecursionDetected Code = 104
+	ErrNodeTypeCantBeGuessed     Code = 105
 
 	// Validator.
 
-	ErrValidator                       ErrorCode = 201
-	ErrEmptySchema                     ErrorCode = 202
-	ErrEmptyJson                       ErrorCode = 203
-	ErrOrRuleSetValidation             ErrorCode = 204
-	ErrRequiredKeyNotFound             ErrorCode = 205
-	ErrSchemaDoesNotSupportKey         ErrorCode = 206
-	ErrUnexpectedLexInLiteralValidator ErrorCode = 207
-	ErrUnexpectedLexInObjectValidator  ErrorCode = 208
-	ErrUnexpectedLexInArrayValidator   ErrorCode = 209
-	ErrInvalidValueType                ErrorCode = 210
-	ErrInvalidKeyType                  ErrorCode = 211
-	ErrUnexpectedLexInMixedValidator   ErrorCode = 212
-	ErrObjectExpected                  ErrorCode = 213
-	ErrPropertyNotFound                ErrorCode = 214
+	ErrValidator                       Code = 201
+	ErrEmptySchema                     Code = 202
+	ErrEmptyJson                       Code = 203
+	ErrOrRuleSetValidation             Code = 204
+	ErrRequiredKeyNotFound             Code = 205
+	ErrSchemaDoesNotSupportKey         Code = 206
+	ErrUnexpectedLexInLiteralValidator Code = 207
+	ErrUnexpectedLexInObjectValidator  Code = 208
+	ErrUnexpectedLexInArrayValidator   Code = 209
+	ErrInvalidValueType                Code = 210
+	ErrInvalidKeyType                  Code = 211
+	ErrUnexpectedLexInMixedValidator   Code = 212
+	ErrObjectExpected                  Code = 213
+	ErrPropertyNotFound                Code = 214
 
 	// Scanner.
 
-	ErrInvalidCharacter                      ErrorCode = 301
-	ErrInvalidCharacterInAnnotationObjectKey ErrorCode = 302
-	ErrUnexpectedEOF                         ErrorCode = 303
-	ErrAnnotationNotAllowed                  ErrorCode = 304
+	ErrInvalidCharacter                      Code = 301
+	ErrInvalidCharacterInAnnotationObjectKey Code = 302
+	ErrUnexpectedEOF                         Code = 303
+	ErrAnnotationNotAllowed                  Code = 304
 
 	// Schema.
 
-	ErrNodeGrow                 ErrorCode = 401
-	ErrDuplicateKeysInSchema    ErrorCode = 402
-	ErrDuplicationOfNameOfTypes ErrorCode = 403
+	ErrNodeGrow                 Code = 401
+	ErrDuplicateKeysInSchema    Code = 402
+	ErrDuplicationOfNameOfTypes Code = 403
 
 	// Node.
 
-	ErrDuplicateRule ErrorCode = 501
+	ErrDuplicateRule Code = 501
 
 	// Constraint
 
-	ErrUnknownRule                                 ErrorCode = 601
-	ErrConstraintValidation                        ErrorCode = 602
-	ErrConstraintStringLengthValidation            ErrorCode = 603
-	ErrInvalidValueOfConstraint                    ErrorCode = 604
-	ErrZeroPrecision                               ErrorCode = 605
-	ErrEmptyEmail                                  ErrorCode = 606
-	ErrInvalidEmail                                ErrorCode = 607
-	ErrConstraintMinItemsValidation                ErrorCode = 608
-	ErrConstraintMaxItemsValidation                ErrorCode = 609
-	ErrDoesNotMatchAnyOfTheEnumValues              ErrorCode = 610
-	ErrDoesNotMatchRegularExpression               ErrorCode = 611
-	ErrInvalidUri                                  ErrorCode = 612
-	ErrInvalidDateTime                             ErrorCode = 613
-	ErrInvalidUuid                                 ErrorCode = 614
-	ErrInvalidConst                                ErrorCode = 615
-	ErrInvalidDate                                 ErrorCode = 616
-	ErrValueOfOneConstraintGreaterThanAnother      ErrorCode = 617
-	ErrValueOfOneConstraintGreaterOrEqualToAnother ErrorCode = 618
+	ErrUnknownRule                                 Code = 601
+	ErrConstraintValidation                        Code = 602
+	ErrConstraintStringLengthValidation            Code = 603
+	ErrInvalidValueOfConstraint                    Code = 604
+	ErrZeroPrecision                               Code = 605
+	ErrEmptyEmail                                  Code = 606
+	ErrInvalidEmail                                Code = 607
+	ErrConstraintMinItemsValidation                Code = 608
+	ErrConstraintMaxItemsValidation                Code = 609
+	ErrDoesNotMatchAnyOfTheEnumValues              Code = 610
+	ErrDoesNotMatchRegularExpression               Code = 611
+	ErrInvalidUri                                  Code = 612
+	ErrInvalidDateTime                             Code = 613
+	ErrInvalidUuid                                 Code = 614
+	ErrInvalidConst                                Code = 615
+	ErrInvalidDate                                 Code = 616
+	ErrValueOfOneConstraintGreaterThanAnother      Code = 617
+	ErrValueOfOneConstraintGreaterOrEqualToAnother Code = 618
 
 	// Loader.
 
-	ErrInvalidSchemaName                ErrorCode = 701
-	ErrInvalidSchemaNameInAllOfRule     ErrorCode = 702
-	ErrUnacceptableRecursionInAllOfRule ErrorCode = 703
-	ErrUnacceptableUserTypeInAllOfRule  ErrorCode = 704
-	ErrConflictAdditionalProperties     ErrorCode = 705
+	ErrInvalidSchemaName                Code = 701
+	ErrInvalidSchemaNameInAllOfRule     Code = 702
+	ErrUnacceptableRecursionInAllOfRule Code = 703
+	ErrUnacceptableUserTypeInAllOfRule  Code = 704
+	ErrConflictAdditionalProperties     Code = 705
 
 	// Rule loader.
 
-	ErrLoader                           ErrorCode = 801
-	ErrIncorrectRuleValueType           ErrorCode = 802
-	ErrIncorrectRuleWithoutExample      ErrorCode = 803
-	ErrIncorrectRuleForSeveralNode      ErrorCode = 804
-	ErrLiteralValueExpected             ErrorCode = 805
-	ErrInvalidValueInEnumRule           ErrorCode = 806
-	ErrIncorrectArrayItemTypeInEnumRule ErrorCode = 807
-	ErrUnacceptableValueInAllOfRule     ErrorCode = 808
-	ErrTypeNameNotFoundInAllOfRule      ErrorCode = 809
-	ErrDuplicationInEnumRule            ErrorCode = 810
+	ErrLoader                           Code = 801
+	ErrIncorrectRuleValueType           Code = 802
+	ErrIncorrectRuleWithoutExample      Code = 803
+	ErrIncorrectRuleForSeveralNode      Code = 804
+	ErrLiteralValueExpected             Code = 805
+	ErrInvalidValueInEnumRule           Code = 806
+	ErrIncorrectArrayItemTypeInEnumRule Code = 807
+	ErrUnacceptableValueInAllOfRule     Code = 808
+	ErrTypeNameNotFoundInAllOfRule      Code = 809
+	ErrDuplicationInEnumRule            Code = 810
 
 	// "or" rule loader.
 
-	ErrArrayWasExpectedInOrRule       ErrorCode = 901
-	ErrEmptyArrayInOrRule             ErrorCode = 902
-	ErrOneElementInArrayInOrRule      ErrorCode = 903
-	ErrIncorrectArrayItemTypeInOrRule ErrorCode = 904
-	ErrEmptyRuleSet                   ErrorCode = 905
+	ErrArrayWasExpectedInOrRule       Code = 901
+	ErrEmptyArrayInOrRule             Code = 902
+	ErrOneElementInArrayInOrRule      Code = 903
+	ErrIncorrectArrayItemTypeInOrRule Code = 904
+	ErrEmptyRuleSet                   Code = 905
 
 	// Compiler.
 
-	ErrRuleOptionalAppliesOnlyToObjectProperties ErrorCode = 1101
-	ErrCannotSpecifyOtherRulesWithTypeReference  ErrorCode = 1102
-	ErrShouldBeNoOtherRulesInSetWithOr           ErrorCode = 1103
-	ErrShouldBeNoOtherRulesInSetWithEnum         ErrorCode = 1104
-	ErrShouldBeNoOtherRulesInSetWithAny          ErrorCode = 1105
-	ErrInvalidNestedElementsFoundForTypeAny      ErrorCode = 1106
-	ErrInvalidChildNodeTogetherWithTypeReference ErrorCode = 1107
-	ErrInvalidChildNodeTogetherWithOrRule        ErrorCode = 1108
-	ErrConstraintMinNotFound                     ErrorCode = 1109
-	ErrConstraintMaxNotFound                     ErrorCode = 1110
-	ErrInvalidValueInTheTypeRule                 ErrorCode = 1111
-	ErrNotFoundRulePrecision                     ErrorCode = 1112
-	ErrNotFoundRuleEnum                          ErrorCode = 1113
-	ErrNotFoundRuleOr                            ErrorCode = 1114
-	ErrIncompatibleTypes                         ErrorCode = 1115
-	// ErrUnknownAdditionalPropertiesTypes          ErrorCode = 1116
+	ErrRuleOptionalAppliesOnlyToObjectProperties Code = 1101
+	ErrCannotSpecifyOtherRulesWithTypeReference  Code = 1102
+	ErrShouldBeNoOtherRulesInSetWithOr           Code = 1103
+	ErrShouldBeNoOtherRulesInSetWithEnum         Code = 1104
+	ErrShouldBeNoOtherRulesInSetWithAny          Code = 1105
+	ErrInvalidNestedElementsFoundForTypeAny      Code = 1106
+	ErrInvalidChildNodeTogetherWithTypeReference Code = 1107
+	ErrInvalidChildNodeTogetherWithOrRule        Code = 1108
+	ErrConstraintMinNotFound                     Code = 1109
+	ErrConstraintMaxNotFound                     Code = 1110
+	ErrInvalidValueInTheTypeRule                 Code = 1111
+	ErrNotFoundRulePrecision                     Code = 1112
+	ErrNotFoundRuleEnum                          Code = 1113
+	ErrNotFoundRuleOr                            Code = 1114
+	ErrIncompatibleTypes                         Code = 1115
+	// ErrUnknownAdditionalPropertiesTypes          Code = 1116
 
-	ErrUnexpectedConstraint ErrorCode = 1117
+	ErrUnexpectedConstraint Code = 1117
 
 	// Checker.
 
-	ErrChecker                               ErrorCode = 1201
-	ErrElementNotFoundInArray                ErrorCode = 1203
-	ErrIncorrectConstraintValueForEmptyArray ErrorCode = 1204
+	ErrChecker                               Code = 1201
+	ErrElementNotFoundInArray                Code = 1203
+	ErrIncorrectConstraintValueForEmptyArray Code = 1204
 
 	// Link checker.
 
-	ErrIncorrectUserType                              ErrorCode = 1301
-	ErrTypeNotFound                                   ErrorCode = 1302
-	ErrImpossibleToDetermineTheJsonTypeDueToRecursion ErrorCode = 1303
-	ErrInvalidKeyShortcutType                         ErrorCode = 1304
+	ErrIncorrectUserType                              Code = 1301
+	ErrTypeNotFound                                   Code = 1302
+	ErrImpossibleToDetermineTheJsonTypeDueToRecursion Code = 1303
+	ErrInvalidKeyShortcutType                         Code = 1304
 
 	// SDK.
 
-	ErrEmptyType                          ErrorCode = 1401
-	ErrUnnecessaryLexemeAfterTheEndOfEnum ErrorCode = 1402
+	ErrEmptyType                          Code = 1401
+	ErrUnnecessaryLexemeAfterTheEndOfEnum Code = 1402
 
 	// Regex.
 
-	ErrRegexUnexpectedStart ErrorCode = 1500
-	ErrRegexUnexpectedEnd   ErrorCode = 1501
-	ErrRegexInvalid         ErrorCode = 1502
+	ErrRegexUnexpectedStart Code = 1500
+	ErrRegexUnexpectedEnd   Code = 1501
+	ErrRegexInvalid         Code = 1502
 
 	// Enum.
 
-	ErrEnumArrayExpected  ErrorCode = 1600
-	ErrEnumIsHoldRuleName ErrorCode = 1601
-	ErrEnumRuleNotFound   ErrorCode = 1602
-	ErrNotAnEnumRule      ErrorCode = 1603
+	ErrEnumArrayExpected  Code = 1600
+	ErrEnumIsHoldRuleName Code = 1601
+	ErrEnumRuleNotFound   Code = 1602
+	ErrNotAnEnumRule      Code = 1603
 )
 
-var errorFormat = map[ErrorCode]string{
+var errorFormat = map[Code]string{
 	// old error format
-	ErrGeneric: "%s",
-
-	ErrImpossible: "The error should not occur during regular operation. May appear only in the process of unfinished code refactoring.", //nolint:lll
+	ErrGeneric:              "%s",
+	ErrImpossible:           "The error should not occur during regular operation. May appear only in the process of unfinished code refactoring.", //nolint:lll
+	ErrUnhandledContentType: "Unhandled content type %T",
 
 	// main & common
 	ErrUserTypeFound:             "Found an invalid reference to the type",
@@ -289,23 +289,10 @@ var errorFormat = map[ErrorCode]string{
 	ErrNotAnEnumRule:      "Rule %q not an Enum",
 }
 
-func (c ErrorCode) Code() ErrorCode {
-	return c
-}
-
-func (c ErrorCode) Itoa() string {
+func (c Code) Itoa() string {
 	return strconv.Itoa(int(c))
 }
 
-func (c ErrorCode) Error() string {
-	if format, ok := errorFormat[c]; ok {
-		cnt := strings.Count(format, "%s")
-		cnt += strings.Count(format, "%q")
-		if cnt == 0 {
-			return format
-		} else {
-			panic("Not enough data to generate an error message from template: " + format)
-		}
-	}
-	panic("Unknown error code")
+func (c Code) F(args ...any) *Err {
+	return f(c, args...)
 }

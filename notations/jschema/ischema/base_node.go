@@ -2,9 +2,9 @@ package ischema
 
 import (
 	schema "github.com/jsightapi/jsight-schema-core"
+	"github.com/jsightapi/jsight-schema-core/errs"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
 	"github.com/jsightapi/jsight-schema-core/json"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
@@ -173,7 +173,7 @@ func (n *baseNode) AddConstraint(c constraint.Constraint) {
 	}
 
 	if n.constraints.Has(c.Type()) { // find an existing constraint
-		panic(errors.Format(errors.ErrDuplicateRule, c.Type().String()))
+		panic(errs.ErrDuplicateRule.F(c.Type().String()))
 	}
 
 	n.constraints.Set(c.Type(), c)

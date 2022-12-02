@@ -1,9 +1,8 @@
 package checker
 
 import (
-	"fmt"
-
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
+	"github.com/jsightapi/jsight-schema-core/kit"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
 )
@@ -18,22 +17,15 @@ func newLiteralChecker(node ischema.Node) literalChecker {
 	}
 }
 
-func (c literalChecker) Check(nodeLex lexeme.LexEvent) (err errors.Error) {
+func (c literalChecker) Check(nodeLex lexeme.LexEvent) (err kit.Error) {
 	defer func() {
 		if r := recover(); r != nil {
-			switch val := r.(type) {
-			case errors.DocumentError:
-				err = val
-			case errors.Err:
-				err = lexeme.NewLexEventError(nodeLex, val)
-			default:
-				err = lexeme.NewLexEventError(nodeLex, errors.Format(errors.ErrGeneric, fmt.Sprintf("%s", r)))
-			}
+			err = lexeme.ConvertError(nodeLex, r)
 		}
 	}()
 
 	if nodeLex.Type() != lexeme.LiteralEnd {
-		return lexeme.NewLexEventError(nodeLex, errors.ErrChecker)
+		return lexeme.NewError(nodeLex, errs.ErrChecker.F())
 	}
 
 	ValidateLiteralValue(c.node, nodeLex.Value()) // can panic

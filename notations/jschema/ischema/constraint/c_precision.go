@@ -5,7 +5,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -24,7 +24,7 @@ func NewPrecision(ruleValue bytes.Bytes) *Precision {
 	u := parseUint(ruleValue, PrecisionConstraintType)
 
 	if u == 0 {
-		panic(errors.ErrZeroPrecision)
+		panic(errs.ErrZeroPrecision.F())
 	}
 
 	return &Precision{
@@ -50,8 +50,7 @@ func (c Precision) Validate(value bytes.Bytes) {
 		panic(err)
 	}
 	if c.value < n.LengthOfFractionalPart() {
-		panic(errors.Format(
-			errors.ErrConstraintValidation,
+		panic(errs.ErrConstraintValidation.F(
 			PrecisionConstraintType.String(),
 			strconv.Itoa(int(c.value)),
 			"(exclusive)",

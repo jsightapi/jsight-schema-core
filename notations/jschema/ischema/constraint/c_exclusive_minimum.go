@@ -5,7 +5,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -23,7 +23,7 @@ func NewExclusiveMinimum(ruleValue bytes.Bytes) *ExclusiveMinimum {
 
 	var err error
 	if c.exclusive, err = ruleValue.ParseBool(); err != nil {
-		panic(errors.Format(errors.ErrInvalidValueOfConstraint, ExclusiveMinimumConstraintType.String()))
+		panic(errs.ErrInvalidValueOfConstraint.F(ExclusiveMinimumConstraintType.String()))
 	}
 	return &c
 }

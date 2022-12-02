@@ -5,7 +5,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -38,7 +38,7 @@ func (Date) Validate(value bytes.Bytes) {
 	str := value.Unquote().String()
 	_, err := time.Parse("2006-01-02", str)
 	if err != nil {
-		panic(errors.Format(errors.ErrInvalidDate, err))
+		panic(errs.ErrInvalidDate.F(err))
 	}
 }
 

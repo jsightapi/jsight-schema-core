@@ -1,7 +1,7 @@
 package ischema
 
 import (
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 )
 
@@ -38,7 +38,7 @@ func newObjectNodeKeys() *ObjectNodeKeys {
 
 func (k *ObjectNodeKeys) Set(v ObjectNodeKey) {
 	if k.isDuplicatedKey(v) {
-		panic(errors.Format(errors.ErrDuplicateKeysInSchema, v.Key))
+		panic(errs.ErrDuplicateKeysInSchema.F(v.Key))
 	}
 
 	k.index[indexKeyFromObjectNodeKey(v)] = v.Index

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/fs"
 )
 
@@ -30,16 +30,17 @@ func (s ISchema) MustType(name string) *ISchema {
 	if ok {
 		return t.Schema
 	}
-	panic(errors.Format(errors.ErrTypeNotFound, name))
+	panic(errs.ErrTypeNotFound.F(name))
 }
 
 // Type returns specified type's schema.
-func (s ISchema) Type(name string) (*ISchema, errors.Err) {
+func (s ISchema) Type(name string) (*ISchema, *errs.Err) {
 	t, ok := s.types[name]
 	if ok {
 		return t.Schema, nil
 	}
-	return nil, errors.Format(errors.ErrTypeNotFound, name)
+
+	return nil, errs.ErrTypeNotFound.F(name)
 }
 
 func (s ISchema) RootNode() Node {
@@ -48,7 +49,7 @@ func (s ISchema) RootNode() Node {
 
 func (s *ISchema) AddNamedType(name string, typ *ISchema, rootFile *fs.File, begin bytes.Index) {
 	if !bytes.NewBytes(name).IsUserTypeName() {
-		panic(errors.Format(errors.ErrInvalidSchemaName, name))
+		panic(errs.ErrInvalidSchemaName.F(name))
 	}
 	s.addType(name, typ, rootFile, begin)
 }
@@ -62,7 +63,7 @@ func (s *ISchema) AddUnnamedType(typ *ISchema, rootFile *fs.File, begin bytes.In
 
 func (s *ISchema) addType(name string, schema *ISchema, rootFile *fs.File, begin bytes.Index) {
 	if _, ok := s.types[name]; ok {
-		panic(errors.Format(errors.ErrDuplicationOfNameOfTypes, name))
+		panic(errs.ErrDuplicationOfNameOfTypes.F(name))
 	}
 	s.types[name] = Type{schema, rootFile, begin}
 }

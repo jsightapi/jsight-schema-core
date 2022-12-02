@@ -6,9 +6,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/jsightapi/jsight-schema-core/errs"
+
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/loader"
 
-	"github.com/jsightapi/jsight-schema-core/errors"
 	"github.com/jsightapi/jsight-schema-core/fs"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/scanner"
 )
@@ -52,7 +53,7 @@ func TestCheckRules(t *testing.T) {
 		tests := []struct {
 			schema string
 			types  []typ
-			err    errors.ErrorCode
+			err    errs.Code
 		}{
 			{
 				`{
@@ -61,7 +62,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -70,7 +71,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -79,7 +80,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -88,7 +89,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -97,7 +98,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -106,7 +107,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -115,7 +116,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -124,7 +125,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -133,7 +134,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -142,7 +143,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -151,7 +152,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -162,7 +163,7 @@ func TestCheckRules(t *testing.T) {
 					]
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -173,7 +174,7 @@ func TestCheckRules(t *testing.T) {
 					]
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -184,7 +185,7 @@ func TestCheckRules(t *testing.T) {
 					]
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -195,7 +196,7 @@ func TestCheckRules(t *testing.T) {
 					]
 				}`,
 				[]typ{},
-				errors.ErrConstraintMinNotFound,
+				errs.ErrConstraintMinNotFound,
 			},
 			{
 				`{
@@ -206,7 +207,7 @@ func TestCheckRules(t *testing.T) {
 					]
 				}`,
 				[]typ{},
-				errors.ErrConstraintMaxNotFound,
+				errs.ErrConstraintMaxNotFound,
 			},
 			{
 				`{
@@ -217,7 +218,7 @@ func TestCheckRules(t *testing.T) {
 					]
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -228,7 +229,7 @@ func TestCheckRules(t *testing.T) {
 					]
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -239,7 +240,7 @@ func TestCheckRules(t *testing.T) {
 					]
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -250,7 +251,7 @@ func TestCheckRules(t *testing.T) {
 					]
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -261,7 +262,7 @@ func TestCheckRules(t *testing.T) {
 					]
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -272,7 +273,7 @@ func TestCheckRules(t *testing.T) {
 					]
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -281,7 +282,7 @@ func TestCheckRules(t *testing.T) {
 					]
 				}`,
 				[]typ{cat, catID},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -292,7 +293,7 @@ func TestCheckRules(t *testing.T) {
 					]
 				}`,
 				[]typ{cat, catID},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -303,7 +304,7 @@ func TestCheckRules(t *testing.T) {
 					]
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -312,7 +313,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -321,7 +322,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -330,7 +331,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -339,7 +340,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -348,7 +349,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -357,7 +358,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -366,7 +367,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -375,7 +376,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -384,7 +385,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{cat, catID},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -393,7 +394,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -402,7 +403,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -411,7 +412,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -420,7 +421,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -429,7 +430,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -438,7 +439,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -447,7 +448,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -456,7 +457,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -465,7 +466,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -474,7 +475,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{cat, catID},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -483,7 +484,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -492,7 +493,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -501,7 +502,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -510,7 +511,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -519,7 +520,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -528,7 +529,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -537,7 +538,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -546,7 +547,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -555,7 +556,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{cat, catID},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -564,7 +565,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -573,7 +574,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -582,7 +583,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -591,7 +592,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrConstraintMinNotFound,
+				errs.ErrConstraintMinNotFound,
 			},
 			{
 				`{
@@ -600,7 +601,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrConstraintMaxNotFound,
+				errs.ErrConstraintMaxNotFound,
 			},
 			{
 				`{
@@ -609,7 +610,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -618,7 +619,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -627,7 +628,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -636,7 +637,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -645,7 +646,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -654,7 +655,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -663,7 +664,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -672,7 +673,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -681,7 +682,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{cat, catID},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -690,7 +691,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -699,7 +700,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -708,7 +709,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -717,7 +718,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrConstraintMinNotFound,
+				errs.ErrConstraintMinNotFound,
 			},
 			{
 				`{
@@ -726,7 +727,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrConstraintMaxNotFound,
+				errs.ErrConstraintMaxNotFound,
 			},
 			{
 				`{
@@ -735,7 +736,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -744,7 +745,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -753,7 +754,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -762,7 +763,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -771,7 +772,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -780,7 +781,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{cat, catID},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -789,7 +790,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -798,7 +799,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -807,7 +808,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -816,7 +817,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrConstraintMinNotFound,
+				errs.ErrConstraintMinNotFound,
 			},
 			{
 				`{
@@ -825,7 +826,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrConstraintMaxNotFound,
+				errs.ErrConstraintMaxNotFound,
 			},
 			{
 				`{
@@ -834,7 +835,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -843,7 +844,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -852,7 +853,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -861,7 +862,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -870,7 +871,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -879,7 +880,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -888,7 +889,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -897,7 +898,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -906,7 +907,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrConstraintMinNotFound,
+				errs.ErrConstraintMinNotFound,
 			},
 			{
 				`{
@@ -915,7 +916,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrConstraintMaxNotFound,
+				errs.ErrConstraintMaxNotFound,
 			},
 			{
 				`{
@@ -924,7 +925,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -933,7 +934,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -942,7 +943,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -951,7 +952,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -960,7 +961,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -969,7 +970,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -978,7 +979,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -987,7 +988,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -996,7 +997,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{cat, catID},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1005,7 +1006,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -1014,7 +1015,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1023,7 +1024,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1032,7 +1033,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrConstraintMinNotFound,
+				errs.ErrConstraintMinNotFound,
 			},
 			{
 				`{
@@ -1041,7 +1042,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrConstraintMaxNotFound,
+				errs.ErrConstraintMaxNotFound,
 			},
 			{
 				`{
@@ -1050,7 +1051,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1059,7 +1060,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1068,7 +1069,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1077,7 +1078,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1086,7 +1087,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1095,7 +1096,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1104,7 +1105,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -1113,7 +1114,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1122,7 +1123,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{cat, catID},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1131,7 +1132,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -1140,7 +1141,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1149,7 +1150,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1158,7 +1159,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrConstraintMinNotFound,
+				errs.ErrConstraintMinNotFound,
 			},
 			{
 				`{
@@ -1167,7 +1168,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrConstraintMaxNotFound,
+				errs.ErrConstraintMaxNotFound,
 			},
 			{
 				`{
@@ -1176,7 +1177,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1185,7 +1186,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1194,7 +1195,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1203,7 +1204,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1212,7 +1213,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1221,7 +1222,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1230,7 +1231,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -1239,7 +1240,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1248,7 +1249,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{cat, catID},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1257,7 +1258,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -1266,7 +1267,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1275,7 +1276,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1284,7 +1285,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrConstraintMinNotFound,
+				errs.ErrConstraintMinNotFound,
 			},
 			{
 				`{
@@ -1293,7 +1294,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrConstraintMaxNotFound,
+				errs.ErrConstraintMaxNotFound,
 			},
 			{
 				`{
@@ -1302,7 +1303,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1311,7 +1312,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1320,7 +1321,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1329,7 +1330,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1338,7 +1339,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1347,7 +1348,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1356,7 +1357,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -1365,7 +1366,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1374,7 +1375,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{cat, catID},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1383,7 +1384,7 @@ func TestCheckRules(t *testing.T) {
 						 }*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -1392,7 +1393,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithEnum,
+				errs.ErrShouldBeNoOtherRulesInSetWithEnum,
 			},
 			{
 				`{
@@ -1401,7 +1402,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithEnum,
+				errs.ErrShouldBeNoOtherRulesInSetWithEnum,
 			},
 			{
 				`{
@@ -1410,7 +1411,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithEnum,
+				errs.ErrShouldBeNoOtherRulesInSetWithEnum,
 			},
 			{
 				`{
@@ -1419,7 +1420,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithEnum,
+				errs.ErrShouldBeNoOtherRulesInSetWithEnum,
 			},
 			{
 				`{
@@ -1428,7 +1429,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithEnum,
+				errs.ErrShouldBeNoOtherRulesInSetWithEnum,
 			},
 			{
 				`{
@@ -1437,7 +1438,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithEnum,
+				errs.ErrShouldBeNoOtherRulesInSetWithEnum,
 			},
 			{
 				`{
@@ -1446,7 +1447,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithEnum,
+				errs.ErrShouldBeNoOtherRulesInSetWithEnum,
 			},
 			{
 				`{
@@ -1455,7 +1456,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithEnum,
+				errs.ErrShouldBeNoOtherRulesInSetWithEnum,
 			},
 			{
 				`{
@@ -1464,7 +1465,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithEnum,
+				errs.ErrShouldBeNoOtherRulesInSetWithEnum,
 			},
 			{
 				`{
@@ -1473,7 +1474,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithEnum,
+				errs.ErrShouldBeNoOtherRulesInSetWithEnum,
 			},
 			{
 				`{
@@ -1482,7 +1483,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithOr,
+				errs.ErrShouldBeNoOtherRulesInSetWithOr,
 			},
 			{
 				`{
@@ -1491,7 +1492,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithEnum,
+				errs.ErrShouldBeNoOtherRulesInSetWithEnum,
 			},
 			{
 				`{
@@ -1500,7 +1501,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{cat, catID},
-				errors.ErrShouldBeNoOtherRulesInSetWithEnum,
+				errs.ErrShouldBeNoOtherRulesInSetWithEnum,
 			},
 			{
 				`{
@@ -1509,7 +1510,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithOr,
+				errs.ErrShouldBeNoOtherRulesInSetWithOr,
 			},
 			{
 				`{
@@ -1518,7 +1519,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithOr,
+				errs.ErrShouldBeNoOtherRulesInSetWithOr,
 			},
 			{
 				`{
@@ -1527,7 +1528,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithOr,
+				errs.ErrShouldBeNoOtherRulesInSetWithOr,
 			},
 			{
 				`{
@@ -1536,7 +1537,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithOr,
+				errs.ErrShouldBeNoOtherRulesInSetWithOr,
 			},
 			{
 				`{
@@ -1545,7 +1546,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithOr,
+				errs.ErrShouldBeNoOtherRulesInSetWithOr,
 			},
 			{
 				`{
@@ -1554,7 +1555,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithOr,
+				errs.ErrShouldBeNoOtherRulesInSetWithOr,
 			},
 			{
 				`{
@@ -1563,7 +1564,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithOr,
+				errs.ErrShouldBeNoOtherRulesInSetWithOr,
 			},
 			{
 				`{
@@ -1572,7 +1573,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithOr,
+				errs.ErrShouldBeNoOtherRulesInSetWithOr,
 			},
 			{
 				`{
@@ -1581,7 +1582,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithOr,
+				errs.ErrShouldBeNoOtherRulesInSetWithOr,
 			},
 			{
 				`{
@@ -1590,7 +1591,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithOr,
+				errs.ErrShouldBeNoOtherRulesInSetWithOr,
 			},
 			{
 				`{
@@ -1599,7 +1600,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithOr,
+				errs.ErrShouldBeNoOtherRulesInSetWithOr,
 			},
 			{
 				`{
@@ -1608,7 +1609,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithOr,
+				errs.ErrShouldBeNoOtherRulesInSetWithOr,
 			},
 			{
 				`{
@@ -1617,7 +1618,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{cat, catID},
-				errors.ErrShouldBeNoOtherRulesInSetWithOr,
+				errs.ErrShouldBeNoOtherRulesInSetWithOr,
 			},
 			{
 				`{
@@ -1626,7 +1627,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithOr,
+				errs.ErrShouldBeNoOtherRulesInSetWithOr,
 			},
 			{
 				`{
@@ -1635,7 +1636,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithAny,
+				errs.ErrShouldBeNoOtherRulesInSetWithAny,
 			},
 			{
 				`{
@@ -1644,7 +1645,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithAny,
+				errs.ErrShouldBeNoOtherRulesInSetWithAny,
 			},
 			{
 				`{
@@ -1653,7 +1654,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithAny,
+				errs.ErrShouldBeNoOtherRulesInSetWithAny,
 			},
 			{
 				`{
@@ -1662,7 +1663,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithAny,
+				errs.ErrShouldBeNoOtherRulesInSetWithAny,
 			},
 			{
 				`{
@@ -1671,7 +1672,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1680,7 +1681,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithAny,
+				errs.ErrShouldBeNoOtherRulesInSetWithAny,
 			},
 			{
 				`{
@@ -1689,7 +1690,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithAny,
+				errs.ErrShouldBeNoOtherRulesInSetWithAny,
 			},
 			{
 				`{
@@ -1698,7 +1699,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithAny,
+				errs.ErrShouldBeNoOtherRulesInSetWithAny,
 			},
 			{
 				`{
@@ -1707,7 +1708,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithAny,
+				errs.ErrShouldBeNoOtherRulesInSetWithAny,
 			},
 			{
 				`{
@@ -1716,7 +1717,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithAny,
+				errs.ErrShouldBeNoOtherRulesInSetWithAny,
 			},
 			{
 				`{
@@ -1725,7 +1726,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -1734,7 +1735,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrShouldBeNoOtherRulesInSetWithAny,
+				errs.ErrShouldBeNoOtherRulesInSetWithAny,
 			},
 			{
 				`{
@@ -1743,7 +1744,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{cat, catID},
-				errors.ErrShouldBeNoOtherRulesInSetWithAny,
+				errs.ErrShouldBeNoOtherRulesInSetWithAny,
 			},
 			{
 				`{
@@ -1752,7 +1753,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -1761,7 +1762,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1770,7 +1771,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1779,7 +1780,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrConstraintMinNotFound,
+				errs.ErrConstraintMinNotFound,
 			},
 			{
 				`{
@@ -1788,7 +1789,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrConstraintMaxNotFound,
+				errs.ErrConstraintMaxNotFound,
 			},
 			{
 				`{
@@ -1797,7 +1798,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1806,7 +1807,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1815,7 +1816,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1824,7 +1825,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1833,7 +1834,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1842,7 +1843,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1851,7 +1852,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -1860,7 +1861,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1869,7 +1870,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{cat, catID},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1878,7 +1879,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -1887,7 +1888,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{cat, catID},
-				errors.ErrInvalidChildNodeTogetherWithTypeReference,
+				errs.ErrInvalidChildNodeTogetherWithTypeReference,
 			},
 			{
 				`{
@@ -1896,7 +1897,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -1905,7 +1906,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -1914,7 +1915,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -1923,7 +1924,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -1932,7 +1933,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -1941,7 +1942,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -1950,7 +1951,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -1959,7 +1960,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -1968,7 +1969,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -1977,7 +1978,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -1986,7 +1987,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -1995,7 +1996,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -2004,7 +2005,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{cat, catID},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -2013,7 +2014,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -2022,7 +2023,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{catID},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -2031,7 +2032,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{catID},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -2040,7 +2041,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{catID},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -2049,7 +2050,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{catID},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -2058,7 +2059,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{catID},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -2067,7 +2068,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{catID},
-				errors.ErrUnexpectedConstraint,
+				errs.ErrUnexpectedConstraint,
 			},
 			{
 				`{
@@ -2076,7 +2077,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{catID},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -2085,7 +2086,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{catID},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -2094,7 +2095,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{catID},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -2103,7 +2104,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{catID},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -2112,7 +2113,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{catID},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -2121,7 +2122,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{catID},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 			{
 				`{
@@ -2130,7 +2131,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{catID},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -2139,7 +2140,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{cat, catID},
-				errors.ErrCannotSpecifyOtherRulesWithTypeReference,
+				errs.ErrCannotSpecifyOtherRulesWithTypeReference,
 			},
 			{
 				`{
@@ -2148,7 +2149,7 @@ func TestCheckRules(t *testing.T) {
 					}*/
 				}`,
 				[]typ{catID},
-				errors.ErrInvalidValueInTheTypeRule,
+				errs.ErrInvalidValueInTheTypeRule,
 			},
 		}
 
@@ -2158,7 +2159,7 @@ func TestCheckRules(t *testing.T) {
 					r := recover()
 					require.NotNil(t, r, "Panic expected")
 
-					err, ok := r.(errors.Err)
+					err, ok := r.(errs.CodeKeeper)
 					require.Truef(t, ok, "Unexpected error type %#v", r)
 
 					assert.Equal(t, tt.err, err.Code())

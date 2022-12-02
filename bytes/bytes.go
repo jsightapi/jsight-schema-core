@@ -2,10 +2,12 @@ package bytes
 
 import (
 	"bytes"
-	"errors"
+	stdErrors "errors"
 	"fmt"
 	"math"
 	"unicode/utf8"
+
+	"github.com/jsightapi/jsight-schema-core/errs"
 )
 
 type Bytes struct {
@@ -37,7 +39,7 @@ func NewBytes[T Byter](data T) Bytes {
 	}
 	// This might happen only when we extend `Byter` interface and forget
 	// to add new case to the type switch above this point.
-	panic(fmt.Sprintf("Unhandled content type %T", data))
+	panic(errs.ErrUnhandledContentType.F(data))
 }
 
 func (b Bytes) IsNil() bool {
@@ -87,7 +89,7 @@ func (b Bytes) SubHigh(high any) Bytes {
 
 func (b Bytes) SubToEndOfLine(start Index) (Bytes, error) {
 	if start > b.LenIndex() {
-		return b, errors.New("can't get a line from a slice")
+		return b, stdErrors.New("can't get a line from a slice")
 	}
 
 	bb := b.data[start:]
@@ -183,12 +185,12 @@ func (b Bytes) ParseBool() (bool, error) {
 	case "false":
 		return false, nil
 	}
-	return false, errors.New("invalid bool value")
+	return false, stdErrors.New("invalid bool value")
 }
 
 func (b Bytes) ParseUint() (uint, error) {
 	if len(b.data) == 0 {
-		return 0, errors.New("not enough data in ParseUint")
+		return 0, stdErrors.New("not enough data in ParseUint")
 	}
 
 	var u uint
@@ -220,7 +222,7 @@ func (b Bytes) ParseInt() (int, error) {
 	}
 
 	if u > math.MaxInt {
-		return 0, errors.New("too much data for int")
+		return 0, stdErrors.New("too much data for int")
 	}
 
 	i := int(u)

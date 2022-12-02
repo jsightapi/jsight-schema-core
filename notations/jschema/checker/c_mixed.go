@@ -1,9 +1,7 @@
 package checker
 
 import (
-	"fmt"
-
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/kit"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
 )
@@ -18,17 +16,10 @@ func newMixedChecker(node ischema.Node) mixedChecker {
 	}
 }
 
-func (c mixedChecker) Check(nodeLex lexeme.LexEvent) (err errors.Error) {
+func (c mixedChecker) Check(nodeLex lexeme.LexEvent) (err kit.Error) {
 	defer func() {
 		if r := recover(); r != nil {
-			switch val := r.(type) {
-			case errors.DocumentError:
-				err = val
-			case errors.Err:
-				err = lexeme.NewLexEventError(nodeLex, val)
-			default:
-				err = lexeme.NewLexEventError(nodeLex, errors.Format(errors.ErrGeneric, fmt.Sprintf("%s", r)))
-			}
+			err = lexeme.ConvertError(nodeLex, r)
 		}
 	}()
 

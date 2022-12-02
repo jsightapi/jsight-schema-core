@@ -5,9 +5,10 @@ import (
 	"io"
 
 	schema "github.com/jsightapi/jsight-schema-core"
+	"github.com/jsightapi/jsight-schema-core/errs"
+	"github.com/jsightapi/jsight-schema-core/kit"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
 	"github.com/jsightapi/jsight-schema-core/fs"
 	"github.com/jsightapi/jsight-schema-core/internal/sync"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
@@ -112,7 +113,7 @@ func (d *Document) check() error {
 			err = nil
 
 			if jsonLexCounter == 0 {
-				err = errors.NewDocumentError(d.file, errors.ErrEmptyJson)
+				err = kit.NewJSchemaError(d.file, errs.ErrEmptyJson.F())
 			}
 		}
 		return err

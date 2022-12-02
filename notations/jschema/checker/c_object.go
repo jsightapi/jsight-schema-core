@@ -1,7 +1,8 @@
 package checker
 
 import (
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
+	"github.com/jsightapi/jsight-schema-core/kit"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 )
 
@@ -11,9 +12,9 @@ func newObjectChecker() objectChecker {
 	return objectChecker{}
 }
 
-func (objectChecker) Check(nodeLex lexeme.LexEvent) errors.Error {
+func (objectChecker) Check(nodeLex lexeme.LexEvent) kit.Error {
 	if nodeLex.Type() != lexeme.ObjectEnd {
-		return lexeme.NewLexEventError(nodeLex, errors.ErrChecker)
+		return lexeme.NewError(nodeLex, errs.ErrChecker.F())
 	}
 
 	return nil

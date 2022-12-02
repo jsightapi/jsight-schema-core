@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	jschemaLib "github.com/jsightapi/jsight-schema-core"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
 	"github.com/jsightapi/jsight-schema-core/rules/enum"
@@ -60,7 +60,7 @@ func (l *enumValueLoader) begin(lex lexeme.LexEvent) {
 	case lexeme.MixedValueBegin:
 		l.stateFunc = l.ruleNameBegin
 	default:
-		panic(errors.ErrInvalidValueInEnumRule)
+		panic(errs.ErrInvalidValueInEnumRule.F())
 	}
 }
 
@@ -78,20 +78,20 @@ func (l *enumValueLoader) arrayItemBeginOrArrayEnd(lex lexeme.LexEvent) {
 	case lexeme.InlineAnnotationBegin:
 		l.stateFunc = l.commentStart
 	default:
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 }
 
 func (l *enumValueLoader) commentStart(lex lexeme.LexEvent) {
 	if lex.Type() != lexeme.InlineAnnotationTextBegin {
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 	l.stateFunc = l.commentEnd
 }
 
 func (l *enumValueLoader) commentEnd(lex lexeme.LexEvent) {
 	if lex.Type() != lexeme.InlineAnnotationTextEnd {
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 
 	l.enumConstraint.SetComment(l.lastIdx, lex.Value().String())
@@ -100,7 +100,7 @@ func (l *enumValueLoader) commentEnd(lex lexeme.LexEvent) {
 
 func (l *enumValueLoader) annotationEnd(lex lexeme.LexEvent) {
 	if lex.Type() != lexeme.InlineAnnotationEnd {
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 	l.stateFunc = l.arrayItemBeginOrArrayEnd
 }
@@ -113,13 +113,13 @@ func (l *enumValueLoader) literal(lex lexeme.LexEvent) {
 		l.lastIdx = l.enumConstraint.Append(constraint.NewEnumItem(lex.Value(), ""))
 		l.stateFunc = l.arrayItemEnd
 	default:
-		panic(errors.ErrIncorrectArrayItemTypeInEnumRule)
+		panic(errs.ErrIncorrectArrayItemTypeInEnumRule.F())
 	}
 }
 
 func (l *enumValueLoader) arrayItemEnd(lex lexeme.LexEvent) {
 	if lex.Type() != lexeme.ArrayItemEnd {
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 	l.stateFunc = l.arrayItemBeginOrArrayEnd
 }
@@ -128,7 +128,7 @@ func (l *enumValueLoader) arrayItemEnd(lex lexeme.LexEvent) {
 // ex: @ <--
 func (l *enumValueLoader) ruleNameBegin(lex lexeme.LexEvent) {
 	if lex.Type() != lexeme.TypesShortcutBegin {
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 	l.stateFunc = l.ruleName
 }
@@ -136,19 +136,19 @@ func (l *enumValueLoader) ruleNameBegin(lex lexeme.LexEvent) {
 // ruleName process rule name
 func (l *enumValueLoader) ruleName(lex lexeme.LexEvent) {
 	if lex.Type() != lexeme.TypesShortcutEnd {
-		panic(errors.ErrLoader)
+		panic(errs.ErrLoader.F())
 	}
 
 	v := lex.Value().TrimSpaces().String()
 
 	r, ok := l.rules[v]
 	if !ok {
-		panic(errors.Format(errors.ErrEnumRuleNotFound, v))
+		panic(errs.ErrEnumRuleNotFound.F(v))
 	}
 
 	e, ok := r.(*enum.Enum)
 	if !ok {
-		panic(errors.Format(errors.ErrNotAnEnumRule, v))
+		panic(errs.ErrNotAnEnumRule.F(v))
 	}
 
 	vv, err := e.Values()
@@ -178,5 +178,5 @@ func getDetailsFromEnumError(err error) string {
 // The endOfLoading method should not be called during normal operation. Ensures
 // that the loader will not continue to work after the load is complete.
 func (*enumValueLoader) endOfLoading(lexeme.LexEvent) {
-	panic(errors.ErrLoader)
+	panic(errs.ErrLoader.F())
 }

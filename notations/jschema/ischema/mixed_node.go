@@ -2,7 +2,7 @@ package ischema
 
 import (
 	schema "github.com/jsightapi/jsight-schema-core"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 )
@@ -32,7 +32,7 @@ func (n *MixedNode) SetJsonType(t json.Type) {
 }
 
 func (*MixedNode) Grow(lexeme.LexEvent) (Node, bool) {
-	panic(errors.ErrNodeGrow)
+	panic(errs.ErrNodeGrow.F())
 }
 
 func (n MixedNode) ASTNode() (schema.ASTNode, error) {

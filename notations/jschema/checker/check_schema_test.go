@@ -6,9 +6,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/jsightapi/jsight-schema-core/errs"
+
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/loader"
 
-	"github.com/jsightapi/jsight-schema-core/errors"
 	"github.com/jsightapi/jsight-schema-core/fs"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/scanner"
 )
@@ -658,185 +659,185 @@ func TestCheckRootSchema(t *testing.T) {
 		tests := []struct {
 			schema string
 			types  []typ
-			err    errors.ErrorCode
+			err    errs.Code
 		}{
 			// min
-			{`-1 // {"min": 2}`, []typ{}, errors.ErrConstraintValidation},
-			{` 0 // {"min": 2}`, []typ{}, errors.ErrConstraintValidation},
-			{` 1 // {"min": 2}`, []typ{}, errors.ErrConstraintValidation},
-			{`-3 // {"min": -2}`, []typ{}, errors.ErrConstraintValidation},
-			{`-4 // {"min": -2}`, []typ{}, errors.ErrConstraintValidation},
+			{`-1 // {"min": 2}`, []typ{}, errs.ErrConstraintValidation},
+			{` 0 // {"min": 2}`, []typ{}, errs.ErrConstraintValidation},
+			{` 1 // {"min": 2}`, []typ{}, errs.ErrConstraintValidation},
+			{`-3 // {"min": -2}`, []typ{}, errs.ErrConstraintValidation},
+			{`-4 // {"min": -2}`, []typ{}, errs.ErrConstraintValidation},
 
-			{` 3 // {"max": 2}`, []typ{}, errors.ErrConstraintValidation},
-			{` 4 // {"max": 2}`, []typ{}, errors.ErrConstraintValidation},
-			{`-1 // {"max": -2}`, []typ{}, errors.ErrConstraintValidation},
-			{` 0 // {"max": -2}`, []typ{}, errors.ErrConstraintValidation},
-			{` 1 // {"max": -2}`, []typ{}, errors.ErrConstraintValidation},
+			{` 3 // {"max": 2}`, []typ{}, errs.ErrConstraintValidation},
+			{` 4 // {"max": 2}`, []typ{}, errs.ErrConstraintValidation},
+			{`-1 // {"max": -2}`, []typ{}, errs.ErrConstraintValidation},
+			{` 0 // {"max": -2}`, []typ{}, errs.ErrConstraintValidation},
+			{` 1 // {"max": -2}`, []typ{}, errs.ErrConstraintValidation},
 
-			{"2 // {unknown: 123}", []typ{}, errors.ErrUnknownRule},
-			{`2 // {type: "unknown"}`, []typ{}, errors.ErrUnknownType},
+			{"2 // {unknown: 123}", []typ{}, errs.ErrUnknownRule},
+			{`2 // {type: "unknown"}`, []typ{}, errs.ErrUnknownType},
 
-			{"2 // {min: [1,2]}", []typ{}, errors.ErrIncorrectRuleValueType},
-			{"2 // {min: {}}", []typ{}, errors.ErrIncorrectRuleValueType},
+			{"2 // {min: [1,2]}", []typ{}, errs.ErrIncorrectRuleValueType},
+			{"2 // {min: {}}", []typ{}, errs.ErrIncorrectRuleValueType},
 
-			{`222 // {min: 1, min: 1}`, []typ{}, errors.ErrDuplicateRule}, // duplicate, with the same values
-			{`333 // {min: 1, min: 2}`, []typ{}, errors.ErrDuplicateRule}, // duplicate, with different values
+			{`222 // {min: 1, min: 1}`, []typ{}, errs.ErrDuplicateRule}, // duplicate, with the same values
+			{`333 // {min: 1, min: 2}`, []typ{}, errs.ErrDuplicateRule}, // duplicate, with different values
 
-			{`{key: 1}`, []typ{}, errors.ErrInvalidCharacter},            // incorrect json example (no quotes)
-			{`{"k":1, "k":2}`, []typ{}, errors.ErrDuplicateKeysInSchema}, // duplicate keys on JSON
+			{`{key: 1}`, []typ{}, errs.ErrInvalidCharacter},            // incorrect json example (no quotes)
+			{`{"k":1, "k":2}`, []typ{}, errs.ErrDuplicateKeysInSchema}, // duplicate keys on JSON
 
-			{`{"key": "value"} // {min: 1}`, []typ{}, errors.ErrIncorrectRuleForSeveralNode},
+			{`{"key": "value"} // {min: 1}`, []typ{}, errs.ErrIncorrectRuleForSeveralNode},
 			{`[
 			1,2 // {min: 1}
-		]`, []typ{}, errors.ErrIncorrectRuleForSeveralNode},
+		]`, []typ{}, errs.ErrIncorrectRuleForSeveralNode},
 			{`{"key": {"bbb": // {min: 1}
 			2
-		}}`, []typ{}, errors.ErrIncorrectRuleForSeveralNode},
+		}}`, []typ{}, errs.ErrIncorrectRuleForSeveralNode},
 			{`[
 			1
-		] // {min: 1}`, []typ{}, errors.ErrAnnotationNotAllowed},
+		] // {min: 1}`, []typ{}, errs.ErrAnnotationNotAllowed},
 
 			{`{
-		} // {min: 1}`, []typ{}, errors.ErrIncorrectRuleWithoutExample},
+		} // {min: 1}`, []typ{}, errs.ErrIncorrectRuleWithoutExample},
 
 			// error on constraint validation
-			{`3 // {min: 4}`, []typ{}, errors.ErrConstraintValidation},
-			{`3 // {max: 2}`, []typ{}, errors.ErrConstraintValidation},
-			{`"str" // {minLength: 4}`, []typ{}, errors.ErrConstraintStringLengthValidation},
-			{`"str" // {maxLength: 2}`, []typ{}, errors.ErrConstraintStringLengthValidation},
+			{`3 // {min: 4}`, []typ{}, errs.ErrConstraintValidation},
+			{`3 // {max: 2}`, []typ{}, errs.ErrConstraintValidation},
+			{`"str" // {minLength: 4}`, []typ{}, errs.ErrConstraintStringLengthValidation},
+			{`"str" // {maxLength: 2}`, []typ{}, errs.ErrConstraintStringLengthValidation},
 
 			// Incompatible JSON-type
 			{`[ // {min: 1}
 			1
-		]`, []typ{}, errors.ErrUnexpectedConstraint},
-			{`1 // {minLength: 1}`, []typ{}, errors.ErrUnexpectedConstraint},
-			{`"str" // {min: 1}`, []typ{}, errors.ErrUnexpectedConstraint},
+		]`, []typ{}, errs.ErrUnexpectedConstraint},
+			{`1 // {minLength: 1}`, []typ{}, errs.ErrUnexpectedConstraint},
+			{`"str" // {min: 1}`, []typ{}, errs.ErrUnexpectedConstraint},
 
 			// Unable to add constraint "email" to the node "Integer"
-			{`123 // {type: "email"}`, []typ{}, errors.ErrIncompatibleTypes},
+			{`123 // {type: "email"}`, []typ{}, errs.ErrIncompatibleTypes},
 
 			// email
-			{`"" // {type: "email"}`, []typ{}, errors.ErrEmptyEmail},
-			{`"no email" // {type: "email"}`, []typ{}, errors.ErrInvalidEmail},
+			{`"" // {type: "email"}`, []typ{}, errs.ErrEmptyEmail},
+			{`"no email" // {type: "email"}`, []typ{}, errs.ErrInvalidEmail},
 
 			// Invalid value of constraint
-			{`1 // {min: 99, exclusiveMinimum: 1}`, []typ{}, errors.ErrInvalidValueOfConstraint},
-			{`1 // {max: 99, exclusiveMaximum: 1}`, []typ{}, errors.ErrInvalidValueOfConstraint},
-			{`1.1 // {precision: true}`, []typ{}, errors.ErrInvalidValueOfConstraint},
+			{`1 // {min: 99, exclusiveMinimum: 1}`, []typ{}, errs.ErrInvalidValueOfConstraint},
+			{`1 // {max: 99, exclusiveMaximum: 1}`, []typ{}, errs.ErrInvalidValueOfConstraint},
+			{`1.1 // {precision: true}`, []typ{}, errs.ErrInvalidValueOfConstraint},
 			{`{
 					"k": 1 // {optional: 1}
-		}`, []typ{}, errors.ErrInvalidValueOfConstraint},
+		}`, []typ{}, errs.ErrInvalidValueOfConstraint},
 
 			// typeConstraint: incorrect type conversion
-			{`"abc" // {type: "integer"}`, []typ{}, errors.ErrIncompatibleTypes},
-			{`12.34 // {type: "integer"}`, []typ{}, errors.ErrIncompatibleTypes},
-			{`123 // {type: "string"}`, []typ{}, errors.ErrIncompatibleTypes},
-			{`true // {type: "string"}`, []typ{}, errors.ErrIncompatibleTypes},
-			{`null // {type: "string"}`, []typ{}, errors.ErrIncompatibleTypes},
-			{`{} // {type: "string"}`, []typ{}, errors.ErrIncompatibleTypes},
-			{`[] // {type: "string"}`, []typ{}, errors.ErrIncompatibleTypes},
-			{`123 // {type: "float"}`, []typ{}, errors.ErrIncompatibleTypes},
+			{`"abc" // {type: "integer"}`, []typ{}, errs.ErrIncompatibleTypes},
+			{`12.34 // {type: "integer"}`, []typ{}, errs.ErrIncompatibleTypes},
+			{`123 // {type: "string"}`, []typ{}, errs.ErrIncompatibleTypes},
+			{`true // {type: "string"}`, []typ{}, errs.ErrIncompatibleTypes},
+			{`null // {type: "string"}`, []typ{}, errs.ErrIncompatibleTypes},
+			{`{} // {type: "string"}`, []typ{}, errs.ErrIncompatibleTypes},
+			{`[] // {type: "string"}`, []typ{}, errs.ErrIncompatibleTypes},
+			{`123 // {type: "float"}`, []typ{}, errs.ErrIncompatibleTypes},
 
 			// precisionConstraint
-			{`123.45 // {type: "decimal"}`, []typ{}, errors.ErrNotFoundRulePrecision},          // decimal without precision
-			{`123 // {precision: 1}`, []typ{}, errors.ErrUnexpectedConstraint},                 // incorrect integer node type
-			{`"str" // {precision: 2}`, []typ{}, errors.ErrUnexpectedConstraint},               // incorrect string node type
-			{`true // {precision: 2}`, []typ{}, errors.ErrUnexpectedConstraint},                // incorrect bool node type
-			{`null // {precision: 2}`, []typ{}, errors.ErrUnexpectedConstraint},                // incorrect null node type
-			{`"str" // {minLength: 0, precision: 1}`, []typ{}, errors.ErrUnexpectedConstraint}, // incompatibility node type with constraint
-			{`1.0 // {precision: 0}`, []typ{}, errors.ErrZeroPrecision},                        // zero precision
-			{`0.12 // {precision: -2}`, []typ{}, errors.ErrInvalidValueOfConstraint},           // negative precision
-			{`0.12 // {precision: 2.3}`, []typ{}, errors.ErrInvalidValueOfConstraint},          // fractional precision
+			{`123.45 // {type: "decimal"}`, []typ{}, errs.ErrNotFoundRulePrecision},          // decimal without precision
+			{`123 // {precision: 1}`, []typ{}, errs.ErrUnexpectedConstraint},                 // incorrect integer node type
+			{`"str" // {precision: 2}`, []typ{}, errs.ErrUnexpectedConstraint},               // incorrect string node type
+			{`true // {precision: 2}`, []typ{}, errs.ErrUnexpectedConstraint},                // incorrect bool node type
+			{`null // {precision: 2}`, []typ{}, errs.ErrUnexpectedConstraint},                // incorrect null node type
+			{`"str" // {minLength: 0, precision: 1}`, []typ{}, errs.ErrUnexpectedConstraint}, // incompatibility node type with constraint
+			{`1.0 // {precision: 0}`, []typ{}, errs.ErrZeroPrecision},                        // zero precision
+			{`0.12 // {precision: -2}`, []typ{}, errs.ErrInvalidValueOfConstraint},           // negative precision
+			{`0.12 // {precision: 2.3}`, []typ{}, errs.ErrInvalidValueOfConstraint},          // fractional precision
 
 			// exclusiveMinimumConstraint
-			{`111 // {exclusiveMinimum: true}`, []typ{}, errors.ErrConstraintMinNotFound},
-			{`111 // {min: 2, exclusiveMinimum: 1}`, []typ{}, errors.ErrInvalidValueOfConstraint}, // not bool in exclusive
+			{`111 // {exclusiveMinimum: true}`, []typ{}, errs.ErrConstraintMinNotFound},
+			{`111 // {min: 2, exclusiveMinimum: 1}`, []typ{}, errs.ErrInvalidValueOfConstraint}, // not bool in exclusive
 
 			// exclusiveMaximumConstraint
-			{`222 // {exclusiveMaximum: true}`, []typ{}, errors.ErrConstraintMaxNotFound},
-			{`222 // {max: 2, exclusiveMaximum: "str"}`, []typ{}, errors.ErrInvalidValueOfConstraint}, // not bool in exclusive
+			{`222 // {exclusiveMaximum: true}`, []typ{}, errs.ErrConstraintMaxNotFound},
+			{`222 // {max: 2, exclusiveMaximum: "str"}`, []typ{}, errs.ErrInvalidValueOfConstraint}, // not bool in exclusive
 
 			// optionalConstraints: Incorrect rule "optional" location. The rule "optional" applies only to object properties.
-			{`"str" // {optional: true}`, []typ{}, errors.ErrRuleOptionalAppliesOnlyToObjectProperties},
-			{`12 // {optional: true}`, []typ{}, errors.ErrRuleOptionalAppliesOnlyToObjectProperties},
-			{`1.2 // {optional: true}`, []typ{}, errors.ErrRuleOptionalAppliesOnlyToObjectProperties},
-			{`true // {optional: true}`, []typ{}, errors.ErrRuleOptionalAppliesOnlyToObjectProperties},
-			{`null // {optional: true}`, []typ{}, errors.ErrRuleOptionalAppliesOnlyToObjectProperties},
-			{`{} // {optional: true}`, []typ{}, errors.ErrRuleOptionalAppliesOnlyToObjectProperties},
-			{`[] // {optional: true}`, []typ{}, errors.ErrRuleOptionalAppliesOnlyToObjectProperties},
+			{`"str" // {optional: true}`, []typ{}, errs.ErrRuleOptionalAppliesOnlyToObjectProperties},
+			{`12 // {optional: true}`, []typ{}, errs.ErrRuleOptionalAppliesOnlyToObjectProperties},
+			{`1.2 // {optional: true}`, []typ{}, errs.ErrRuleOptionalAppliesOnlyToObjectProperties},
+			{`true // {optional: true}`, []typ{}, errs.ErrRuleOptionalAppliesOnlyToObjectProperties},
+			{`null // {optional: true}`, []typ{}, errs.ErrRuleOptionalAppliesOnlyToObjectProperties},
+			{`{} // {optional: true}`, []typ{}, errs.ErrRuleOptionalAppliesOnlyToObjectProperties},
+			{`[] // {optional: true}`, []typ{}, errs.ErrRuleOptionalAppliesOnlyToObjectProperties},
 			{`[
 				1 // {optional: true}
-			]`, []typ{}, errors.ErrRuleOptionalAppliesOnlyToObjectProperties},
+			]`, []typ{}, errs.ErrRuleOptionalAppliesOnlyToObjectProperties},
 			{`{ // {optional: true}
-            }`, []typ{}, errors.ErrRuleOptionalAppliesOnlyToObjectProperties},
+            }`, []typ{}, errs.ErrRuleOptionalAppliesOnlyToObjectProperties},
 
 			// You cannot specify children node if you use a type reference.
 			{`{ // {type: "@schema"}
 			"key": 123
-		}`, []typ{}, errors.ErrInvalidChildNodeTogetherWithTypeReference},
+		}`, []typ{}, errs.ErrInvalidChildNodeTogetherWithTypeReference},
 
 			// You cannot specify other rules if you use a type reference.
-			{`333 // {type: "@type", min: 1}`, []typ{}, errors.ErrCannotSpecifyOtherRulesWithTypeReference},
-			{`333 // {type: "@type", min: 1}`, []typ{}, errors.ErrCannotSpecifyOtherRulesWithTypeReference},
-			{`333 // {type: "@type1", type: "@type2"}`, []typ{}, errors.ErrDuplicateRule},
+			{`333 // {type: "@type", min: 1}`, []typ{}, errs.ErrCannotSpecifyOtherRulesWithTypeReference},
+			{`333 // {type: "@type", min: 1}`, []typ{}, errs.ErrCannotSpecifyOtherRulesWithTypeReference},
+			{`333 // {type: "@type1", type: "@type2"}`, []typ{}, errs.ErrDuplicateRule},
 
 			// rule "or"
 			{
 				`true // {or: [ {type: "integer"}, {type: "string"} ]}`,
 				[]typ{},
-				errors.ErrIncorrectUserType,
+				errs.ErrIncorrectUserType,
 			},
 			{
 				`0 // {or: [ {type: "integer", min: 1}, {type: "string"} ]}`,
 				[]typ{},
-				errors.ErrOrRuleSetValidation,
+				errs.ErrOrRuleSetValidation,
 			},
-			{`2 // {or: 123}`, []typ{}, errors.ErrArrayWasExpectedInOrRule},
-			{`2 // {or: "some_string"}`, []typ{}, errors.ErrArrayWasExpectedInOrRule},
-			{`2 // {or: "@some_string"}`, []typ{}, errors.ErrArrayWasExpectedInOrRule},
-			{`2 // {or: true}`, []typ{}, errors.ErrArrayWasExpectedInOrRule},
-			{`2 // {or: null}`, []typ{}, errors.ErrArrayWasExpectedInOrRule},
-			{`2 // {or: {}`, []typ{}, errors.ErrArrayWasExpectedInOrRule},
-			{`2 // {or: {or: {"@type-1","@type-2"}`, []typ{}, errors.ErrArrayWasExpectedInOrRule},
+			{`2 // {or: 123}`, []typ{}, errs.ErrArrayWasExpectedInOrRule},
+			{`2 // {or: "some_string"}`, []typ{}, errs.ErrArrayWasExpectedInOrRule},
+			{`2 // {or: "@some_string"}`, []typ{}, errs.ErrArrayWasExpectedInOrRule},
+			{`2 // {or: true}`, []typ{}, errs.ErrArrayWasExpectedInOrRule},
+			{`2 // {or: null}`, []typ{}, errs.ErrArrayWasExpectedInOrRule},
+			{`2 // {or: {}`, []typ{}, errs.ErrArrayWasExpectedInOrRule},
+			{`2 // {or: {or: {"@type-1","@type-2"}`, []typ{}, errs.ErrArrayWasExpectedInOrRule},
 
-			{`2 // {or: [ 1,2,3 ]}`, []typ{}, errors.ErrIncorrectArrayItemTypeInOrRule},
-			{`2 // {or: [ [],[] ]}`, []typ{}, errors.ErrIncorrectArrayItemTypeInOrRule},
+			{`2 // {or: [ 1,2,3 ]}`, []typ{}, errs.ErrIncorrectArrayItemTypeInOrRule},
+			{`2 // {or: [ [],[] ]}`, []typ{}, errs.ErrIncorrectArrayItemTypeInOrRule},
 
-			{`2 // {or: [ {type: false}, {type: "string"} ]}`, []typ{}, errors.ErrUnknownType},
-			{`2 // {or: [ {type: "unknown_json_type"}, {type: "string"} ]}`, []typ{}, errors.ErrUnknownType},
+			{`2 // {or: [ {type: false}, {type: "string"} ]}`, []typ{}, errs.ErrUnknownType},
+			{`2 // {or: [ {type: "unknown_json_type"}, {type: "string"} ]}`, []typ{}, errs.ErrUnknownType},
 
-			{`2 // {or: [ {type: "@type", min: 0}, {type: "string"} ]}`, []typ{}, errors.ErrCannotSpecifyOtherRulesWithTypeReference},
-			{`2 // {or: [ {min: 0, type: "@type"}, {type: "string"} ]}`, []typ{}, errors.ErrCannotSpecifyOtherRulesWithTypeReference},
+			{`2 // {or: [ {type: "@type", min: 0}, {type: "string"} ]}`, []typ{}, errs.ErrCannotSpecifyOtherRulesWithTypeReference},
+			{`2 // {or: [ {min: 0, type: "@type"}, {type: "string"} ]}`, []typ{}, errs.ErrCannotSpecifyOtherRulesWithTypeReference},
 
-			{`2 // {or: [ {}, {} ]}`, []typ{}, errors.ErrEmptyRuleSet},
-			{`2 // {or: []}`, []typ{}, errors.ErrEmptyArrayInOrRule},
+			{`2 // {or: [ {}, {} ]}`, []typ{}, errs.ErrEmptyRuleSet},
+			{`2 // {or: []}`, []typ{}, errs.ErrEmptyArrayInOrRule},
 
-			{`2 // {or: [ {type: "integer", min: 0} ]}`, []typ{}, errors.ErrOneElementInArrayInOrRule},
-			{`2 // {or: [ {min: 0} ]}`, []typ{}, errors.ErrOneElementInArrayInOrRule},
-			{`2 // {or: [ {type: "@type"} ]}`, []typ{}, errors.ErrOneElementInArrayInOrRule},
-			{`2 // {or: [ "@type" ]}`, []typ{}, errors.ErrOneElementInArrayInOrRule},
+			{`2 // {or: [ {type: "integer", min: 0} ]}`, []typ{}, errs.ErrOneElementInArrayInOrRule},
+			{`2 // {or: [ {min: 0} ]}`, []typ{}, errs.ErrOneElementInArrayInOrRule},
+			{`2 // {or: [ {type: "@type"} ]}`, []typ{}, errs.ErrOneElementInArrayInOrRule},
+			{`2 // {or: [ "@type" ]}`, []typ{}, errs.ErrOneElementInArrayInOrRule},
 
 			// {`2 // {or: [ {type: "integer"}, {minLength:1} ]}`, []typ{}, errors.ErrIncompatibleJsonType},
 			// {`2 // {or: [ {type: "integer"}, {min:1, minLength:1} ]}`, []typ{}, errors.ErrIncompatibleJsonType},
 
-			{`2 // {or: [ "some_string" ]}`, []typ{}, errors.ErrUnknownType},
-			{`2 // {or: [ {type: "integer", min: 0, min: 0}, {type: "string"} ]}`, []typ{}, errors.ErrDuplicateRule},
-			{`2 // {or: [ {min: []}, {type: "string"} ]}`, []typ{}, errors.ErrLiteralValueExpected},
+			{`2 // {or: [ "some_string" ]}`, []typ{}, errs.ErrUnknownType},
+			{`2 // {or: [ {type: "integer", min: 0, min: 0}, {type: "string"} ]}`, []typ{}, errs.ErrDuplicateRule},
+			{`2 // {or: [ {min: []}, {type: "string"} ]}`, []typ{}, errs.ErrLiteralValueExpected},
 
-			{`2 // {min: 1, or: [ {type: "integer"}, {type: "string"} ]}`, []typ{}, errors.ErrShouldBeNoOtherRulesInSetWithOr},
+			{`2 // {min: 1, or: [ {type: "integer"}, {type: "string"} ]}`, []typ{}, errs.ErrShouldBeNoOtherRulesInSetWithOr},
 			{
 				`{ // {or: [ {type: "object"}, {type: "string"} ]}
 				"key": 1
 			}`,
 				[]typ{},
-				errors.ErrInvalidChildNodeTogetherWithOrRule,
+				errs.ErrInvalidChildNodeTogetherWithOrRule,
 			},
 			{
 				`[ // {or: [ {type: "array"}, {type: "string"} ]}
 				1,2,3
 			]`,
 				[]typ{},
-				errors.ErrInvalidChildNodeTogetherWithOrRule,
+				errs.ErrInvalidChildNodeTogetherWithOrRule,
 			},
 
 			{
@@ -844,10 +845,10 @@ func TestCheckRootSchema(t *testing.T) {
 				[]typ{
 					{`abc`, `{}`},
 				},
-				errors.ErrInvalidSchemaName,
+				errs.ErrInvalidSchemaName,
 			},
 
-			{`-5 // {or: [ {min: 0}, {type: "string"} ]}`, []typ{}, errors.ErrOrRuleSetValidation},
+			{`-5 // {or: [ {min: 0}, {type: "string"} ]}`, []typ{}, errs.ErrOrRuleSetValidation},
 
 			// duplicate type names
 			{
@@ -856,7 +857,7 @@ func TestCheckRootSchema(t *testing.T) {
 					{`@sub1`, `"some string 1"`},
 					{`@sub1`, `{}`},
 				},
-				errors.ErrDuplicationOfNameOfTypes,
+				errs.ErrDuplicationOfNameOfTypes,
 			},
 
 			// invalid place for comment
@@ -866,7 +867,7 @@ func TestCheckRootSchema(t *testing.T) {
 					{`@sub`, `3.4
 					// {precision: 1}`},
 				},
-				errors.ErrIncorrectRuleWithoutExample,
+				errs.ErrIncorrectRuleWithoutExample,
 			},
 
 			// schema and example type mismatch
@@ -875,70 +876,70 @@ func TestCheckRootSchema(t *testing.T) {
 				[]typ{
 					{`@arr`, `[1,2,3]`},
 				},
-				errors.ErrInvalidChildNodeTogetherWithOrRule,
+				errs.ErrInvalidChildNodeTogetherWithOrRule,
 			},
 			{
 				`[] // {type: "@schema"}`,
 				[]typ{
 					{`@schema`, `{}`},
 				},
-				errors.ErrInvalidChildNodeTogetherWithTypeReference,
+				errs.ErrInvalidChildNodeTogetherWithTypeReference,
 			},
 			{
 				`{} // {type: "@schema"}`,
 				[]typ{
 					{`@schema`, `[1]`},
 				},
-				errors.ErrInvalidChildNodeTogetherWithTypeReference,
+				errs.ErrInvalidChildNodeTogetherWithTypeReference,
 			},
 			{
 				`"" // {type: "@schema"}`,
 				[]typ{
 					{`@schema`, `[1]`},
 				},
-				errors.ErrIncorrectUserType,
+				errs.ErrIncorrectUserType,
 			},
 			{
 				`11 // {type: "@schema"}`,
 				[]typ{
 					{`@schema`, `[1]`},
 				},
-				errors.ErrIncorrectUserType,
+				errs.ErrIncorrectUserType,
 			},
 			{
 				`1.2 // {type: "@schema"}`,
 				[]typ{
 					{`@schema`, `[1]`},
 				},
-				errors.ErrIncorrectUserType,
+				errs.ErrIncorrectUserType,
 			},
 			{
 				`true // {type: "@schema"}`,
 				[]typ{
 					{`@schema`, `[1]`},
 				},
-				errors.ErrIncorrectUserType,
+				errs.ErrIncorrectUserType,
 			},
 			{
 				`null // {type: "@schema"}`,
 				[]typ{
 					{`@schema`, `[1]`},
 				},
-				errors.ErrIncorrectUserType,
+				errs.ErrIncorrectUserType,
 			},
 			{
 				`111 // {type: "@schema"}`,
 				[]typ{
 					{`@schema`, `1.2`},
 				},
-				errors.ErrIncorrectUserType,
+				errs.ErrIncorrectUserType,
 			},
 			{ // decimal and integer
 				`3 // {type: "@schema"}`,
 				[]typ{
 					{`@schema`, `1.2 // {precision: 1}`},
 				},
-				errors.ErrIncorrectUserType,
+				errs.ErrIncorrectUserType,
 			},
 
 			// or
@@ -948,7 +949,7 @@ func TestCheckRootSchema(t *testing.T) {
 					{`@int`, `111`},
 					{`@str`, `"abc"`},
 				},
-				errors.ErrIncorrectUserType,
+				errs.ErrIncorrectUserType,
 			},
 			{
 				`true // {or: ["@int","@str"]}`,
@@ -956,14 +957,14 @@ func TestCheckRootSchema(t *testing.T) {
 					{`@int`, `111`},
 					{`@str`, `"abc"`},
 				},
-				errors.ErrIncorrectUserType},
+				errs.ErrIncorrectUserType},
 			{
 				`null // {or: ["@int","@str"]}`,
 				[]typ{
 					{`@int`, `111`},
 					{`@str`, `"abc"`},
 				},
-				errors.ErrIncorrectUserType,
+				errs.ErrIncorrectUserType,
 			},
 			{
 				`{}   // {or: ["@int","@str"]}`,
@@ -971,7 +972,7 @@ func TestCheckRootSchema(t *testing.T) {
 					{`@int`, `111`},
 					{`@str`, `"abc"`},
 				},
-				errors.ErrInvalidChildNodeTogetherWithOrRule,
+				errs.ErrInvalidChildNodeTogetherWithOrRule,
 			},
 			{
 				`[]   // {or: ["@int","@str"]}`,
@@ -979,7 +980,7 @@ func TestCheckRootSchema(t *testing.T) {
 					{`@int`, `111`},
 					{`@str`, `"abc"`},
 				},
-				errors.ErrInvalidChildNodeTogetherWithOrRule,
+				errs.ErrInvalidChildNodeTogetherWithOrRule,
 			},
 
 			{
@@ -988,28 +989,28 @@ func TestCheckRootSchema(t *testing.T) {
 					{`@int`, `111`},
 					{`@str`, `"abc"`},
 				},
-				errors.ErrIncorrectUserType},
+				errs.ErrIncorrectUserType},
 			{
 				`true // {or: [ {type:"@int"}, {type:"@str"} ]}`,
 				[]typ{
 					{`@int`, `111`},
 					{`@str`, `"abc"`},
 				},
-				errors.ErrIncorrectUserType},
+				errs.ErrIncorrectUserType},
 			{
 				`null // {or: [ {type:"@int"}, {type:"@str"} ]}`,
 				[]typ{
 					{`@int`, `111`},
 					{`@str`, `"abc"`},
 				},
-				errors.ErrIncorrectUserType},
+				errs.ErrIncorrectUserType},
 			{
 				`{}   // {or: [ {type:"@int"}, {type:"@str"} ]}`,
 				[]typ{
 					{`@int`, `111`},
 					{`@str`, `"abc"`},
 				},
-				errors.ErrInvalidChildNodeTogetherWithOrRule,
+				errs.ErrInvalidChildNodeTogetherWithOrRule,
 			},
 			{
 				`[]   // {or: [ {type:"@int"}, {type:"@str"} ]}`,
@@ -1017,14 +1018,14 @@ func TestCheckRootSchema(t *testing.T) {
 					{`@int`, `111`},
 					{`@str`, `"abc"`},
 				},
-				errors.ErrInvalidChildNodeTogetherWithOrRule,
+				errs.ErrInvalidChildNodeTogetherWithOrRule,
 			},
 
-			{`1.2  // {or: [ {type:"integer"}, {type:"string"} ]}`, []typ{}, errors.ErrIncorrectUserType},
-			{`true // {or: [ {type:"integer"}, {type:"string"} ]}`, []typ{}, errors.ErrIncorrectUserType},
-			{`null // {or: [ {type:"integer"}, {type:"string"} ]}`, []typ{}, errors.ErrIncorrectUserType},
-			{`{}   // {or: [ {type:"integer"}, {type:"string"} ]}`, []typ{}, errors.ErrIncorrectUserType},
-			{`[]   // {or: [ {type:"integer"}, {type:"string"} ]}`, []typ{}, errors.ErrIncorrectUserType},
+			{`1.2  // {or: [ {type:"integer"}, {type:"string"} ]}`, []typ{}, errs.ErrIncorrectUserType},
+			{`true // {or: [ {type:"integer"}, {type:"string"} ]}`, []typ{}, errs.ErrIncorrectUserType},
+			{`null // {or: [ {type:"integer"}, {type:"string"} ]}`, []typ{}, errs.ErrIncorrectUserType},
+			{`{}   // {or: [ {type:"integer"}, {type:"string"} ]}`, []typ{}, errs.ErrIncorrectUserType},
+			{`[]   // {or: [ {type:"integer"}, {type:"string"} ]}`, []typ{}, errs.ErrIncorrectUserType},
 
 			{
 				`false // {or: ["@int_or_str", "@obj"]}`,
@@ -1034,14 +1035,14 @@ func TestCheckRootSchema(t *testing.T) {
 					{`@int`, `123`},
 					{`@obj`, `{}`},
 				},
-				errors.ErrIncorrectUserType},
+				errs.ErrIncorrectUserType},
 
 			{
 				`1 // {type: "@type1"}`,
 				[]typ{
 					{`@type1`, `1 // {type: "@type1"}`},
 				},
-				errors.ErrImpossibleToDetermineTheJsonTypeDueToRecursion},
+				errs.ErrImpossibleToDetermineTheJsonTypeDueToRecursion},
 
 			{
 				`1 // {type: "@type1"}`,
@@ -1049,7 +1050,7 @@ func TestCheckRootSchema(t *testing.T) {
 					{`@type1`, `1 // {type: "@type2"}`},
 					{`@type2`, `2 // {type: "@type1"}`},
 				},
-				errors.ErrImpossibleToDetermineTheJsonTypeDueToRecursion},
+				errs.ErrImpossibleToDetermineTheJsonTypeDueToRecursion},
 
 			{
 				`1 // {type: "@type1"}`,
@@ -1058,7 +1059,7 @@ func TestCheckRootSchema(t *testing.T) {
 					{`@type2`, `2 // {type: "@type3"}`},
 					{`@type3`, `3 // {type: "@type1"}`},
 				},
-				errors.ErrImpossibleToDetermineTheJsonTypeDueToRecursion},
+				errs.ErrImpossibleToDetermineTheJsonTypeDueToRecursion},
 
 			{
 				`1 // {type: "@type1"}`,
@@ -1066,7 +1067,7 @@ func TestCheckRootSchema(t *testing.T) {
 					{`@type1`, `1 // {or: [ {type:"integer"}, "@type2" ]}`},
 					{`@type2`, `2 // {or: [ {type:"integer"}, "@type1" ]}`},
 				},
-				errors.ErrImpossibleToDetermineTheJsonTypeDueToRecursion},
+				errs.ErrImpossibleToDetermineTheJsonTypeDueToRecursion},
 
 			{
 				`1 // {type: "@recurring"}`,
@@ -1074,104 +1075,104 @@ func TestCheckRootSchema(t *testing.T) {
 					{`@recurring`, `"abc" // {or: ["@int", "@recurring"]}`},
 					{`@int`, `123`},
 				},
-				errors.ErrImpossibleToDetermineTheJsonTypeDueToRecursion},
+				errs.ErrImpossibleToDetermineTheJsonTypeDueToRecursion},
 
-			{`"abc" // {type: "enum"}`, []typ{}, errors.ErrNotFoundRuleEnum},
-			{`"abc" // {type: "enum", minLength: 1}`, []typ{}, errors.ErrNotFoundRuleEnum},
+			{`"abc" // {type: "enum"}`, []typ{}, errs.ErrNotFoundRuleEnum},
+			{`"abc" // {type: "enum", minLength: 1}`, []typ{}, errs.ErrNotFoundRuleEnum},
 
-			{`"abc" // {type: "mixed"}`, []typ{}, errors.ErrNotFoundRuleOr},
-			{`"abc" // {type: "mixed", minLength: 1}`, []typ{}, errors.ErrNotFoundRuleOr},
+			{`"abc" // {type: "mixed"}`, []typ{}, errs.ErrNotFoundRuleOr},
+			{`"abc" // {type: "mixed", minLength: 1}`, []typ{}, errs.ErrNotFoundRuleOr},
 
-			{`2.0 // {enum: [2]}`, []typ{}, errors.ErrDoesNotMatchAnyOfTheEnumValues},
-			{`2 // {enum: [2.0]}`, []typ{}, errors.ErrDoesNotMatchAnyOfTheEnumValues},
+			{`2.0 // {enum: [2]}`, []typ{}, errs.ErrDoesNotMatchAnyOfTheEnumValues},
+			{`2 // {enum: [2.0]}`, []typ{}, errs.ErrDoesNotMatchAnyOfTheEnumValues},
 
-			{`"abc" // {type: "string", enum: [123, "abc"]}`, []typ{}, errors.ErrInvalidValueInTheTypeRule},
-			{`"abc" // {type: "integer", enum: [123, "abc"]}`, []typ{}, errors.ErrInvalidValueInTheTypeRule},
-			{`"abc" // {type: "boolean", enum: [123, "abc"]}`, []typ{}, errors.ErrInvalidValueInTheTypeRule},
-			{`"abc" // {type: "string", or: [{type:"integer"}, {type:"string"}]}`, []typ{}, errors.ErrInvalidValueInTheTypeRule},
+			{`"abc" // {type: "string", enum: [123, "abc"]}`, []typ{}, errs.ErrInvalidValueInTheTypeRule},
+			{`"abc" // {type: "integer", enum: [123, "abc"]}`, []typ{}, errs.ErrInvalidValueInTheTypeRule},
+			{`"abc" // {type: "boolean", enum: [123, "abc"]}`, []typ{}, errs.ErrInvalidValueInTheTypeRule},
+			{`"abc" // {type: "string", or: [{type:"integer"}, {type:"string"}]}`, []typ{}, errs.ErrInvalidValueInTheTypeRule},
 
-			{`2 // {type: "integer", or: [ {type: "integer"}, {type: "string"} ]}`, []typ{}, errors.ErrInvalidValueInTheTypeRule},
-			{`2 // {type: "@type", or: [ {type: "integer"}, {type: "string"} ]}`, []typ{}, errors.ErrInvalidValueInTheTypeRule},
+			{`2 // {type: "integer", or: [ {type: "integer"}, {type: "string"} ]}`, []typ{}, errs.ErrInvalidValueInTheTypeRule},
+			{`2 // {type: "@type", or: [ {type: "integer"}, {type: "string"} ]}`, []typ{}, errs.ErrInvalidValueInTheTypeRule},
 
-			{`"abc" // {enum: [123, "abc"], minLength: 1}`, []typ{}, errors.ErrShouldBeNoOtherRulesInSetWithEnum},
-			{`"abc" // {type: "enum", enum: [123, "abc"], min: 1}`, []typ{}, errors.ErrShouldBeNoOtherRulesInSetWithEnum},
+			{`"abc" // {enum: [123, "abc"], minLength: 1}`, []typ{}, errs.ErrShouldBeNoOtherRulesInSetWithEnum},
+			{`"abc" // {type: "enum", enum: [123, "abc"], min: 1}`, []typ{}, errs.ErrShouldBeNoOtherRulesInSetWithEnum},
 
-			{`123 // {type: "any", min: 1}`, []typ{}, errors.ErrShouldBeNoOtherRulesInSetWithAny},
-			{`123 // {min: 1, type: "any"}`, []typ{}, errors.ErrShouldBeNoOtherRulesInSetWithAny},
+			{`123 // {type: "any", min: 1}`, []typ{}, errs.ErrShouldBeNoOtherRulesInSetWithAny},
+			{`123 // {min: 1, type: "any"}`, []typ{}, errs.ErrShouldBeNoOtherRulesInSetWithAny},
 			{`{ // {type: "any"}
 			"aaa": 1,
 			"bbb": 2
-		}`, []typ{}, errors.ErrInvalidNestedElementsFoundForTypeAny},
+		}`, []typ{}, errs.ErrInvalidNestedElementsFoundForTypeAny},
 			{`[ // {type: "any"}
 			1,2,3
-		]`, []typ{}, errors.ErrInvalidNestedElementsFoundForTypeAny},
+		]`, []typ{}, errs.ErrInvalidNestedElementsFoundForTypeAny},
 
 			{`1 // {type: "@int"}`,
 				[]typ{
 					{`@int`, `1 // {type: "@str"}`},
 					{`@str`, `"abc"`},
 				},
-				errors.ErrIncorrectUserType},
+				errs.ErrIncorrectUserType},
 			{`1 // {type: "@int"}`,
 				[]typ{
 					{`@int`, `"abc" // {type: "@str"}`},
 					{`@str`, `"abc"`},
 				},
-				errors.ErrIncorrectUserType},
+				errs.ErrIncorrectUserType},
 
 			{`"abc"`,
 				[]typ{
 					{`@unused`, `-1 // {min: 0}`},
 				},
-				errors.ErrConstraintValidation},
+				errs.ErrConstraintValidation},
 
 			{`-5 // {or: [ {min: 0}, {type: "string"}, "@used" ]}`,
 				[]typ{
 					{`@used`, `0 // {min: -10}`},
 					{`@unused`, `-1 // {min: 0} - incorrect EXAMPLE value`},
 				},
-				errors.ErrConstraintValidation},
+				errs.ErrConstraintValidation},
 
 			{`-1 // {type: "@int"}`,
 				[]typ{
 					{`@int`, `0 // {min: 0}`},
 				},
-				errors.ErrConstraintValidation},
+				errs.ErrConstraintValidation},
 
 			{`-1 // {type: "@int"}`,
 				[]typ{
 					{`@int`, `0 // {type: "@uint"}`},
 					{`@uint`, `0  // {min: 0}`},
 				},
-				errors.ErrConstraintValidation},
+				errs.ErrConstraintValidation},
 
 			{`-1 // {type: "@int"}`,
 				[]typ{
 					{`@int`, `-1 // {type: "@uint"}`},
 					{`@uint`, `0  // {min: 0}`},
 				},
-				errors.ErrConstraintValidation},
+				errs.ErrConstraintValidation},
 
-			{`{} // {additionalProperties: "wrong"}`, []typ{}, errors.ErrUnknownJSchemaType},
+			{`{} // {additionalProperties: "wrong"}`, []typ{}, errs.ErrUnknownJSchemaType},
 
-			{`"abc" // {additionalProperties: "string"}`, []typ{}, errors.ErrUnexpectedConstraint},
-			{`123 // {additionalProperties: "string"}`, []typ{}, errors.ErrUnexpectedConstraint},
-			{`123.45 // {additionalProperties: "string"}`, []typ{}, errors.ErrUnexpectedConstraint},
-			{`true // {additionalProperties: "string"}`, []typ{}, errors.ErrUnexpectedConstraint},
-			{`false // {additionalProperties: "string"}`, []typ{}, errors.ErrUnexpectedConstraint},
-			{`null // {additionalProperties: "string"}`, []typ{}, errors.ErrUnexpectedConstraint},
+			{`"abc" // {additionalProperties: "string"}`, []typ{}, errs.ErrUnexpectedConstraint},
+			{`123 // {additionalProperties: "string"}`, []typ{}, errs.ErrUnexpectedConstraint},
+			{`123.45 // {additionalProperties: "string"}`, []typ{}, errs.ErrUnexpectedConstraint},
+			{`true // {additionalProperties: "string"}`, []typ{}, errs.ErrUnexpectedConstraint},
+			{`false // {additionalProperties: "string"}`, []typ{}, errs.ErrUnexpectedConstraint},
+			{`null // {additionalProperties: "string"}`, []typ{}, errs.ErrUnexpectedConstraint},
 			{`[ // {additionalProperties: "string"}
 			123
-		]`, []typ{}, errors.ErrUnexpectedConstraint},
+		]`, []typ{}, errs.ErrUnexpectedConstraint},
 
-			{`{} // {allOf: 123}`, []typ{}, errors.ErrUnacceptableValueInAllOfRule},
-			{`{} // {allOf: true}`, []typ{}, errors.ErrUnacceptableValueInAllOfRule},
-			{`{} // {allOf: false}`, []typ{}, errors.ErrUnacceptableValueInAllOfRule},
-			{`{} // {allOf: null}`, []typ{}, errors.ErrUnacceptableValueInAllOfRule},
-			{`{} // {allOf: {}}`, []typ{}, errors.ErrUnacceptableValueInAllOfRule},
-			{`{} // {allOf: []}`, []typ{}, errors.ErrTypeNameNotFoundInAllOfRule},
-			{`{} // {allOf: "not a schema name"}`, []typ{}, errors.ErrInvalidSchemaNameInAllOfRule},
-			{`{} // {allOf: ["not a schema name"]}`, []typ{}, errors.ErrInvalidSchemaNameInAllOfRule},
+			{`{} // {allOf: 123}`, []typ{}, errs.ErrUnacceptableValueInAllOfRule},
+			{`{} // {allOf: true}`, []typ{}, errs.ErrUnacceptableValueInAllOfRule},
+			{`{} // {allOf: false}`, []typ{}, errs.ErrUnacceptableValueInAllOfRule},
+			{`{} // {allOf: null}`, []typ{}, errs.ErrUnacceptableValueInAllOfRule},
+			{`{} // {allOf: {}}`, []typ{}, errs.ErrUnacceptableValueInAllOfRule},
+			{`{} // {allOf: []}`, []typ{}, errs.ErrTypeNameNotFoundInAllOfRule},
+			{`{} // {allOf: "not a schema name"}`, []typ{}, errs.ErrInvalidSchemaNameInAllOfRule},
+			{`{} // {allOf: ["not a schema name"]}`, []typ{}, errs.ErrInvalidSchemaNameInAllOfRule},
 			{
 				`{ // {allOf: "@basicError"}
 				"message": "Some message text"
@@ -1179,7 +1180,7 @@ func TestCheckRootSchema(t *testing.T) {
 				[]typ{
 					{`@basicError`, `{"message": "Some message text"}`},
 				},
-				errors.ErrDuplicateKeysInSchema,
+				errs.ErrDuplicateKeysInSchema,
 			},
 			{
 				``,
@@ -1191,7 +1192,7 @@ func TestCheckRootSchema(t *testing.T) {
 						"bbb": "bbb"
 					}`},
 				},
-				errors.ErrUnacceptableRecursionInAllOfRule,
+				errs.ErrUnacceptableRecursionInAllOfRule,
 			},
 			{
 				`{} // {allOf: "@aaa"}`,
@@ -1203,7 +1204,7 @@ func TestCheckRootSchema(t *testing.T) {
 						"bbb": "bbb"
 					}`},
 				},
-				errors.ErrUnacceptableRecursionInAllOfRule,
+				errs.ErrUnacceptableRecursionInAllOfRule,
 			},
 			{
 				``,
@@ -1212,54 +1213,54 @@ func TestCheckRootSchema(t *testing.T) {
 						"aaa": "aaa"
 					}`},
 				},
-				errors.ErrTypeNotFound,
+				errs.ErrTypeNotFound,
 			},
 			{
 				`{} // {allOf: "@aaa"}`,
 				[]typ{},
-				errors.ErrTypeNotFound,
+				errs.ErrTypeNotFound,
 			},
 			{
 				`{} // {allOf: "@aaa"}`,
 				[]typ{
 					{`@aaa`, `[]`},
 				},
-				errors.ErrUnacceptableUserTypeInAllOfRule,
+				errs.ErrUnacceptableUserTypeInAllOfRule,
 			},
 			{
 				`{} // {allOf: "@aaa"}`,
 				[]typ{
 					{`@aaa`, `"string"`},
 				},
-				errors.ErrUnacceptableUserTypeInAllOfRule,
+				errs.ErrUnacceptableUserTypeInAllOfRule,
 			},
 			{
 				`{} // {allOf: "@aaa"}`,
 				[]typ{
 					{`@aaa`, `123`},
 				},
-				errors.ErrUnacceptableUserTypeInAllOfRule,
+				errs.ErrUnacceptableUserTypeInAllOfRule,
 			},
 			{
 				`{} // {allOf: "@aaa"}`,
 				[]typ{
 					{`@aaa`, `123.45`},
 				},
-				errors.ErrUnacceptableUserTypeInAllOfRule,
+				errs.ErrUnacceptableUserTypeInAllOfRule,
 			},
 			{
 				`{} // {allOf: "@aaa"}`,
 				[]typ{
 					{`@aaa`, `true`},
 				},
-				errors.ErrUnacceptableUserTypeInAllOfRule,
+				errs.ErrUnacceptableUserTypeInAllOfRule,
 			},
 			{
 				`{} // {allOf: "@aaa"}`,
 				[]typ{
 					{`@aaa`, `null`},
 				},
-				errors.ErrUnacceptableUserTypeInAllOfRule,
+				errs.ErrUnacceptableUserTypeInAllOfRule,
 			},
 			{
 				`{ // {allOf: "@aaa", additionalProperties: "integer"}
@@ -1270,7 +1271,7 @@ func TestCheckRootSchema(t *testing.T) {
 						"aaa": 111
 					}`},
 				},
-				errors.ErrConflictAdditionalProperties,
+				errs.ErrConflictAdditionalProperties,
 			},
 			{
 				`{ // {allOf: "@aaa", additionalProperties: "@int"}
@@ -1283,22 +1284,22 @@ func TestCheckRootSchema(t *testing.T) {
 					{`@str`, `"abc"`},
 					{`@int`, `123`},
 				},
-				errors.ErrConflictAdditionalProperties,
+				errs.ErrConflictAdditionalProperties,
 			},
 			{
 				`[] // {minItems: 1}`,
 				[]typ{},
-				errors.ErrIncorrectConstraintValueForEmptyArray,
+				errs.ErrIncorrectConstraintValueForEmptyArray,
 			},
 			{
 				`[] // {maxItems: 1}`,
 				[]typ{},
-				errors.ErrIncorrectConstraintValueForEmptyArray,
+				errs.ErrIncorrectConstraintValueForEmptyArray,
 			},
 			{
 				`[] // {minItems: 1, maxItems: 1}`,
 				[]typ{},
-				errors.ErrIncorrectConstraintValueForEmptyArray,
+				errs.ErrIncorrectConstraintValueForEmptyArray,
 			},
 			{
 				`{} // {type: "@sub"}`,
@@ -1307,7 +1308,7 @@ func TestCheckRootSchema(t *testing.T) {
 					id\n: 123
 				}`},
 				},
-				errors.ErrInvalidChildNodeTogetherWithTypeReference,
+				errs.ErrInvalidChildNodeTogetherWithTypeReference,
 			},
 			{
 				`{} // {type: "@sub"}`,
@@ -1316,7 +1317,7 @@ func TestCheckRootSchema(t *testing.T) {
 					id": 123
 				}`},
 				},
-				errors.ErrInvalidChildNodeTogetherWithTypeReference,
+				errs.ErrInvalidChildNodeTogetherWithTypeReference,
 			},
 		}
 
@@ -1326,7 +1327,7 @@ func TestCheckRootSchema(t *testing.T) {
 					r := recover()
 					require.NotNil(t, r, "Panic expected")
 
-					err, ok := r.(errors.Err)
+					err, ok := r.(errs.CodeKeeper)
 					require.Truef(t, ok, "Unexpected error type %#v", r)
 
 					assert.Equal(t, tt.err, err.Code())

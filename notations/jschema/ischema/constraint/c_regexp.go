@@ -6,7 +6,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	internalJSON "github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -49,7 +49,7 @@ func (c Regex) String() string {
 
 func (c Regex) Validate(value bytes.Bytes) {
 	if !c.re.Match(value.Unquote().Data()) {
-		panic(errors.ErrDoesNotMatchRegularExpression)
+		panic(errs.ErrDoesNotMatchRegularExpression.F())
 	}
 }
 

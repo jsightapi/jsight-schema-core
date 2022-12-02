@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/internal/sync"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
@@ -50,7 +50,7 @@ func (b *exampleBuilder) Build(node ischema.Node) ([]byte, error) {
 
 func (b *exampleBuilder) buildExampleForObjectNode(node *ischema.ObjectNode) ([]byte, error) {
 	if node.Constraint(constraint.TypesListConstraintType) != nil {
-		return nil, errors.ErrUserTypeFound
+		return nil, errs.ErrUserTypeFound.F()
 	}
 
 	buf := exampleBufferPool.Get()
@@ -93,7 +93,7 @@ func (b *exampleBuilder) buildObjectKey(k ischema.ObjectNodeKey) ([]byte, error)
 
 	typ, ok := b.types[k.Key]
 	if !ok {
-		return nil, errors.Format(errors.ErrUnknownType, k.Key)
+		return nil, errs.ErrUnknownType.F(k.Key)
 	}
 
 	ex, err := b.Build(typ.Schema.RootNode())
@@ -105,7 +105,7 @@ func (b *exampleBuilder) buildObjectKey(k ischema.ObjectNodeKey) ([]byte, error)
 
 func (b *exampleBuilder) buildExampleForArrayNode(node *ischema.ArrayNode) ([]byte, error) {
 	if node.Constraint(constraint.TypesListConstraintType) != nil {
-		return nil, errors.ErrUserTypeFound
+		return nil, errs.ErrUserTypeFound.F()
 	}
 
 	buf := exampleBufferPool.Get()
@@ -137,7 +137,7 @@ func (b *exampleBuilder) buildExampleForMixedValueNode(node *ischema.MixedValueN
 	tt := node.GetTypes()
 	if len(tt) == 0 {
 		// Normally this shouldn't happen, but we still have to handle this case.
-		return nil, errors.ErrLoader
+		return nil, errs.ErrLoader.F()
 	}
 
 	typeName := tt[0]
@@ -157,7 +157,7 @@ func (b *exampleBuilder) buildExampleForMixedValueNode(node *ischema.MixedValueN
 
 	t, ok := b.types[typeName]
 	if !ok {
-		return nil, errors.Format(errors.ErrTypeNotFound, typeName)
+		return nil, errs.ErrTypeNotFound.F(typeName)
 	}
 	return b.Build(t.Schema.RootNode())
 }
@@ -186,7 +186,7 @@ func buildExampleForObjectNode(
 	types map[string]ischema.Type,
 ) ([]byte, error) {
 	if node.Constraint(constraint.TypesListConstraintType) != nil {
-		return nil, errors.ErrUserTypeFound
+		return nil, errs.ErrUserTypeFound.F()
 	}
 
 	b := exampleBufferPool.Get()
@@ -219,7 +219,7 @@ func buildExampleForArrayNode(
 	types map[string]ischema.Type,
 ) ([]byte, error) {
 	if node.Constraint(constraint.TypesListConstraintType) != nil {
-		return nil, errors.ErrUserTypeFound
+		return nil, errs.ErrUserTypeFound.F()
 	}
 
 	b := exampleBufferPool.Get()
@@ -251,7 +251,7 @@ func buildExampleForMixedValueNode(
 	tt := node.GetTypes()
 	if len(tt) == 0 {
 		// Normally this shouldn't happen, but we still have to handle this case.
-		return nil, errors.ErrLoader
+		return nil, errs.ErrLoader.F()
 	}
 
 	typeName := tt[0]
@@ -261,7 +261,7 @@ func buildExampleForMixedValueNode(
 
 	t, ok := types[typeName]
 	if !ok {
-		return nil, errors.Format(errors.ErrTypeNotFound, typeName)
+		return nil, errs.ErrTypeNotFound.F(typeName)
 	}
 	return buildExample(t.Schema.RootNode(), types)
 }

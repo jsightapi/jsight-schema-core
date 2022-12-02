@@ -6,10 +6,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/jsightapi/jsight-schema-core/errs"
+
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
 	"github.com/jsightapi/jsight-schema-core/fs"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
@@ -26,7 +27,7 @@ func Test_addShortcutConstraint(t *testing.T) {
 			lex := lexeme.NewLexEvent(lexeme.TypesShortcutEnd, 0, bytes.Index(len(content)-1), f)
 
 			err := addShortcutConstraint(n, &sc, lex)
-			require.NoError(t, err)
+			require.Nil(t, err)
 
 			c := n.Constraint(constraint.TypesListConstraintType)
 			require.NotNil(t, c)
@@ -47,7 +48,7 @@ func Test_addShortcutConstraint(t *testing.T) {
 			lex := lexeme.NewLexEvent(lexeme.TypesShortcutEnd, 0, bytes.Index(len(content)-1), f)
 
 			err := addShortcutConstraint(n, &sc, lex)
-			require.NoError(t, err)
+			require.Nil(t, err)
 
 			c := n.Constraint(constraint.TypeConstraintType)
 			require.NotNil(t, c)
@@ -87,7 +88,8 @@ func Test_addShortcutConstraint(t *testing.T) {
 		for _, c := range cc {
 			t.Run(c.String(), func(t *testing.T) {
 				err := addShortcutConstraint(nil, nil, lexeme.NewLexEvent(c, 0, 0, nil))
-				assert.Equal(t, errors.ErrLoader, err)
+				assert.NotNil(t, err)
+				assert.Equal(t, errs.ErrLoader, err.Code())
 			})
 		}
 	})

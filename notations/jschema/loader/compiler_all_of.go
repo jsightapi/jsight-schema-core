@@ -1,7 +1,7 @@
 package loader
 
 import (
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
@@ -70,7 +70,7 @@ func (c *allOfConstraintCompiler) extend(node ischema.Node, schemaNames []string
 	defer lexeme.CatchLexEventError(node.BasisLexEventOfSchemaForNode())
 
 	if len(schemaNames) == 0 {
-		panic(errors.ErrTypeNameNotFoundInAllOfRule)
+		panic(errs.ErrTypeNameNotFoundInAllOfRule.F())
 	}
 
 	for _, name := range schemaNames {
@@ -92,14 +92,14 @@ func (c *allOfConstraintCompiler) extendWith(node ischema.Node, name string) {
 
 	fromObject, ok := schem.RootNode().(*ischema.ObjectNode)
 	if !ok {
-		panic(errors.Format(errors.ErrUnacceptableUserTypeInAllOfRule, name))
+		panic(errs.ErrUnacceptableUserTypeInAllOfRule.F(name))
 	}
 
 	// It is not obligatory to make a check for casting to type *schema.ObjectNode.
 	// The constraint cannot be applied to other types of nodes.
 	toObject, ok := node.(*ischema.ObjectNode)
 	if !ok {
-		panic(errors.Format(errors.ErrUnexpectedConstraint, constraint.AllOfConstraintType.String(), node.Type().String())) //nolint:lll
+		panic(errs.ErrUnexpectedConstraint.F(constraint.AllOfConstraintType.String(), node.Type().String()))
 	}
 
 	if fromAdditionalProperties := fromObject.Constraint(constraint.AdditionalPropertiesConstraintType); fromAdditionalProperties != nil { //nolint:lll
@@ -107,7 +107,7 @@ func (c *allOfConstraintCompiler) extendWith(node ischema.Node, name string) {
 		if toAdditionalProperties := toObject.Constraint(constraint.AdditionalPropertiesConstraintType); toAdditionalProperties != nil { //nolint:lll
 			toAdditionalProperties := toAdditionalProperties.(*constraint.AdditionalProperties)
 			if !fromAdditionalProperties.IsEqual(*toAdditionalProperties) {
-				panic(errors.ErrConflictAdditionalProperties)
+				panic(errs.ErrConflictAdditionalProperties.F())
 			}
 		} else {
 			toObject.AddConstraint(fromAdditionalProperties)
@@ -130,7 +130,7 @@ func (c *allOfConstraintCompiler) extendWith(node ischema.Node, name string) {
 
 func (c *allOfConstraintCompiler) processType(name string) *ischema.ISchema {
 	if _, ok := c.processingTypes[name]; ok {
-		panic(errors.ErrUnacceptableRecursionInAllOfRule)
+		panic(errs.ErrUnacceptableRecursionInAllOfRule.F())
 	}
 
 	typ := c.rootSchema.MustType(name) // can panic

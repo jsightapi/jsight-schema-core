@@ -2,7 +2,7 @@ package json
 
 import (
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 )
 
 const nullStr = "null"
@@ -145,5 +145,5 @@ func (g GuessData) LiteralJsonType() Type {
 	case g.IsShortcut():
 		return TypeMixed
 	}
-	panic(errors.Format(errors.ErrNodeTypeCantBeGuessed, g.bytes.String()))
+	panic(errs.ErrNodeTypeCantBeGuessed.F(g.bytes.String()))
 }

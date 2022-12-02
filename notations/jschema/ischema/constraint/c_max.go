@@ -3,7 +3,7 @@ package constraint
 import (
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/errors"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -63,11 +63,11 @@ func (c Max) Validate(value bytes.Bytes) {
 	}
 	if c.exclusive {
 		if c.max.LessThanOrEqual(jsonNumber) {
-			panic(errors.Format(errors.ErrConstraintValidation, MaxConstraintType.String(), c.max.String(), "(exclusive)")) //nolint:lll
+			panic(errs.ErrConstraintValidation.F(MaxConstraintType.String(), c.max.String(), "(exclusive)"))
 		}
 	} else {
 		if c.max.LessThan(jsonNumber) {
-			panic(errors.Format(errors.ErrConstraintValidation, MaxConstraintType.String(), c.max.String(), ""))
+			panic(errs.ErrConstraintValidation.F(MaxConstraintType.String(), c.max.String(), ""))
 		}
 	}
 }
