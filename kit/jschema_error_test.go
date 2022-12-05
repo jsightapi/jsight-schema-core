@@ -5,9 +5,10 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/test"
-	"github.com/stretchr/testify/assert"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
 	"github.com/jsightapi/jsight-schema-core/fs"

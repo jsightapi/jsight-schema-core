@@ -4,9 +4,10 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/test"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestStack_Len(t *testing.T) {

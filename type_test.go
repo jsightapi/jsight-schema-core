@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/jsightapi/jsight-schema-core/errs"
 )
 
 func TestIsValidType(t *testing.T) {

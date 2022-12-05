@@ -121,7 +121,7 @@ func scannerComputeLength(s *scanner) {
 
 func (s *scanner) Length() (uint, error) {
 	if !s.lengthComputing {
-		return 0, stdErrors.New("method not allowed")
+		return 0, errs.ErrRuntimeFailure.F()
 	}
 	var length uint
 	for {
