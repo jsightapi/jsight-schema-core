@@ -24,7 +24,7 @@ func TestNewFile(t *testing.T) {
 	})
 }
 
-func testNewFile[T bytes.Byter](t *testing.T, given T, expected bytes.Bytes) {
+func testNewFile[T bytes.ByteKeeper](t *testing.T, given T, expected bytes.Bytes) {
 	const name = "foo"
 
 	f := NewFile(name, given)

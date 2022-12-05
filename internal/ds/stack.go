@@ -1,5 +1,7 @@
 package ds
 
+import "github.com/jsightapi/jsight-schema-core/errs"
+
 // Stack represent generic stack.
 // Not a thread safe!
 type Stack[T any] struct {
@@ -30,7 +32,7 @@ func (s *Stack[T]) Pop() T {
 func (s *Stack[T]) Peek() T {
 	l := s.Len()
 	if l == 0 {
-		panic("Reading from empty stack")
+		panic(errs.ErrRuntimeFailure.F())
 	}
 	return s.vals[l-1]
 }
@@ -38,7 +40,7 @@ func (s *Stack[T]) Peek() T {
 // Get returns a value of the stack, without removing.
 func (s *Stack[T]) Get(i int) T {
 	if i < 0 || i > s.Len()-1 {
-		panic("Reading a nonexistent element of the stack")
+		panic(errs.ErrRuntimeFailure.F())
 	}
 	return s.vals[i]
 }

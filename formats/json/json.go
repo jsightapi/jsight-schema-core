@@ -27,7 +27,7 @@ type Document struct {
 var _ schema.Document = &Document{}
 
 // New creates a JSON document with specified name and content.
-func New[T bytes.Byter](name string, content T, oo ...Option) schema.Document {
+func New[T bytes.ByteKeeper](name string, content T, oo ...Option) schema.Document {
 	return FromFile(fs.NewFile(name, content), oo...)
 }
 
@@ -81,7 +81,7 @@ func (d *Document) computeLen() (length uint, err error) {
 
 		rErr, ok := r.(error)
 		if !ok {
-			panic(r)
+			panic(errs.ErrRuntimeFailure.F())
 		}
 		err = rErr
 	}()
@@ -129,7 +129,7 @@ func (d *Document) nextLexeme() (lex lexeme.LexEvent, err error) {
 
 		rErr, ok := r.(error)
 		if !ok {
-			panic(r)
+			panic(errs.ErrRuntimeFailure.F())
 		}
 		err = rErr
 	}()

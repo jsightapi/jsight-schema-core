@@ -31,7 +31,7 @@ func (v enumItemValue) String() string {
 	if v.jsonType == json.TypeString {
 		b, err := stdJson.Marshal(v.value)
 		if err != nil {
-			panic(errs.ErrImpossible.F())
+			panic(errs.ErrRuntimeFailure.F())
 		}
 		return string(b)
 	} else {

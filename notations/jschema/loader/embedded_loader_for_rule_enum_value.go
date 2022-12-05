@@ -2,7 +2,6 @@ package loader
 
 import (
 	stdErrors "errors"
-	"fmt"
 
 	jschemaLib "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/errs"
@@ -153,7 +152,7 @@ func (l *enumValueLoader) ruleName(lex lexeme.LexEvent) {
 
 	vv, err := e.Values()
 	if err != nil {
-		panic(fmt.Errorf("Invalid enum %q: %s", v, getDetailsFromEnumError(err)))
+		panic(errs.ErrInvalidEnumValues.F(v, getDetailsFromEnumError(err)))
 	}
 
 	l.enumConstraint.SetRuleName(v)

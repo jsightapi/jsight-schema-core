@@ -7,19 +7,21 @@ import (
 type Code int
 
 const (
-	ErrGeneric              Code = 0
-	ErrImpossible           Code = 1
-	ErrUnhandledContentType Code = 2
+	// Basic
 
-	// Main & common.
+	ErrGeneric        Code = 0
+	ErrRuntimeFailure Code = 1
 
-	ErrUserTypeFound             Code = 101
-	ErrUnknownType               Code = 102
-	ErrUnknownJSchemaType        Code = 103
-	ErrInfinityRecursionDetected Code = 104
-	ErrNodeTypeCantBeGuessed     Code = 105
+	// Common
 
-	// Validator.
+	ErrUserTypeFound                       Code = 101
+	ErrUnknownValueOfTheTypeRule           Code = 102
+	ErrUnknownJSchemaType                  Code = 103
+	ErrInfinityRecursionDetected           Code = 104
+	ErrNodeTypeCantBeGuessed               Code = 105
+	ErrUnableToDetermineTheTypeOfJsonValue Code = 106
+
+	// Validator
 
 	ErrValidator                       Code = 201
 	ErrEmptySchema                     Code = 202
@@ -36,22 +38,25 @@ const (
 	ErrObjectExpected                  Code = 213
 	ErrPropertyNotFound                Code = 214
 
-	// Scanner.
+	// Scanner
 
 	ErrInvalidCharacter                      Code = 301
 	ErrInvalidCharacterInAnnotationObjectKey Code = 302
 	ErrUnexpectedEOF                         Code = 303
 	ErrAnnotationNotAllowed                  Code = 304
+	ErrEmptySetOfLexicalEvents               Code = 305
+	ErrIncorrectEndingOfTheLexicalEvent      Code = 306
 
-	// Schema.
+	// Schema
 
 	ErrNodeGrow                 Code = 401
 	ErrDuplicateKeysInSchema    Code = 402
 	ErrDuplicationOfNameOfTypes Code = 403
 
-	// Node.
+	// Node
 
-	ErrDuplicateRule Code = 501
+	ErrDuplicateRule          Code = 501
+	ErrUnexpectedLexicalEvent Code = 502
 
 	// Constraint
 
@@ -74,7 +79,7 @@ const (
 	ErrValueOfOneConstraintGreaterThanAnother      Code = 617
 	ErrValueOfOneConstraintGreaterOrEqualToAnother Code = 618
 
-	// Loader.
+	// Loader
 
 	ErrInvalidSchemaName                Code = 701
 	ErrInvalidSchemaNameInAllOfRule     Code = 702
@@ -82,7 +87,7 @@ const (
 	ErrUnacceptableUserTypeInAllOfRule  Code = 704
 	ErrConflictAdditionalProperties     Code = 705
 
-	// Rule loader.
+	// Rule loader
 
 	ErrLoader                           Code = 801
 	ErrIncorrectRuleValueType           Code = 802
@@ -95,7 +100,7 @@ const (
 	ErrTypeNameNotFoundInAllOfRule      Code = 809
 	ErrDuplicationInEnumRule            Code = 810
 
-	// "or" rule loader.
+	// "or" rule loader
 
 	ErrArrayWasExpectedInOrRule       Code = 901
 	ErrEmptyArrayInOrRule             Code = 902
@@ -103,7 +108,7 @@ const (
 	ErrIncorrectArrayItemTypeInOrRule Code = 904
 	ErrEmptyRuleSet                   Code = 905
 
-	// Compiler.
+	// Compiler
 
 	ErrRuleOptionalAppliesOnlyToObjectProperties Code = 1101
 	ErrCannotSpecifyOtherRulesWithTypeReference  Code = 1102
@@ -124,50 +129,54 @@ const (
 
 	ErrUnexpectedConstraint Code = 1117
 
-	// Checker.
+	// Checker
 
 	ErrChecker                               Code = 1201
 	ErrElementNotFoundInArray                Code = 1203
 	ErrIncorrectConstraintValueForEmptyArray Code = 1204
 
-	// Link checker.
+	// Link checker
 
 	ErrIncorrectUserType                              Code = 1301
 	ErrTypeNotFound                                   Code = 1302
 	ErrImpossibleToDetermineTheJsonTypeDueToRecursion Code = 1303
 	ErrInvalidKeyShortcutType                         Code = 1304
 
-	// SDK.
+	// SDK
 
 	ErrEmptyType                          Code = 1401
 	ErrUnnecessaryLexemeAfterTheEndOfEnum Code = 1402
 
-	// Regex.
+	// Regex
 
 	ErrRegexUnexpectedStart Code = 1500
 	ErrRegexUnexpectedEnd   Code = 1501
 	ErrRegexInvalid         Code = 1502
 
-	// Enum.
+	// Enum
 
 	ErrEnumArrayExpected  Code = 1600
 	ErrEnumIsHoldRuleName Code = 1601
 	ErrEnumRuleNotFound   Code = 1602
 	ErrNotAnEnumRule      Code = 1603
+	ErrInvalidEnumValues  Code = 1604
+
+	// Tests
+
+	ErrInTheTest Code = 1700
 )
 
 var errorFormat = map[Code]string{
-	// old error format
-	ErrGeneric:              "%s",
-	ErrImpossible:           "The error should not occur during regular operation. May appear only in the process of unfinished code refactoring.", //nolint:lll
-	ErrUnhandledContentType: "Unhandled content type %T",
+	ErrGeneric:        "%s",
+	ErrRuntimeFailure: "Runtime Failure",
 
 	// main & common
-	ErrUserTypeFound:             "Found an invalid reference to the type",
-	ErrUnknownType:               "Unknown type %q",
-	ErrUnknownJSchemaType:        "Unknown JSchema type %q",
-	ErrInfinityRecursionDetected: "Infinity recursion detected %s",
-	ErrNodeTypeCantBeGuessed:     "Node type can't be guessed by value (%s)",
+	ErrUserTypeFound:                       "Found an invalid reference to the type",
+	ErrUnknownValueOfTheTypeRule:           "Unknown value of the type rule %q",
+	ErrUnknownJSchemaType:                  "Unknown JSchema type %q",
+	ErrInfinityRecursionDetected:           "Infinity recursion detected %s",
+	ErrNodeTypeCantBeGuessed:               "Node type can't be guessed by value (%s)",
+	ErrUnableToDetermineTheTypeOfJsonValue: "Unable to determine the type of JSON value",
 
 	// validator
 	ErrValidator:                       "Validator error",
@@ -190,6 +199,8 @@ var errorFormat = map[Code]string{
 	ErrInvalidCharacterInAnnotationObjectKey: "Invalid character %s in object key (inside comment)",
 	ErrUnexpectedEOF:                         "Unexpected end of file",
 	ErrAnnotationNotAllowed:                  "Annotation not allowed here",
+	ErrEmptySetOfLexicalEvents:               "Empty set of found lexical events",
+	ErrIncorrectEndingOfTheLexicalEvent:      "Incorrect ending of the lexical event",
 
 	// schema
 	ErrNodeGrow:                 "Node grow error",
@@ -197,7 +208,8 @@ var errorFormat = map[Code]string{
 	ErrDuplicationOfNameOfTypes: "Duplication of the name of the types (%s)",
 
 	// node
-	ErrDuplicateRule: "Duplicate %q rule",
+	ErrDuplicateRule:          "Duplicate %q rule",
+	ErrUnexpectedLexicalEvent: "Unexpected lexical event %q %s",
 
 	// constraint
 	ErrUnknownRule:                                 `Unknown rule "%s"`,
@@ -287,6 +299,10 @@ var errorFormat = map[Code]string{
 	ErrEnumIsHoldRuleName: "Can't append specific value to enum initialized with rule name",
 	ErrEnumRuleNotFound:   "Enum rule %q not found",
 	ErrNotAnEnumRule:      "Rule %q not an Enum",
+	ErrInvalidEnumValues:  "Invalid enum values %q: %s",
+
+	// tests
+	ErrInTheTest: "Error in the test: %s",
 }
 
 func (c Code) Itoa() string {

@@ -91,11 +91,11 @@ var jsonTests = map[string][]string{
 }
 
 // Returns all value from json variable for the specified key
-func success(key string) []string {
+func success(t *testing.T, key string) []string {
 	arr, ok := jsonTests[key]
 
 	if !ok {
-		panic(`Key "` + key + `" not found`)
+		t.Fatal(`Key "` + key + `" not found`)
 	}
 
 	return append([]string{}, arr...)
@@ -113,7 +113,7 @@ func fail(key string) []string {
 }
 
 func TestIsInteger(t *testing.T) {
-	for _, str := range success("integer") {
+	for _, str := range success(t, "integer") {
 		t.Run(str, func(t *testing.T) {
 			assert.True(t, Guess(bytes.NewBytes(str)).IsInteger())
 		})
@@ -127,7 +127,7 @@ func TestIsInteger(t *testing.T) {
 }
 
 func TestIsFloat(t *testing.T) {
-	for _, str := range success("float") {
+	for _, str := range success(t, "float") {
 		t.Run(str, func(t *testing.T) {
 			assert.True(t, Guess(bytes.NewBytes(str)).IsFloat())
 		})
@@ -141,7 +141,7 @@ func TestIsFloat(t *testing.T) {
 }
 
 func TestIsString(t *testing.T) {
-	for _, str := range success("string") {
+	for _, str := range success(t, "string") {
 		t.Run(str, func(t *testing.T) {
 			assert.True(t, Guess(bytes.NewBytes(str)).IsString())
 		})
@@ -187,7 +187,7 @@ func TestGuessData_IsArray(t *testing.T) {
 }
 
 func TestIsBoolean(t *testing.T) {
-	for _, str := range success("boolean") {
+	for _, str := range success(t, "boolean") {
 		t.Run(str, func(t *testing.T) {
 			assert.True(t, Guess(bytes.NewBytes(str)).IsBoolean())
 		})
@@ -201,7 +201,7 @@ func TestIsBoolean(t *testing.T) {
 }
 
 func TestIsNull(t *testing.T) {
-	for _, str := range success(nullStr) {
+	for _, str := range success(t, nullStr) {
 		t.Run(str, func(t *testing.T) {
 			assert.True(t, Guess(bytes.NewBytes(str)).IsNull())
 		})
@@ -215,31 +215,31 @@ func TestIsNull(t *testing.T) {
 }
 
 func TestGuessLiteralNodeType(t *testing.T) {
-	for _, str := range success("string") {
+	for _, str := range success(t, "string") {
 		t.Run(str, func(t *testing.T) {
 			assert.Equal(t, TypeString, Guess(bytes.NewBytes(str)).LiteralJsonType())
 		})
 	}
 
-	for _, str := range success("integer") {
+	for _, str := range success(t, "integer") {
 		t.Run(str, func(t *testing.T) {
 			assert.Equal(t, TypeInteger, Guess(bytes.NewBytes(str)).LiteralJsonType())
 		})
 	}
 
-	for _, str := range success("float") {
+	for _, str := range success(t, "float") {
 		t.Run(str, func(t *testing.T) {
 			assert.Equal(t, TypeFloat, Guess(bytes.NewBytes(str)).LiteralJsonType())
 		})
 	}
 
-	for _, str := range success("boolean") {
+	for _, str := range success(t, "boolean") {
 		t.Run(str, func(t *testing.T) {
 			assert.Equal(t, TypeBoolean, Guess(bytes.NewBytes(str)).LiteralJsonType())
 		})
 	}
 
-	for _, str := range success(nullStr) {
+	for _, str := range success(t, nullStr) {
 		t.Run(str, func(t *testing.T) {
 			assert.Equal(t, TypeNull, Guess(bytes.NewBytes(str)).LiteralJsonType())
 		})
@@ -247,7 +247,7 @@ func TestGuessLiteralNodeType(t *testing.T) {
 }
 
 func TestGuessLiteralNodeTypePanic(t *testing.T) {
-	for _, str := range success("wrong") {
+	for _, str := range success(t, "wrong") {
 		assert.Panics(t, func() {
 			Guess(bytes.NewBytes(str)).LiteralJsonType()
 		})

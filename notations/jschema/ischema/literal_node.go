@@ -2,6 +2,7 @@ package ischema
 
 import (
 	schema "github.com/jsightapi/jsight-schema-core"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 )
@@ -30,7 +31,7 @@ func (n *LiteralNode) Grow(lex lexeme.LexEvent) (Node, bool) {
 		return n.parent, false
 
 	default:
-		panic(`Unexpected lexical event "` + lex.Type().String() + `" in literal node`)
+		panic(errs.ErrUnexpectedLexicalEvent.F(lex.Type().String(), "in literal node"))
 	}
 
 	return n, false

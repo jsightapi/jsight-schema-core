@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/internal/sync"
 )
 
@@ -19,11 +20,11 @@ func GetProjectRoot() string {
 func determineProjectRoot() string {
 	path, err := os.Getwd()
 	if err != nil {
-		panic(err)
+		panic(errs.ErrInTheTest.F(err))
 	}
 	for {
 		if path == "/" || path == "" {
-			panic("Project root not found")
+			panic(errs.ErrInTheTest.F("Project root not found"))
 		}
 		if isExists(filepath.Join(path, "go.mod")) {
 			break

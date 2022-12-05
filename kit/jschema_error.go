@@ -105,7 +105,7 @@ func (e *JSchemaError) preparation() {
 	}
 
 	if e.file == nil {
-		panic("The file is not specified")
+		panic(errs.ErrRuntimeFailure.F())
 	}
 
 	e.length = e.file.Content().LenIndex()

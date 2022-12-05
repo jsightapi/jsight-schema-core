@@ -4,6 +4,8 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/jsightapi/jsight-schema-core/errs"
+	"github.com/jsightapi/jsight-schema-core/test"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/jsightapi/jsight-schema-core/json"
@@ -94,7 +96,7 @@ func TestAdditionalProperties_String(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		assert.PanicsWithError(t, "Constraint error", func() {
+		test.PanicsWithErr(t, errs.ErrRuntimeFailure.F(), func() {
 			_ = AdditionalProperties{
 				mode: -1,
 			}.String()

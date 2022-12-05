@@ -37,7 +37,7 @@ type JSchema struct {
 var _ schema.Schema = (*JSchema)(nil)
 
 // New creates a Jsight schema with specified name and content.
-func New[T bytes.Byter](name string, content T, oo ...Option) *JSchema {
+func New[T bytes.ByteKeeper](name string, content T, oo ...Option) *JSchema {
 	return FromFile(fs.NewFile(name, content), oo...)
 }
 

@@ -42,7 +42,7 @@ func NewJsonType(b bytes.Bytes) Type {
 	case nullStr:
 		return TypeNull
 	}
-	panic(errs.ErrUnknownType.F(b.String()))
+	panic(errs.ErrUnknownValueOfTheTypeRule.F(b.String()))
 }
 
 var AllTypes = []Type{

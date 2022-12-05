@@ -4,6 +4,8 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/jsightapi/jsight-schema-core/errs"
+	"github.com/jsightapi/jsight-schema-core/test"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -58,7 +60,7 @@ func TestStack_Pop(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		assert.PanicsWithValue(t, "Reading from empty stack", func() {
+		test.PanicsWithErr(t, errs.ErrRuntimeFailure.F(), func() {
 			var s *Stack[int]
 			s.Pop()
 		})
@@ -77,7 +79,7 @@ func TestStack_Peek(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		assert.PanicsWithValue(t, "Reading from empty stack", func() {
+		test.PanicsWithErr(t, errs.ErrRuntimeFailure.F(), func() {
 			(&Stack[int]{}).Peek()
 		})
 	})
@@ -102,7 +104,7 @@ func TestStack_Get(t *testing.T) {
 
 		for _, i := range cc {
 			t.Run(strconv.Itoa(i), func(t *testing.T) {
-				assert.PanicsWithValue(t, "Reading a nonexistent element of the stack", func() {
+				test.PanicsWithErr(t, errs.ErrRuntimeFailure.F(), func() {
 					(&Stack[int]{vals: []int{1}}).Get(i)
 				})
 			})

@@ -610,7 +610,7 @@ func TestEnumValueLoader_ruleName(t *testing.T) {
 			`Rule "ruleName" not an Enum`: {
 				"ruleName": mocks.NewRule(t),
 			},
-			`Invalid enum "ruleName": An array was expected as a value for the "enum"`: {
+			`Invalid enum values "ruleName": An array was expected as a value for the "enum"`: {
 				"ruleName": enum.New("ruleName", "invalid"),
 			},
 		}

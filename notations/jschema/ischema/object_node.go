@@ -1,10 +1,9 @@
 package ischema
 
 import (
-	"fmt"
-
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 )
@@ -65,7 +64,7 @@ func (n *ObjectNode) Grow(lex lexeme.LexEvent) (Node, bool) {
 		return n.parent, false
 
 	default:
-		panic(`Unexpected lexical event "` + lex.Type().String() + `" in object node`)
+		panic(errs.ErrUnexpectedLexicalEvent.F(lex.Type().String(), "in object node"))
 	}
 
 	return n, false
@@ -123,7 +122,7 @@ func (n ObjectNode) Key(index int) ObjectNodeKey {
 	if kv, ok := n.keys.Find(index); ok {
 		return kv
 	}
-	panic(fmt.Sprintf(`Schema key not found in index %d`, index))
+	panic(errs.ErrRuntimeFailure.F())
 }
 
 func (n ObjectNode) Keys() *ObjectNodeKeys {

@@ -93,7 +93,7 @@ func (b *exampleBuilder) buildObjectKey(k ischema.ObjectNodeKey) ([]byte, error)
 
 	typ, ok := b.types[k.Key]
 	if !ok {
-		return nil, errs.ErrUnknownType.F(k.Key)
+		return nil, errs.ErrTypeNotFound.F(k.Key)
 	}
 
 	ex, err := b.Build(typ.Schema.RootNode())

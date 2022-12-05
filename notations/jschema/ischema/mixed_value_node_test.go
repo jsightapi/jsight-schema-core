@@ -5,10 +5,12 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/fs"
 	"github.com/jsightapi/jsight-schema-core/json"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
+	"github.com/jsightapi/jsight-schema-core/test"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -163,8 +165,8 @@ func TestMixedValueNode_Grow(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		assert.PanicsWithValue(t,
-			`Unexpected lexical event "`+lexeme.ObjectBegin.String()+`" in mixed value node`,
+		test.PanicsWithErr(t,
+			errs.ErrUnexpectedLexicalEvent.F(lexeme.ObjectBegin.String(), "in mixed value node"),
 			func() {
 				createFakeMixedValueNode().
 					Grow(lexeme.NewLexEvent(lexeme.ObjectBegin, 0, 0, nil))

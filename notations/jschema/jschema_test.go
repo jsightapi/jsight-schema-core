@@ -3984,7 +3984,7 @@ line
 			schema string
 			types  map[string]string
 		}{
-			`ERROR (code 102): Unknown type "foo"
+			`ERROR (code 102): Unknown value of the type rule "foo"
 	in line 1 on file 
 	> 42 // {type: "foo"}
 	--^`: {

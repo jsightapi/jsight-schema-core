@@ -31,7 +31,7 @@ func Int(i any) int {
 	}
 	// This might happen only when we extend `Indexer` interface and forget
 	// to add new case to the type switch above this point.
-	panic(errs.ErrUnhandledContentType.F(i))
+	panic(errs.ErrRuntimeFailure.F())
 }
 
 // type Indexer interface {
@@ -49,5 +49,5 @@ func Int(i any) int {
 // 	}
 // 	// This might happen only when we extend `Indexer` interface and forget
 // 	// to add new case to the type switch above this point.
-// 	panic(fmt.Sprintf("Unhandled content type %T", i))
+// 	panic(errs.ErrRuntimeFailure.F())
 // }

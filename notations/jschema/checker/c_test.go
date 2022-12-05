@@ -42,7 +42,7 @@ func Test_newNodeChecker(t *testing.T) {
 		for n, c := range cc {
 			t.Run(n, func(t *testing.T) {
 				_, err := newNodeChecker(c)
-				assert.Equal(t, err.Error(), errs.ErrImpossible.F().Error())
+				assert.Equal(t, err.Error(), errs.ErrRuntimeFailure.F().Error())
 			})
 		}
 	})

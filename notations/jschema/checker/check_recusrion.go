@@ -129,7 +129,7 @@ func (c *recursionChecker) check(node ischema.Node, types map[string]ischema.Typ
 		}
 
 	default:
-		return errs.ErrImpossible.F()
+		return errs.ErrRuntimeFailure.F()
 	}
 
 	return nil

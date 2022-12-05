@@ -173,7 +173,7 @@ func (s *scanner) found(lexType lexeme.LexEventType) {
 func (s *scanner) shiftFound() lexeme.LexEventType {
 	length := len(s.finds)
 	if length == 0 {
-		panic("Empty set of found lexical event")
+		panic(errs.ErrEmptySetOfLexicalEvents.F())
 	}
 	lexType := s.finds[0]
 	copy(s.finds[0:], s.finds[1:])
@@ -212,7 +212,7 @@ func (s *scanner) processFoundLexemeClosingTag(lexType lexeme.LexEventType, i by
 	if isScalarPair(pairType, lexType) {
 		return lexeme.NewLexEvent(lexType, pair.Begin(), i-1, s.file)
 	}
-	panic("Incorrect ending of the lexical event")
+	panic(errs.ErrIncorrectEndingOfTheLexicalEvent.F())
 }
 
 func isNonScalarPair(pairType, lexType lexeme.LexEventType) bool {
@@ -353,7 +353,7 @@ func stateBeginValue(s *scanner, c byte) state {
 		s.step = state1
 		return scanBeginLiteral
 	}
-	panic(s.newDocumentErrorAtCharacter("looking for beginning of value"))
+	panic(s.newJSchemaErrorAtCharacter("looking for beginning of value"))
 }
 
 // After reading `[`.
@@ -379,7 +379,7 @@ func stateBeginString(s *scanner, c byte) state {
 		s.step = stateInString
 		return scanBeginLiteral
 	}
-	panic(s.newDocumentErrorAtCharacter("looking for beginning of string"))
+	panic(s.newJSchemaErrorAtCharacter("looking for beginning of string"))
 }
 
 func stateEndValue(s *scanner, c byte) state {
@@ -417,7 +417,7 @@ func stateEndValue(s *scanner, c byte) state {
 		s.step = stateAfterArrayItem
 		return s.step(s, c)
 	}
-	panic(s.newDocumentErrorAtCharacter("at the end of value"))
+	panic(s.newJSchemaErrorAtCharacter("at the end of value"))
 }
 
 func stateAfterObjectKey(s *scanner, c byte) state {
@@ -429,7 +429,7 @@ func stateAfterObjectKey(s *scanner, c byte) state {
 		s.step = stateFoundObjectValueBegin
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("after object key"))
+	panic(s.newJSchemaErrorAtCharacter("after object key"))
 }
 
 func stateAfterObjectValue(s *scanner, c byte) state {
@@ -443,7 +443,7 @@ func stateAfterObjectValue(s *scanner, c byte) state {
 	if c == '}' {
 		return stateFoundObjectEnd(s)
 	}
-	panic(s.newDocumentErrorAtCharacter("after object key:value pair"))
+	panic(s.newJSchemaErrorAtCharacter("after object key:value pair"))
 }
 
 func stateAfterArrayItem(s *scanner, c byte) state {
@@ -457,7 +457,7 @@ func stateAfterArrayItem(s *scanner, c byte) state {
 	if c == ']' {
 		return stateFoundArrayEnd(s)
 	}
-	panic(s.newDocumentErrorAtCharacter("after array item"))
+	panic(s.newJSchemaErrorAtCharacter("after array item"))
 }
 
 func stateFoundObjectEnd(s *scanner) state {
@@ -482,7 +482,7 @@ func stateFoundArrayEnd(s *scanner) state {
 func stateEndTop(s *scanner, c byte) state {
 	if !bytes.IsBlank(c) {
 		if !s.allowTrailingNonSpaceCharacters {
-			panic(s.newDocumentErrorAtCharacter("non-space byte after top-level value"))
+			panic(s.newJSchemaErrorAtCharacter("non-space byte after top-level value"))
 		}
 		s.found(lexeme.EndTop)
 	}
@@ -501,7 +501,7 @@ func stateInString(s *scanner, c byte) state {
 		return scanContinue
 	}
 	if c < 0x20 {
-		panic(s.newDocumentErrorAtCharacter("in string literal"))
+		panic(s.newJSchemaErrorAtCharacter("in string literal"))
 	}
 	return scanContinue
 }
@@ -517,7 +517,7 @@ func stateInStringEsc(s *scanner, c byte) state {
 		s.step = stateInStringEscU
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("in string escape code"))
+	panic(s.newJSchemaErrorAtCharacter("in string escape code"))
 }
 
 // After reading `"\u` during a quoted string.
@@ -526,7 +526,7 @@ func stateInStringEscU(s *scanner, c byte) state {
 		s.step = stateInStringEscU1
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("in \\u hexadecimal character escape"))
+	panic(s.newJSchemaErrorAtCharacter("in \\u hexadecimal character escape"))
 }
 
 // After reading `"\u1` during a quoted string.
@@ -535,7 +535,7 @@ func stateInStringEscU1(s *scanner, c byte) state {
 		s.step = stateInStringEscU12
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("in \\u hexadecimal character escape"))
+	panic(s.newJSchemaErrorAtCharacter("in \\u hexadecimal character escape"))
 }
 
 // After reading `"\u12` during a quoted string.
@@ -544,7 +544,7 @@ func stateInStringEscU12(s *scanner, c byte) state {
 		s.step = stateInStringEscU123
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("in \\u hexadecimal character escape"))
+	panic(s.newJSchemaErrorAtCharacter("in \\u hexadecimal character escape"))
 }
 
 // After reading `"\u123` during a quoted string.
@@ -553,7 +553,7 @@ func stateInStringEscU123(s *scanner, c byte) state {
 		s.step = s.returnToStep.Pop() // = stateInString for JSON, = stateInAnnotationObjectKey for AnnotationObject
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("in \\u hexadecimal character escape"))
+	panic(s.newJSchemaErrorAtCharacter("in \\u hexadecimal character escape"))
 }
 
 // After reading `-` during a number.
@@ -568,7 +568,7 @@ func stateNeg(s *scanner, c byte) state {
 		s.unfinishedLiteral = false
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("in numeric literal"))
+	panic(s.newJSchemaErrorAtCharacter("in numeric literal"))
 }
 
 // After reading a non-zero integer during a number, such as after reading `1` or
@@ -601,7 +601,7 @@ func stateDot(s *scanner, c byte) state {
 		s.step = stateDot0
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("after decimal point in numeric literal"))
+	panic(s.newJSchemaErrorAtCharacter("after decimal point in numeric literal"))
 }
 
 // After reading the integer, decimal point, and subsequent digits of a number,
@@ -634,7 +634,7 @@ func stateESign(s *scanner, c byte) state {
 		s.step = stateE0
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("in exponent of numeric literal"))
+	panic(s.newJSchemaErrorAtCharacter("in exponent of numeric literal"))
 }
 
 // After reading the mantissa, e, optional sign, and at least one digit of the
@@ -652,7 +652,7 @@ func stateT(s *scanner, c byte) state {
 		s.step = stateTr
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("in literal true (expecting 'r')"))
+	panic(s.newJSchemaErrorAtCharacter("in literal true (expecting 'r')"))
 }
 
 // After reading `tr`.
@@ -661,7 +661,7 @@ func stateTr(s *scanner, c byte) state {
 		s.step = stateTru
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("in literal true (expecting 'u')"))
+	panic(s.newJSchemaErrorAtCharacter("in literal true (expecting 'u')"))
 }
 
 // After reading `tru`.
@@ -671,7 +671,7 @@ func stateTru(s *scanner, c byte) state {
 		s.unfinishedLiteral = false
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("in literal true (expecting 'e')"))
+	panic(s.newJSchemaErrorAtCharacter("in literal true (expecting 'e')"))
 }
 
 // After reading `f`.
@@ -680,7 +680,7 @@ func stateF(s *scanner, c byte) state {
 		s.step = stateFa
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("in literal false (expecting 'a')"))
+	panic(s.newJSchemaErrorAtCharacter("in literal false (expecting 'a')"))
 }
 
 // After reading `fa`.
@@ -689,7 +689,7 @@ func stateFa(s *scanner, c byte) state {
 		s.step = stateFal
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("in literal false (expecting 'l')"))
+	panic(s.newJSchemaErrorAtCharacter("in literal false (expecting 'l')"))
 }
 
 // After reading `fal`.
@@ -698,7 +698,7 @@ func stateFal(s *scanner, c byte) state {
 		s.step = stateFals
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("in literal false (expecting 's')"))
+	panic(s.newJSchemaErrorAtCharacter("in literal false (expecting 's')"))
 }
 
 // After reading `fals`.
@@ -708,7 +708,7 @@ func stateFals(s *scanner, c byte) state {
 		s.unfinishedLiteral = false
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("in literal false (expecting 'e')"))
+	panic(s.newJSchemaErrorAtCharacter("in literal false (expecting 'e')"))
 }
 
 // After reading `n`.
@@ -717,7 +717,7 @@ func stateN(s *scanner, c byte) state {
 		s.step = stateNu
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("in literal null (expecting 'u')"))
+	panic(s.newJSchemaErrorAtCharacter("in literal null (expecting 'u')"))
 }
 
 // After reading `nu`.
@@ -726,7 +726,7 @@ func stateNu(s *scanner, c byte) state {
 		s.step = stateNul
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("in literal null (expecting 'l')"))
+	panic(s.newJSchemaErrorAtCharacter("in literal null (expecting 'l')"))
 }
 
 // After reading `nul`.
@@ -736,10 +736,10 @@ func stateNul(s *scanner, c byte) state {
 		s.unfinishedLiteral = false
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("in literal null (expecting 'l')"))
+	panic(s.newJSchemaErrorAtCharacter("in literal null (expecting 'l')"))
 }
 
-func (s *scanner) newDocumentErrorAtCharacter(context string) kit.JSchemaError {
+func (s *scanner) newJSchemaErrorAtCharacter(context string) kit.JSchemaError {
 	// Make runes (utf8 symbols) from current index to last of slice s.data.
 	// Get first rune. Then make string with format ' symbol '
 	r := s.data.SubLow(s.index - 1).DecodeRune()

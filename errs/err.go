@@ -10,15 +10,20 @@ type Err struct {
 	message string
 }
 
+var (
+	_ error = Err{}
+	_ error = &Err{}
+)
+
 func f(code Code, args ...any) *Err {
 	message, ok := errorFormat[code]
 	if !ok {
-		panic("Undefined error message")
+		panic(ErrRuntimeFailure.F())
 	}
 
 	cnt := strings.Count(message, "%")
 	if cnt != len(args) {
-		panic("Invalid error message format")
+		panic(ErrRuntimeFailure.F())
 	}
 	if cnt != 0 {
 		message = fmt.Sprintf(message, args...)

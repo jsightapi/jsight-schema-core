@@ -15,8 +15,8 @@ type Bytes struct {
 	nl   byte
 }
 
-// Byter all allowed types for specifying Byte constructor
-type Byter interface {
+// ByteKeeper all allowed types for specifying Byte constructor
+type ByteKeeper interface {
 	string | []byte | Bytes
 }
 
@@ -26,7 +26,7 @@ func MakeBytes(size int) Bytes {
 	}
 }
 
-func NewBytes[T Byter](data T) Bytes {
+func NewBytes[T ByteKeeper](data T) Bytes {
 	switch bb := any(data).(type) {
 	case nil:
 		return Bytes{data: nil}
@@ -37,9 +37,9 @@ func NewBytes[T Byter](data T) Bytes {
 	case Bytes:
 		return bb
 	}
-	// This might happen only when we extend `Byter` interface and forget
+	// This might happen only when we extend `ByteKeeper` interface and forget
 	// to add new case to the type switch above this point.
-	panic(errs.ErrUnhandledContentType.F(data))
+	panic(errs.ErrRuntimeFailure.F())
 }
 
 func (b Bytes) IsNil() bool {

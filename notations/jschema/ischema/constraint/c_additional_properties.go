@@ -109,7 +109,7 @@ func (c AdditionalProperties) String() string {
 		buf.WriteString("false")
 
 	default:
-		panic(errs.ErrGeneric.F("Constraint error"))
+		panic(errs.ErrRuntimeFailure.F())
 	}
 
 	return buf.String()

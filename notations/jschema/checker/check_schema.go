@@ -47,14 +47,14 @@ func (c *checkSchema) checkType(name string, typ ischema.Type, ss map[string]isc
 		}
 
 		// Return an error with the full set of bytes of the root schema.
-		if documentError, ok := r.(kit.JSchemaError); ok {
-			documentError.SetFile(typ.RootFile)
-			documentError.SetIndex(bytes.Index(documentError.Index()) + typ.Begin)
-			documentError.SetIncorrectUserType(name)
-			panic(documentError)
+		if jErr, ok := r.(kit.JSchemaError); ok {
+			jErr.SetFile(typ.RootFile)
+			jErr.SetIndex(bytes.Index(jErr.Index()) + typ.Begin)
+			jErr.SetIncorrectUserType(name)
+			panic(jErr)
 		}
 
-		panic(r)
+		panic(errs.ErrRuntimeFailure.F())
 	}()
 
 	c.checkNode(typ.Schema.RootNode(), ss)
@@ -95,7 +95,7 @@ func (c checkSchema) checkNode(node ischema.Node, ss map[string]ischema.Type) {
 		c.checkCompatibilityOfConstraints(node)
 		c.checkLinksOfNode(node, ss) // can panic
 	default:
-		panic(errs.ErrImpossible.F())
+		panic(errs.ErrRuntimeFailure.F())
 	}
 
 	if branchingNode, ok := node.(ischema.BranchNode); ok {

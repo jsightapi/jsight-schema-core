@@ -92,7 +92,7 @@ func (n *MixedValueNode) Grow(lex lexeme.LexEvent) (Node, bool) {
 		return n.parent, false
 
 	default:
-		panic(`Unexpected lexical event "` + lex.Type().String() + `" in mixed value node`)
+		panic(errs.ErrUnexpectedLexicalEvent.F(lex.Type().String(), "in mixed value node"))
 	}
 
 	return n, false

@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
+	"github.com/jsightapi/jsight-schema-core/errs"
 )
 
 // Number provides a method to work with numbers in the understanding of JSON (for
@@ -98,7 +99,7 @@ func (Number) not(cmp int) int {
 	case 0:
 		return 0
 	}
-	panic("Incorrect value")
+	panic(errs.ErrRuntimeFailure.F())
 }
 
 func (n Number) cmpAbs(nn *Number) (r int) {
@@ -219,7 +220,7 @@ func (n Number) ToFloat() float64 {
 	// Normally we shouldn't get an error here cause string value is valid.
 	// But we should throw error just in case.
 	if err != nil {
-		panic(err)
+		panic(errs.ErrRuntimeFailure.F())
 	}
 	return v
 }

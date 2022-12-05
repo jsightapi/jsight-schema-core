@@ -675,7 +675,7 @@ func TestCheckRootSchema(t *testing.T) {
 			{` 1 // {"max": -2}`, []typ{}, errs.ErrConstraintValidation},
 
 			{"2 // {unknown: 123}", []typ{}, errs.ErrUnknownRule},
-			{`2 // {type: "unknown"}`, []typ{}, errs.ErrUnknownType},
+			{`2 // {type: "unknown"}`, []typ{}, errs.ErrUnknownValueOfTheTypeRule},
 
 			{"2 // {min: [1,2]}", []typ{}, errs.ErrIncorrectRuleValueType},
 			{"2 // {min: {}}", []typ{}, errs.ErrIncorrectRuleValueType},
@@ -803,8 +803,8 @@ func TestCheckRootSchema(t *testing.T) {
 			{`2 // {or: [ 1,2,3 ]}`, []typ{}, errs.ErrIncorrectArrayItemTypeInOrRule},
 			{`2 // {or: [ [],[] ]}`, []typ{}, errs.ErrIncorrectArrayItemTypeInOrRule},
 
-			{`2 // {or: [ {type: false}, {type: "string"} ]}`, []typ{}, errs.ErrUnknownType},
-			{`2 // {or: [ {type: "unknown_json_type"}, {type: "string"} ]}`, []typ{}, errs.ErrUnknownType},
+			{`2 // {or: [ {type: false}, {type: "string"} ]}`, []typ{}, errs.ErrUnknownValueOfTheTypeRule},
+			{`2 // {or: [ {type: "unknown_json_type"}, {type: "string"} ]}`, []typ{}, errs.ErrUnknownValueOfTheTypeRule},
 
 			{`2 // {or: [ {type: "@type", min: 0}, {type: "string"} ]}`, []typ{}, errs.ErrCannotSpecifyOtherRulesWithTypeReference},
 			{`2 // {or: [ {min: 0, type: "@type"}, {type: "string"} ]}`, []typ{}, errs.ErrCannotSpecifyOtherRulesWithTypeReference},
@@ -820,7 +820,7 @@ func TestCheckRootSchema(t *testing.T) {
 			// {`2 // {or: [ {type: "integer"}, {minLength:1} ]}`, []typ{}, errors.ErrIncompatibleJsonType},
 			// {`2 // {or: [ {type: "integer"}, {min:1, minLength:1} ]}`, []typ{}, errors.ErrIncompatibleJsonType},
 
-			{`2 // {or: [ "some_string" ]}`, []typ{}, errs.ErrUnknownType},
+			{`2 // {or: [ "some_string" ]}`, []typ{}, errs.ErrUnknownValueOfTheTypeRule},
 			{`2 // {or: [ {type: "integer", min: 0, min: 0}, {type: "string"} ]}`, []typ{}, errs.ErrDuplicateRule},
 			{`2 // {or: [ {min: []}, {type: "string"} ]}`, []typ{}, errs.ErrLiteralValueExpected},
 

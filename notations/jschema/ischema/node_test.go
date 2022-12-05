@@ -1,12 +1,13 @@
 package ischema
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
+	"github.com/jsightapi/jsight-schema-core/test"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -29,8 +30,7 @@ func TestNewNode(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		const lexType = lexeme.NewLine
-		assert.PanicsWithValue(t, fmt.Sprintf("Can not create node from the lexical event %q", lexType), func() {
+		test.PanicsWithErr(t, errs.ErrRuntimeFailure.F(), func() {
 			NewNode(lexeme.NewLexEvent(lexeme.NewLine, 0, 0, nil))
 		})
 	})

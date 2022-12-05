@@ -35,7 +35,7 @@ type Value struct {
 var _ schema.Rule = (*Enum)(nil)
 
 // New creates new Enum rule with specified name and content.
-func New[T bytes.Byter](name string, content T) *Enum {
+func New[T bytes.ByteKeeper](name string, content T) *Enum {
 	return FromFile(fs.NewFile(name, content))
 }
 

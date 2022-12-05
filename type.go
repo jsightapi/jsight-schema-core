@@ -1,9 +1,8 @@
 package schema
 
 import (
-	"errors"
-
 	"github.com/jsightapi/jsight-schema-core/bytes"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 )
 
@@ -306,8 +305,6 @@ var schemaTypeComparisonMap = map[SchemaType][]SchemaType{
 	},
 }
 
-var ErrUnknownSchemaType = errors.New("unknown schema type")
-
 func GuessSchemaType(b []byte) (SchemaType, error) {
 	return (&typeGuesser{data: b}).Guess()
 }
@@ -333,7 +330,7 @@ func (g *typeGuesser) Guess() (SchemaType, error) {
 			return t, nil
 		}
 	}
-	return SchemaTypeUndefined, ErrUnknownSchemaType
+	return SchemaTypeUndefined, errs.ErrUnableToDetermineTheTypeOfJsonValue.F()
 }
 
 func (g *typeGuesser) isString() bool {

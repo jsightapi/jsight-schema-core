@@ -5,13 +5,15 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/jsightapi/jsight-schema-core/errs"
+	"github.com/jsightapi/jsight-schema-core/test"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
 	"github.com/jsightapi/jsight-schema-core/fs"
 )
 
-func TestDocumentError_preparation(t *testing.T) {
+func TestJSchemaError_preparation(t *testing.T) {
 	t.Run("positive", func(t *testing.T) {
 		t.Run("not prepared", func(t *testing.T) {
 			e := JSchemaError{file: fs.NewFile("", "123456")}
@@ -23,7 +25,7 @@ func TestDocumentError_preparation(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		assert.PanicsWithValue(t, "The file is not specified", func() {
+		test.PanicsWithErr(t, errs.ErrRuntimeFailure.F(), func() {
 			(&JSchemaError{}).preparation()
 		})
 	})
@@ -133,13 +135,13 @@ var data = []testData{
 	},
 }
 
-func TestDocumentError_lineBeginning(t *testing.T) {
+func TestJSchemaError_lineBeginning(t *testing.T) {
 	for _, d := range data {
 		for _, v := range d.valid {
 			t.Run(fmt.Sprintf("%s %d", d.source, v.index), func(t *testing.T) {
 				file := fs.NewFile("", d.source)
 
-				e := newFakeDocumentError(file, v.index)
+				e := newFakeJSchemaError(file, v.index)
 
 				begin := e.lineBeginning()
 				assert.Equal(t, v.begin, begin)
@@ -148,13 +150,13 @@ func TestDocumentError_lineBeginning(t *testing.T) {
 	}
 }
 
-func TestDocumentError_lineEnd(t *testing.T) {
+func TestJSchemaError_lineEnd(t *testing.T) {
 	for _, d := range data {
 		for _, v := range d.valid {
 			t.Run(fmt.Sprintf("%s %d", d.source, v.index), func(t *testing.T) {
 				file := fs.NewFile("", d.source)
 
-				e := newFakeDocumentError(file, v.index)
+				e := newFakeJSchemaError(file, v.index)
 
 				end := e.lineEnd()
 				assert.Equal(t, v.end, end)
@@ -163,13 +165,13 @@ func TestDocumentError_lineEnd(t *testing.T) {
 	}
 }
 
-func TestNewDocumentError_Line(t *testing.T) {
+func TestNewJSchemaError_Line(t *testing.T) {
 	for _, d := range data {
 		for _, v := range d.valid {
 			t.Run(fmt.Sprintf("%s %d", d.source, v.index), func(t *testing.T) {
 				file := fs.NewFile("", d.source)
 
-				e := newFakeDocumentError(file, v.index)
+				e := newFakeJSchemaError(file, v.index)
 
 				n := e.Line()
 				assert.Equal(t, v.line, n)
@@ -178,13 +180,13 @@ func TestNewDocumentError_Line(t *testing.T) {
 	}
 }
 
-func TestNewDocumentError_Column(t *testing.T) {
+func TestNewJSchemaError_Column(t *testing.T) {
 	for _, d := range data {
 		for _, v := range d.valid {
 			t.Run(fmt.Sprintf("%s %d", d.source, v.index), func(t *testing.T) {
 				file := fs.NewFile("", d.source)
 
-				e := newFakeDocumentError(file, v.index)
+				e := newFakeJSchemaError(file, v.index)
 
 				n := e.Column()
 				assert.Equal(t, v.column, n)
@@ -193,13 +195,13 @@ func TestNewDocumentError_Column(t *testing.T) {
 	}
 }
 
-func TestDocumentError_SourceSubString(t *testing.T) {
+func TestJSchemaError_SourceSubString(t *testing.T) {
 	for _, d := range data {
 		for _, v := range d.valid {
 			t.Run(fmt.Sprintf("%s %d", d.source, v.index), func(t *testing.T) {
 				file := fs.NewFile("", d.source)
 
-				e := newFakeDocumentError(file, v.index)
+				e := newFakeJSchemaError(file, v.index)
 
 				str := e.SourceSubString()
 				assert.Equal(t, v.str, str)
@@ -210,13 +212,13 @@ func TestDocumentError_SourceSubString(t *testing.T) {
 	t.Run("too long source substring", func(t *testing.T) {
 		file := fs.NewFile("", strings.Repeat("123456789 ", 100))
 
-		e := newFakeDocumentError(file, 0)
+		e := newFakeJSchemaError(file, 0)
 
 		assert.Len(t, e.SourceSubString(), 200)
 	})
 }
 
-func newFakeDocumentError(f *fs.File, idx bytes.Index) JSchemaError {
+func newFakeJSchemaError(f *fs.File, idx bytes.Index) JSchemaError {
 	e := JSchemaError{}
 	e.SetFile(f)
 	e.SetIndex(idx)

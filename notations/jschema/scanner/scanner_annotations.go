@@ -41,7 +41,7 @@ func (s *Scanner) switchToAnnotation() {
 		s.step = stateInlineAnnotationStart
 
 	default:
-		panic(s.newDocumentErrorAtCharacter("inside inline annotation"))
+		panic(s.newJSchemaErrorAtCharacter("inside inline annotation"))
 	}
 }
 
@@ -58,7 +58,7 @@ func stateAnyAnnotationStart(s *Scanner, c byte) state {
 		s.step = stateMultiLineAnnotation
 		return scanContinue
 	}
-	panic(s.newDocumentErrorAtCharacter("after first slash"))
+	panic(s.newJSchemaErrorAtCharacter("after first slash"))
 }
 
 // ///////////////////////////
@@ -67,7 +67,7 @@ func stateAnyAnnotationStart(s *Scanner, c byte) state {
 func stateInlineAnnotationStart(s *Scanner, c byte) state {
 	// second slash - inline annotation
 	if c != '/' {
-		panic(s.newDocumentErrorAtCharacter("after first slash on start inline annotation"))
+		panic(s.newJSchemaErrorAtCharacter("after first slash on start inline annotation"))
 	}
 	s.annotation = annotationInline
 	s.found(lexeme.InlineAnnotationBegin)
@@ -110,7 +110,7 @@ func stateInlineAnnotationTextPrefix(s *Scanner, c byte) state {
 		s.step = stateInlineAnnotationTextPrefix2
 
 	default:
-		panic(s.newDocumentErrorAtCharacter("after object in inline annotation"))
+		panic(s.newJSchemaErrorAtCharacter("after object in inline annotation"))
 	}
 
 	return scanContinue
@@ -134,7 +134,7 @@ func stateInlineAnnotationText(s *Scanner, c byte) state {
 		fn := s.returnToStep.Pop()
 		s.step = func(s *Scanner, c byte) state {
 			if s.isAnnotationStart(c) {
-				panic(s.newDocumentErrorAtCharacter("after inline annotation"))
+				panic(s.newJSchemaErrorAtCharacter("after inline annotation"))
 			}
 			return fn(s, c)
 		}
@@ -163,7 +163,7 @@ func stateInlineAnnotationTextSkip(s *Scanner, c byte) state {
 	fn := s.returnToStep.Pop()
 	s.step = func(s *Scanner, c byte) state {
 		if s.isAnnotationStart(c) {
-			panic(s.newDocumentErrorAtCharacter("after inline annotation"))
+			panic(s.newJSchemaErrorAtCharacter("after inline annotation"))
 		}
 		return fn(s, c)
 	}
@@ -212,7 +212,7 @@ func stateMultiLineAnnotationTextPrefix(s *Scanner, c byte) state {
 		s.step = stateMultiLineAnnotationTextPrefix2
 
 	default:
-		panic(s.newDocumentErrorAtCharacter("after object in multi-line annotation"))
+		panic(s.newJSchemaErrorAtCharacter("after object in multi-line annotation"))
 	}
 	return scanContinue
 }
@@ -228,7 +228,7 @@ func stateMultiLineAnnotationTextPrefix2(s *Scanner, c byte) state {
 
 func stateMultiLineAnnotationEnd(s *Scanner, c byte) state {
 	if c != '/' {
-		panic(s.newDocumentErrorAtCharacter("in multi-line annotation after \"*\" character"))
+		panic(s.newJSchemaErrorAtCharacter("in multi-line annotation after \"*\" character"))
 	}
 	// after *
 	s.annotation = annotationNone
@@ -270,7 +270,7 @@ func stateBeginAnnotationObjectKey(s *Scanner, c byte) state {
 
 func stateInAnnotationObjectKeyFirstLetter(s *Scanner, c byte) state {
 	if (s.boundary == 0 && (c == ':' || bytes.IsNewLine(c) || c == '\\')) || c == s.boundary || c < 0x20 {
-		panic(s.newDocumentError(errs.ErrInvalidCharacterInAnnotationObjectKey, c))
+		panic(s.newJSchemaError(errs.ErrInvalidCharacterInAnnotationObjectKey, c))
 	}
 	s.step = stateInAnnotationObjectKey
 	return scanContinue
@@ -288,7 +288,7 @@ func stateInAnnotationObjectKey(s *Scanner, c byte) state {
 		s.step = stateInAnnotationObjectKeyAfter
 
 	case c < 0x20 || (c == '"' || bytes.IsNewLine(c)):
-		panic(s.newDocumentError(errs.ErrInvalidCharacterInAnnotationObjectKey, c))
+		panic(s.newJSchemaError(errs.ErrInvalidCharacterInAnnotationObjectKey, c))
 	}
 	return scanContinue
 }
@@ -301,5 +301,5 @@ func stateInAnnotationObjectKeyAfter(s *Scanner, c byte) state {
 	case c == ' ':
 		return scanContinue
 	}
-	panic(s.newDocumentError(errs.ErrInvalidCharacterInAnnotationObjectKey, c))
+	panic(s.newJSchemaError(errs.ErrInvalidCharacterInAnnotationObjectKey, c))
 }

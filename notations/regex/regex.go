@@ -36,7 +36,7 @@ func WithGeneratorSeed(seed int64) Option {
 }
 
 // New creates a Regex schema with specified name and content.
-func New[T bytes.Byter](name string, content T, oo ...Option) *RSchema {
+func New[T bytes.ByteKeeper](name string, content T, oo ...Option) *RSchema {
 	return FromFile(fs.NewFile(name, content), oo...)
 }
 
@@ -134,7 +134,7 @@ func (s *RSchema) doCompile() error {
 	content := s.File.Content()
 
 	if content.Byte(0) != '/' {
-		return s.newDocumentError(errs.ErrRegexUnexpectedStart, 0, content.Byte(0))
+		return s.newJSchemaError(errs.ErrRegexUnexpectedStart, 0, content.Byte(0))
 	}
 
 	var escaped bool
@@ -159,7 +159,7 @@ loop:
 
 	if s.pattern == "" {
 		idx := uint(content.Len() - 1)
-		return s.newDocumentError(errs.ErrRegexUnexpectedEnd, idx, content.Byte(idx))
+		return s.newJSchemaError(errs.ErrRegexUnexpectedEnd, idx, content.Byte(idx))
 	}
 
 	var err error
@@ -173,7 +173,7 @@ loop:
 	return nil
 }
 
-func (s *RSchema) newDocumentError(code errs.Code, idx uint, c byte) kit.JSchemaError {
+func (s *RSchema) newJSchemaError(code errs.Code, idx uint, c byte) kit.JSchemaError {
 	e := code.F(bytes.QuoteChar(c))
 	err := kit.NewJSchemaError(s.File, e)
 	err.SetIndex(bytes.Index(idx))

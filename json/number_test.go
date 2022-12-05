@@ -17,7 +17,7 @@ func BenchmarkNewNumber(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		_, err := NewNumber(num)
 		if err != nil {
-			panic(err)
+			b.Fatal(err)
 		}
 	}
 }

@@ -7,6 +7,7 @@ import (
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
@@ -96,7 +97,7 @@ func NewNode(lex lexeme.LexEvent) Node {
 	case lexeme.MixedValueBegin:
 		return NewMixedValueNode(lex)
 	}
-	panic(`Can not create node from the lexical event "` + lex.Type().String() + `"`)
+	panic(errs.ErrRuntimeFailure.F())
 }
 
 // IsOptionalNode returns true is node is optional.

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -135,7 +136,13 @@ func TestGuessSchemaType(t *testing.T) {
 
 	t.Run("negative", func(t *testing.T) {
 		_, err := GuessSchemaType([]byte("invalid"))
-		assert.ErrorIs(t, err, ErrUnknownSchemaType)
+		if e, ok := err.(*errs.Err); ok {
+			if !errs.ErrUnableToDetermineTheTypeOfJsonValue.F().Equal(*e) {
+				t.Error("Incorrect error value")
+			}
+		} else {
+			t.Error("Incorrect error type")
+		}
 	})
 }
 

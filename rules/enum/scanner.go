@@ -241,7 +241,7 @@ func (s *scanner) stateBegin(c byte) (state, error) {
 func (s *scanner) stateFoundArrayItemBeginOrEmpty(c byte) (state, error) {
 	if bytes.IsNewLine(c) {
 		if s.annotation {
-			return scanSkip, s.newDocumentErrorAtCharacter("inside inline annotation")
+			return scanSkip, s.newJSchemaErrorAtCharacter("inside inline annotation")
 		}
 		s.found(lexeme.NewLine)
 		return scanSkip, nil
@@ -278,7 +278,7 @@ func (s *scanner) stateFoundArrayItemBegin(c byte) (state, error) {
 func (s *scanner) stateBeginValue(c byte) (state, error) {
 	if bytes.IsNewLine(c) {
 		if s.annotation {
-			return scanSkip, s.newDocumentErrorAtCharacter("inside inline annotation")
+			return scanSkip, s.newJSchemaErrorAtCharacter("inside inline annotation")
 		}
 		s.found(lexeme.NewLine)
 		return scanSkip, nil
@@ -318,7 +318,7 @@ func (s *scanner) stateBeginValue(c byte) (state, error) {
 		s.step = s.state1
 		return scanBeginLiteral, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("looking for beginning of value")
+	return scanSkip, s.newJSchemaErrorAtCharacter("looking for beginning of value")
 }
 
 // After reading `[`.
@@ -366,7 +366,7 @@ func (s *scanner) stateEndValue(c byte) (state, error) {
 		return s.step(c)
 	}
 
-	return scanSkip, s.newDocumentErrorAtCharacter("at the end of value")
+	return scanSkip, s.newJSchemaErrorAtCharacter("at the end of value")
 }
 
 func (s *scanner) validateValue() error {
@@ -387,7 +387,7 @@ func (s *scanner) validateValue() error {
 func (s *scanner) stateAfterArrayItem(c byte) (state, error) {
 	if bytes.IsNewLine(c) {
 		if s.annotation {
-			return scanSkip, s.newDocumentErrorAtCharacter("inside inline annotation")
+			return scanSkip, s.newJSchemaErrorAtCharacter("inside inline annotation")
 		}
 		s.found(lexeme.NewLine)
 		return scanSkip, nil
@@ -405,7 +405,7 @@ func (s *scanner) stateAfterArrayItem(c byte) (state, error) {
 	if c == ']' {
 		return s.stateFoundArrayEnd()
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("after array item")
+	return scanSkip, s.newJSchemaErrorAtCharacter("after array item")
 }
 
 func (s *scanner) stateFoundArrayEnd() (state, error) {
@@ -425,7 +425,7 @@ func (s *scanner) stateEndTop(c byte) (state, error) {
 	switch {
 	case bytes.IsNewLine(c):
 		if s.annotation {
-			return scanSkip, s.newDocumentErrorAtCharacter("inside inline annotation")
+			return scanSkip, s.newJSchemaErrorAtCharacter("inside inline annotation")
 		}
 		s.found(lexeme.NewLine)
 		return scanSkip, nil
@@ -443,7 +443,7 @@ func (s *scanner) stateEndTop(c byte) (state, error) {
 			s.found(lexeme.EndTop)
 			return scanSkip, errEOS
 		} else if !s.annotation {
-			return scanSkip, s.newDocumentErrorAtCharacter("non-space byte after top-level value")
+			return scanSkip, s.newJSchemaErrorAtCharacter("non-space byte after top-level value")
 		}
 	}
 
@@ -466,7 +466,7 @@ func (s *scanner) stateInString(c byte) (state, error) {
 		return scanSkip, nil
 	}
 	if c < 0x20 {
-		return scanSkip, s.newDocumentErrorAtCharacter("in string literal")
+		return scanSkip, s.newJSchemaErrorAtCharacter("in string literal")
 	}
 	return scanSkip, nil
 }
@@ -482,7 +482,7 @@ func (s *scanner) stateInStringEsc(c byte) (state, error) {
 		s.step = s.stateInStringEscU
 		return scanSkip, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("in string escape code")
+	return scanSkip, s.newJSchemaErrorAtCharacter("in string escape code")
 }
 
 // After reading `"\u` during a quoted string.
@@ -491,7 +491,7 @@ func (s *scanner) stateInStringEscU(c byte) (state, error) {
 		s.step = s.stateInStringEscU1
 		return scanSkip, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("in \\u hexadecimal character escape")
+	return scanSkip, s.newJSchemaErrorAtCharacter("in \\u hexadecimal character escape")
 }
 
 // After reading `"\u1` during a quoted string.
@@ -500,7 +500,7 @@ func (s *scanner) stateInStringEscU1(c byte) (state, error) {
 		s.step = s.stateInStringEscU12
 		return scanSkip, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("in \\u hexadecimal character escape")
+	return scanSkip, s.newJSchemaErrorAtCharacter("in \\u hexadecimal character escape")
 }
 
 // After reading `"\u12` during a quoted string.
@@ -509,7 +509,7 @@ func (s *scanner) stateInStringEscU12(c byte) (state, error) {
 		s.step = s.stateInStringEscU123
 		return scanSkip, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("in \\u hexadecimal character escape")
+	return scanSkip, s.newJSchemaErrorAtCharacter("in \\u hexadecimal character escape")
 }
 
 // After reading `"\u123` during a quoted string.
@@ -518,7 +518,7 @@ func (s *scanner) stateInStringEscU123(c byte) (state, error) {
 		s.step = s.returnToStep.Pop()
 		return scanSkip, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("in \\u hexadecimal character escape")
+	return scanSkip, s.newJSchemaErrorAtCharacter("in \\u hexadecimal character escape")
 }
 
 // After reading `-` during a number.
@@ -533,7 +533,7 @@ func (s *scanner) stateNeg(c byte) (state, error) {
 		s.unfinishedLiteral = false
 		return scanSkip, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("in numeric literal")
+	return scanSkip, s.newJSchemaErrorAtCharacter("in numeric literal")
 }
 
 // After reading a non-zero integer during a number, such as after reading `1` or
@@ -554,7 +554,7 @@ func (s *scanner) state0(c byte) (state, error) {
 		return scanSkip, nil
 	}
 	if c == 'e' || c == 'E' {
-		return scanSkip, s.newDocumentErrorAtCharacter(messageEIsNotAllowed)
+		return scanSkip, s.newJSchemaErrorAtCharacter(messageEIsNotAllowed)
 	}
 	return s.stateEndValue(c)
 }
@@ -566,7 +566,7 @@ func (s *scanner) stateDot(c byte) (state, error) {
 		s.step = s.stateDot0
 		return scanSkip, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("after decimal point in numeric literal")
+	return scanSkip, s.newJSchemaErrorAtCharacter("after decimal point in numeric literal")
 }
 
 // After reading the integer, decimal point, and subsequent digits of a number,
@@ -576,7 +576,7 @@ func (s *scanner) stateDot0(c byte) (state, error) {
 		return scanSkip, nil
 	}
 	if c == 'e' || c == 'E' {
-		return scanSkip, s.newDocumentErrorAtCharacter(messageEIsNotAllowed)
+		return scanSkip, s.newJSchemaErrorAtCharacter(messageEIsNotAllowed)
 	}
 	return s.stateEndValue(c)
 }
@@ -587,7 +587,7 @@ func (s *scanner) stateT(c byte) (state, error) {
 		s.step = s.stateTr
 		return scanSkip, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("in literal true (expecting 'r')")
+	return scanSkip, s.newJSchemaErrorAtCharacter("in literal true (expecting 'r')")
 }
 
 // After reading `tr`.
@@ -596,7 +596,7 @@ func (s *scanner) stateTr(c byte) (state, error) {
 		s.step = s.stateTru
 		return scanSkip, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("in literal true (expecting 'u')")
+	return scanSkip, s.newJSchemaErrorAtCharacter("in literal true (expecting 'u')")
 }
 
 // After reading `tru`.
@@ -606,7 +606,7 @@ func (s *scanner) stateTru(c byte) (state, error) {
 		s.unfinishedLiteral = false
 		return scanSkip, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("in literal true (expecting 'e')")
+	return scanSkip, s.newJSchemaErrorAtCharacter("in literal true (expecting 'e')")
 }
 
 // After reading `f`.
@@ -615,7 +615,7 @@ func (s *scanner) stateF(c byte) (state, error) {
 		s.step = s.stateFa
 		return scanSkip, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("in literal false (expecting 'a')")
+	return scanSkip, s.newJSchemaErrorAtCharacter("in literal false (expecting 'a')")
 }
 
 // After reading `fa`.
@@ -624,7 +624,7 @@ func (s *scanner) stateFa(c byte) (state, error) {
 		s.step = s.stateFal
 		return scanSkip, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("in literal false (expecting 'l')")
+	return scanSkip, s.newJSchemaErrorAtCharacter("in literal false (expecting 'l')")
 }
 
 // After reading `fal`.
@@ -633,7 +633,7 @@ func (s *scanner) stateFal(c byte) (state, error) {
 		s.step = s.stateFals
 		return scanSkip, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("in literal false (expecting 's')")
+	return scanSkip, s.newJSchemaErrorAtCharacter("in literal false (expecting 's')")
 }
 
 // After reading `fals`.
@@ -643,7 +643,7 @@ func (s *scanner) stateFals(c byte) (state, error) {
 		s.unfinishedLiteral = false
 		return scanSkip, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("in literal false (expecting 'e')")
+	return scanSkip, s.newJSchemaErrorAtCharacter("in literal false (expecting 'e')")
 }
 
 // After reading `n`.
@@ -652,7 +652,7 @@ func (s *scanner) stateN(c byte) (state, error) {
 		s.step = s.stateNu
 		return scanSkip, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("in literal null (expecting 'u')")
+	return scanSkip, s.newJSchemaErrorAtCharacter("in literal null (expecting 'u')")
 }
 
 // After reading `nu`.
@@ -661,7 +661,7 @@ func (s *scanner) stateNu(c byte) (state, error) {
 		s.step = s.stateNul
 		return scanSkip, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("in literal null (expecting 'l')")
+	return scanSkip, s.newJSchemaErrorAtCharacter("in literal null (expecting 'l')")
 }
 
 // After reading `nul`.
@@ -671,7 +671,7 @@ func (s *scanner) stateNul(c byte) (state, error) {
 		s.unfinishedLiteral = false
 		return scanSkip, nil
 	}
-	return scanSkip, s.newDocumentErrorAtCharacter("in literal null (expecting 'l')")
+	return scanSkip, s.newJSchemaErrorAtCharacter("in literal null (expecting 'l')")
 }
 
 func (s *scanner) stateAnyAnnotationStart(c byte) (st state, err error) {
@@ -685,7 +685,7 @@ func (s *scanner) stateAnyAnnotationStart(c byte) (st state, err error) {
 		s.found(lexeme.MultiLineAnnotationBegin)
 		s.step = s.stateMultiLineAnnotation
 	default:
-		err = s.newDocumentErrorAtCharacter("after first slash")
+		err = s.newJSchemaErrorAtCharacter("after first slash")
 	}
 	return scanSkip, err
 }
@@ -723,7 +723,7 @@ func (s *scanner) stateMultiLineAnnotationText(c byte) (state, error) {
 
 func (s *scanner) stateMultiLineAnnotationEnd(c byte) (state, error) {
 	if c != '/' {
-		return scanSkip, s.newDocumentErrorAtCharacter("in multi-line annotation after \"*\" character")
+		return scanSkip, s.newJSchemaErrorAtCharacter("in multi-line annotation after \"*\" character")
 	}
 	// after *
 	s.found(lexeme.MultiLineAnnotationEnd)
@@ -760,7 +760,7 @@ func (s *scanner) shiftFound() (lexeme.LexEventType, error) {
 	return lexType, nil
 }
 
-func (s *scanner) newDocumentErrorAtCharacter(context string) kit.JSchemaError {
+func (s *scanner) newJSchemaErrorAtCharacter(context string) kit.JSchemaError {
 	// Make runes (utf8 symbols) from current index to last of slice s.data.
 	// Get first rune. Then make string with format ' symbol '
 	r := s.data.SubLow(s.index - 1).DecodeRune()
@@ -823,7 +823,7 @@ func (*scanner) isAnnotationStart(c byte) bool {
 
 func (s *scanner) switchToAnnotation() error {
 	if s.annotation {
-		return s.newDocumentErrorAtCharacter("inside inline annotation")
+		return s.newJSchemaErrorAtCharacter("inside inline annotation")
 	}
 	s.returnToStep.Push(s.step)
 	s.step = s.stateAnyAnnotationStart

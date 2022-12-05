@@ -26,6 +26,6 @@ func newNodeChecker(node ischema.Node) (nodeChecker, error) {
 		return newMixedChecker(node), nil
 
 	default:
-		return nil, errs.ErrImpossible.F()
+		return nil, errs.ErrRuntimeFailure.F()
 	}
 }

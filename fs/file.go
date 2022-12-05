@@ -11,7 +11,7 @@ type File struct {
 }
 
 // NewFile creates new File instance.
-func NewFile[T bytes.Byter](name string, content T) *File {
+func NewFile[T bytes.ByteKeeper](name string, content T) *File {
 	return &File{
 		name:    name,
 		content: bytes.NewBytes(content),
