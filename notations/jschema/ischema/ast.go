@@ -1,9 +1,8 @@
 package ischema
 
 import (
-	"errors"
-
 	schema "github.com/jsightapi/jsight-schema-core"
+	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
 )
 
@@ -58,7 +57,7 @@ func collectASTRules(cc *Constraints) *schema.RuleASTNodes {
 			types, ok := cc.Get(constraint.TypesListConstraintType)
 			if !ok {
 				//goland:noinspection GoErrorStringFormat
-				return errors.New(`Can't collect rules: "types" constraint is required with "or"" constraint`)
+				return errs.ErrCantCollectRulesTypes.F()
 			}
 
 			nn.Set(constraint.OrConstraintType.String(), types.ASTNode())

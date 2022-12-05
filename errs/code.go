@@ -71,9 +71,9 @@ const (
 	ErrConstraintMaxItemsValidation                Code = 609
 	ErrDoesNotMatchAnyOfTheEnumValues              Code = 610
 	ErrDoesNotMatchRegularExpression               Code = 611
-	ErrInvalidUri                                  Code = 612
+	ErrInvalidURI                                  Code = 612
 	ErrInvalidDateTime                             Code = 613
-	ErrInvalidUuid                                 Code = 614
+	ErrInvalidUUID                                 Code = 614
 	ErrInvalidConst                                Code = 615
 	ErrInvalidDate                                 Code = 616
 	ErrValueOfOneConstraintGreaterThanAnother      Code = 617
@@ -86,6 +86,7 @@ const (
 	ErrUnacceptableRecursionInAllOfRule Code = 703
 	ErrUnacceptableUserTypeInAllOfRule  Code = 704
 	ErrConflictAdditionalProperties     Code = 705
+	ErrLoadError                        Code = 706
 
 	// Rule loader
 
@@ -99,6 +100,8 @@ const (
 	ErrUnacceptableValueInAllOfRule     Code = 808
 	ErrTypeNameNotFoundInAllOfRule      Code = 809
 	ErrDuplicationInEnumRule            Code = 810
+	ErrRuleIsAlreadyCompiled            Code = 811
+	ErrRuleIsNil                        Code = 812
 
 	// "or" rule loader
 
@@ -125,7 +128,6 @@ const (
 	ErrNotFoundRuleEnum                          Code = 1113
 	ErrNotFoundRuleOr                            Code = 1114
 	ErrIncompatibleTypes                         Code = 1115
-	// ErrUnknownAdditionalPropertiesTypes          Code = 1116
 
 	ErrUnexpectedConstraint Code = 1117
 
@@ -161,9 +163,27 @@ const (
 	ErrNotAnEnumRule      Code = 1603
 	ErrInvalidEnumValues  Code = 1604
 
+	// Value
+
+	ErrInvalidBoolValue         Code = 1701
+	ErrNotEnoughDataInParseUint Code = 1702
+	ErrInvalidByteInParseUint   Code = 1703
+	ErrTooMuchDataForInt        Code = 1704
+	ErrIncorrectNumberValue     Code = 1705
+	ErrURNPrefix                Code = 1706
+	ErrUUIDLength               Code = 1708
+	ErrUUIDFormat               Code = 1709
+	ErrUUIDPrefix               Code = 1710
+	ErrIncorrectExponentValue   Code = 1711
+
+	// Example & AST
+
+	ErrRegexExample          Code = 1801
+	ErrCantCollectRulesTypes Code = 1802
+
 	// Tests
 
-	ErrInTheTest Code = 1700
+	ErrInTheTest Code = 9901
 )
 
 var errorFormat = map[Code]string{
@@ -223,9 +243,9 @@ var errorFormat = map[Code]string{
 	ErrConstraintMaxItemsValidation:                `The number of array elements does not match the "maxItems" rule`,
 	ErrDoesNotMatchAnyOfTheEnumValues:              "Does not match any of the enumeration values",
 	ErrDoesNotMatchRegularExpression:               "Does not match regular expression",
-	ErrInvalidUri:                                  "Invalid URI (%s)",
+	ErrInvalidURI:                                  "Invalid URI (%s)",
 	ErrInvalidDateTime:                             "Date/Time parsing error",
-	ErrInvalidUuid:                                 "UUID parsing error: %s",
+	ErrInvalidUUID:                                 "UUID parsing error: %s",
 	ErrInvalidConst:                                "Does not match expected value (%s)",
 	ErrInvalidDate:                                 "Date parsing error (%s)",
 	ErrValueOfOneConstraintGreaterThanAnother:      "Value of constraint %q should be less or equal to value of %q constraint", //nolint:lll
@@ -237,6 +257,7 @@ var errorFormat = map[Code]string{
 	ErrUnacceptableRecursionInAllOfRule: `Unacceptable recursion in "allOf" rule`,
 	ErrUnacceptableUserTypeInAllOfRule:  `Unacceptable type. The "%s" type in the "allOf" rule must be an object`,
 	ErrConflictAdditionalProperties:     `Conflicting value in AdditionalProperties rules when inheriting from allOf`,
+	ErrLoadError:                        "load error: %w",
 
 	// rule loader
 	ErrLoader:                           "Loader error", // error somewhere in the loader code
@@ -249,6 +270,8 @@ var errorFormat = map[Code]string{
 	ErrUnacceptableValueInAllOfRule:     `Incorrect value in "allOf" rule. A type name, or list of type names, is expected.`, //nolint:lll
 	ErrTypeNameNotFoundInAllOfRule:      `Type name not found in "allOf" rule`,
 	ErrDuplicationInEnumRule:            `%s value duplicates in "enum"`,
+	ErrRuleIsAlreadyCompiled:            "Rule is already compiled",
+	ErrRuleIsNil:                        "Rule is nil",
 
 	// "or" rule loader
 	ErrArrayWasExpectedInOrRule:       `An array was expected as a value for the "or" rule`,
@@ -300,6 +323,22 @@ var errorFormat = map[Code]string{
 	ErrEnumRuleNotFound:   "Enum rule %q not found",
 	ErrNotAnEnumRule:      "Rule %q not an Enum",
 	ErrInvalidEnumValues:  "Invalid enum values %q: %s",
+
+	// value
+	ErrInvalidBoolValue:         "Invalid bool value",
+	ErrNotEnoughDataInParseUint: "Not enough data in ParseUint",
+	ErrInvalidByteInParseUint:   "Invalid byte %q in ParseUint %q",
+	ErrTooMuchDataForInt:        "Too much data for int",
+	ErrIncorrectNumberValue:     "Incorrect number value %q",
+	ErrURNPrefix:                "Invalid URN prefix: %q",
+	ErrUUIDLength:               "Invalid UUID length: %d",
+	ErrUUIDFormat:               "Invalid UUID format",
+	ErrUUIDPrefix:               "Invalid prefix: braces expected",
+	ErrIncorrectExponentValue:   "Incorrect exponent value",
+
+	// example & ast
+	ErrRegexExample:          "generate example for Regex type: %w",
+	ErrCantCollectRulesTypes: `Can't collect rules: "types" constraint is required with "or" constraint`,
 
 	// tests
 	ErrInTheTest: "Error in the test: %s",

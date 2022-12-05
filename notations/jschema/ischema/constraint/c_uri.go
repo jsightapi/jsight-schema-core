@@ -38,7 +38,7 @@ func (Uri) Validate(value bytes.Bytes) {
 	val := value.Unquote().String()
 	u, err := url.ParseRequestURI(val)
 	if err != nil || !u.IsAbs() || u.Hostname() == "" {
-		panic(errs.ErrInvalidUri.F(val))
+		panic(errs.ErrInvalidURI.F(val))
 	}
 }
 

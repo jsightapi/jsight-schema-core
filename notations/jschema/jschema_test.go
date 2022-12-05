@@ -9,6 +9,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/jsightapi/jsight-schema-core/errs"
+
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/internal/mocks"
 	schemaMocks "github.com/jsightapi/jsight-schema-core/notations/jschema/internal/mocks"
@@ -292,7 +294,7 @@ func TestSchema_AddType(t *testing.T) {
 	t.Run("negative", func(t *testing.T) {
 		t.Run("invalid schema", func(t *testing.T) {
 			err := New("", "42").AddType("invalid", nil)
-			assert.EqualError(t, err, "schema should be JSight or Regex schema, but <nil> given")
+			assert.EqualError(t, err, errs.ErrRuntimeFailure.F().Error())
 		})
 
 		t.Run("invalid schema name", func(t *testing.T) {
@@ -324,7 +326,7 @@ func TestSchema_AddRule(t *testing.T) {
 
 			err := s.AddRule("foo", mocks.NewRule(t))
 
-			assert.EqualError(t, err, "schema is already compiled")
+			assert.EqualError(t, err, "Rule is already compiled")
 			assert.Len(t, s.Rules, 0)
 		})
 
@@ -333,7 +335,7 @@ func TestSchema_AddRule(t *testing.T) {
 
 			err := s.AddRule("", nil)
 
-			assert.EqualError(t, err, "rule is nil")
+			assert.EqualError(t, err, "Rule is nil")
 			assert.Len(t, s.Rules, 0)
 		})
 

@@ -2,8 +2,6 @@ package constraint
 
 import (
 	stdBytes "bytes"
-	stdErrors "errors"
-	"fmt"
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
@@ -39,7 +37,7 @@ func (UUID) String() string {
 func (UUID) Validate(value bytes.Bytes) {
 	err := parseBytes(value.Unquote().Data())
 	if err != nil {
-		panic(errs.ErrInvalidUuid.F(err))
+		panic(errs.ErrInvalidUUID.F(err))
 	}
 }
 
@@ -54,28 +52,28 @@ func parseBytes(b []byte) error { //nolint:gocyclo // For now it's okay.
 	case 36: // xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 	case 36 + 9: // urn:uuid:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 		if !stdBytes.Equal(stdBytes.ToLower(b[:9]), []byte("urn:uuid:")) {
-			return fmt.Errorf("invalid urn prefix: %q", b[:9])
+			return errs.ErrURNPrefix.F(b[:9])
 		}
 		b = b[9:]
 	case 36 + 2: // {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}
 		if b[0] != '{' || b[37] != '}' {
-			return stdErrors.New("invalid prefix: braces expected")
+			return errs.ErrUUIDPrefix.F()
 		}
 		b = b[1:]
 	case 32: // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 		for i := 0; i < 32; i += 2 {
 			if !xtob(b[i], b[i+1]) {
-				return stdErrors.New("invalid UUID format")
+				return errs.ErrUUIDFormat.F()
 			}
 		}
 		return nil
 	default:
-		return fmt.Errorf("invalid UUID length: %d", len(b))
+		return errs.ErrUUIDLength.F(len(b))
 	}
 
 	// it must be of the form  xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 	if b[8] != '-' || b[13] != '-' || b[18] != '-' || b[23] != '-' {
-		return stdErrors.New("invalid UUID format")
+		return errs.ErrUUIDFormat.F()
 	}
 	for _, x := range [16]int{
 		0, 2, 4, 6,
@@ -84,7 +82,7 @@ func parseBytes(b []byte) error { //nolint:gocyclo // For now it's okay.
 		19, 21,
 		24, 26, 28, 30, 32, 34} {
 		if !xtob(b[x], b[x+1]) {
-			return stdErrors.New("invalid UUID format")
+			return errs.ErrUUIDFormat.F()
 		}
 	}
 	return nil

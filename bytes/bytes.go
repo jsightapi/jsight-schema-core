@@ -2,8 +2,6 @@ package bytes
 
 import (
 	"bytes"
-	stdErrors "errors"
-	"fmt"
 	"math"
 	"unicode/utf8"
 
@@ -89,7 +87,7 @@ func (b Bytes) SubHigh(high any) Bytes {
 
 func (b Bytes) SubToEndOfLine(start Index) (Bytes, error) {
 	if start > b.LenIndex() {
-		return b, stdErrors.New("can't get a line from a slice")
+		return b, errs.ErrRuntimeFailure.F()
 	}
 
 	bb := b.data[start:]
@@ -185,18 +183,18 @@ func (b Bytes) ParseBool() (bool, error) {
 	case "false":
 		return false, nil
 	}
-	return false, stdErrors.New("invalid bool value")
+	return false, errs.ErrInvalidBoolValue.F()
 }
 
 func (b Bytes) ParseUint() (uint, error) {
 	if len(b.data) == 0 {
-		return 0, stdErrors.New("not enough data in ParseUint")
+		return 0, errs.ErrNotEnoughDataInParseUint.F()
 	}
 
 	var u uint
 	for _, c := range b.data {
 		if !IsDigit(c) {
-			return 0, fmt.Errorf("invalid byte (%s) found in ParseUint (%s)", string(c), b)
+			return 0, errs.ErrInvalidByteInParseUint.F(string(c), b)
 		}
 		u = u*10 + uint(c-'0')
 	}
@@ -222,7 +220,7 @@ func (b Bytes) ParseInt() (int, error) {
 	}
 
 	if u > math.MaxInt {
-		return 0, stdErrors.New("too much data for int")
+		return 0, errs.ErrTooMuchDataForInt.F()
 	}
 
 	i := int(u)

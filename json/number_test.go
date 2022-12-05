@@ -371,7 +371,7 @@ func TestNumber_trimTrailingZerosInTheFractionalPart(t *testing.T) {
 		for name, n := range cc {
 			t.Run(name, func(t *testing.T) {
 				err := n.trimTrailingZerosInTheFractionalPart()
-				assert.EqualError(t, err, "incorrect exponent value")
+				assert.EqualError(t, err, "Incorrect exponent value")
 			})
 		}
 	})

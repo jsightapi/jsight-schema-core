@@ -2,7 +2,6 @@ package jschema
 
 import (
 	stdBytes "bytes"
-	"fmt"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
 	"github.com/jsightapi/jsight-schema-core/errs"
@@ -44,7 +43,7 @@ func (b *exampleBuilder) Build(node ischema.Node) ([]byte, error) {
 		return b.buildExampleForMixedValueNode(typedNode)
 
 	default:
-		return nil, fmt.Errorf("unhandled node type %T", node)
+		return nil, errs.ErrRuntimeFailure.F()
 	}
 }
 
@@ -177,7 +176,7 @@ func buildExample(node ischema.Node, types map[string]ischema.Type) ([]byte, err
 		return buildExampleForMixedValueNode(typedNode, types)
 
 	default:
-		return nil, fmt.Errorf("unhandled node type %T", node)
+		return nil, errs.ErrRuntimeFailure.F()
 	}
 }
 

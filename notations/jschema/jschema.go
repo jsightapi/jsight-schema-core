@@ -1,7 +1,6 @@
 package jschema
 
 import (
-	stdErrors "errors"
 	"fmt"
 
 	schema "github.com/jsightapi/jsight-schema-core"
@@ -64,12 +63,12 @@ func FromRSchema(s *regex.RSchema) (*JSchema, error) {
 
 	example, err := s.Example()
 	if err != nil {
-		return nil, fmt.Errorf("generate example for Regex type: %w", err)
+		return nil, errs.ErrRegexExample.F(err)
 	}
 
 	ss := New(s.File.Name(), fmt.Sprintf("%q // {regex: %q}", example, pattern))
 	if err = ss.load(); err != nil {
-		return nil, fmt.Errorf("load added type: %w", err)
+		return nil, errs.ErrLoadError.F(err)
 	}
 
 	return ss, nil
@@ -121,7 +120,7 @@ func (s *JSchema) AddType(name string, sc schema.Schema) (err error) {
 	switch typ := sc.(type) {
 	case *JSchema:
 		if err := typ.load(); err != nil {
-			return fmt.Errorf("load added type: %w", err)
+			return errs.ErrLoadError.F(err)
 		}
 
 		s.Inner.AddNamedType(name, typ.Inner, s.File, 0)
@@ -134,7 +133,7 @@ func (s *JSchema) AddType(name string, sc schema.Schema) (err error) {
 		s.Inner.AddNamedType(name, typSc.Inner, s.File, 0)
 
 	default:
-		return fmt.Errorf("schema should be JSight or Regex schema, but %T given", sc)
+		return errs.ErrRuntimeFailure.F()
 	}
 
 	return nil
@@ -142,11 +141,11 @@ func (s *JSchema) AddType(name string, sc schema.Schema) (err error) {
 
 func (s *JSchema) AddRule(n string, r schema.Rule) error {
 	if s.Inner != nil {
-		return stdErrors.New("schema is already compiled")
+		return errs.ErrRuleIsAlreadyCompiled.F()
 	}
 
 	if r == nil {
-		return stdErrors.New("rule is nil")
+		return errs.ErrRuleIsNil.F()
 	}
 
 	if err := r.Check(); err != nil {

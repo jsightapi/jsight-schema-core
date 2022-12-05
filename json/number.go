@@ -1,7 +1,6 @@
 package json
 
 import (
-	"errors"
 	"strconv"
 
 	"github.com/jsightapi/jsight-schema-core/bytes"
@@ -29,7 +28,7 @@ func NewNumber(b bytes.Bytes) (*Number, error) {
 func (n *Number) trimLeadingZerosInTheIntegerPart() error {
 	length := n.nat.Len()
 	if n.exp < 0 || n.exp > length {
-		return errors.New("incorrect exponent value")
+		return errs.ErrIncorrectExponentValue.F()
 	}
 	for intLen := length - n.exp; intLen != 0; intLen-- {
 		c := n.nat.FirstByte()
@@ -45,7 +44,7 @@ func (n *Number) trimLeadingZerosInTheIntegerPart() error {
 // part (if any).
 func (n *Number) trimTrailingZerosInTheFractionalPart() error {
 	if n.exp < 0 || n.exp > n.nat.Len() {
-		return errors.New("incorrect exponent value")
+		return errs.ErrIncorrectExponentValue.F()
 	}
 	for ; n.exp != 0; n.exp-- {
 		i := n.nat.Len() - 1

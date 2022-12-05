@@ -1,10 +1,12 @@
 package constraint
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/jsightapi/jsight-schema-core/errs"
+	"github.com/jsightapi/jsight-schema-core/test"
 
 	"github.com/jsightapi/jsight-schema-core/json"
 
@@ -44,37 +46,37 @@ func TestUUID_Validate(t *testing.T) {
 
 	t.Run("negative", func(t *testing.T) {
 		var tests = map[string]string{
-			"":      "invalid UUID length: 0",
-			"12":    "invalid UUID length: 2",
-			"1.2":   "invalid UUID length: 3",
-			"true":  "invalid UUID length: 4",
-			"false": "invalid UUID length: 5",
-			"null":  "invalid UUID length: 4",
-			`"ABC"`: "invalid UUID length: 3",
+			"":      "Invalid UUID length: 0",
+			"12":    "Invalid UUID length: 2",
+			"1.2":   "Invalid UUID length: 3",
+			"true":  "Invalid UUID length: 4",
+			"false": "Invalid UUID length: 5",
+			"null":  "Invalid UUID length: 4",
+			`"ABC"`: "Invalid UUID length: 3",
 			// leading symbol " "
-			" 550e8400e29b41d4a716446655440000": "invalid UUID length: 33",
+			" 550e8400e29b41d4a716446655440000": "Invalid UUID length: 33",
 			// leading symbol " "
-			" 550e8400-e29b-41d4-a716-446655440000": "invalid UUID length: 37",
+			" 550e8400-e29b-41d4-a716-446655440000": "Invalid UUID length: 37",
 			// trailing symbol " "
-			"550e8400e29b41d4a716446655440000 ": "invalid UUID length: 33",
+			"550e8400e29b41d4a716446655440000 ": "Invalid UUID length: 33",
 			// trailing symbol " "
-			"550e8400-e29b-41d4-a716-446655440000 ": "invalid UUID length: 37",
+			"550e8400-e29b-41d4-a716-446655440000 ": "Invalid UUID length: 37",
 			// leading  and trailing symbol " "
-			" 550e8400e29b41d4a716446655440000 ": "invalid UUID length: 34",
+			" 550e8400e29b41d4a716446655440000 ": "Invalid UUID length: 34",
 			// leading  and trailing symbol " "
-			" 550e8400-e29b-41d4-a716-446655440000 ": "invalid prefix: braces expected",
+			" 550e8400-e29b-41d4-a716-446655440000 ": "Invalid prefix: braces expected",
 			// additional trailing symbol "9"
-			"550e8400e29b41d4a7164466554400009": "invalid UUID length: 33",
+			"550e8400e29b41d4a7164466554400009": "Invalid UUID length: 33",
 			// invalid symbol "-" location
-			"550e840-0e29b-41d4-a716-446655440000": "invalid UUID format",
+			"550e840-0e29b-41d4-a716-446655440000": "Invalid UUID format",
 			// invalid symbol "z"
-			"z50e8400-e29b-41d4-a716-446655440000":          "invalid UUID format",
-			"not:uuid:550e8400-e29b-41d4-a716-446655440000": `invalid urn prefix: "not:uuid:"`,
+			"z50e8400-e29b-41d4-a716-446655440000":          "Invalid UUID format",
+			"not:uuid:550e8400-e29b-41d4-a716-446655440000": `Invalid URN prefix: "not:uuid:"`,
 		}
 
 		for given, expected := range tests {
 			t.Run(given, func(t *testing.T) {
-				assert.PanicsWithError(t, fmt.Sprintf("UUID parsing error: %s", expected), func() {
+				test.PanicsWithErr(t, errs.ErrInvalidUUID.F(expected), func() {
 					NewUuid().Validate(bytes.NewBytes(given))
 				})
 			})

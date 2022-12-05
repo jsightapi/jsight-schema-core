@@ -1,9 +1,8 @@
 package json
 
 import (
-	"fmt"
-
 	"github.com/jsightapi/jsight-schema-core/bytes"
+	"github.com/jsightapi/jsight-schema-core/errs"
 )
 
 type scanner struct {
@@ -29,12 +28,12 @@ func (s *scanner) Scan(value bytes.Bytes) (*Number, error) {
 		s.index = i
 		s.finished = true
 		if !s.stateFn(c) {
-			return nil, fmt.Errorf("Incorrect number value %q", value.String())
+			return nil, errs.ErrIncorrectNumberValue.F(value.String())
 		}
 	}
 
 	if !s.finished {
-		return nil, fmt.Errorf("Incorrect number value %q", value.String())
+		return nil, errs.ErrIncorrectNumberValue.F(value.String())
 	}
 
 	if err := s.setExp(value); err != nil {
