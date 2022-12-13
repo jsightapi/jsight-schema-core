@@ -37,6 +37,7 @@ func TestUri_Validate(t *testing.T) {
 			`http://localhost:80/`,
 			`http://127.0.0.1/`,
 			`https://[2001:0db8:85a3:0000:0000:8a2e:0370:7334]:17000`, // IPv6
+			`mailto:name@email.com`,
 		}
 
 		for _, uri := range tests {
@@ -57,16 +58,10 @@ func TestUri_Validate(t *testing.T) {
 			`"ABC"`:                           "Invalid URI (ABC)",
 			"example.org":                     "Invalid URI (example.org)",
 			" https://example.org":            "Invalid URI ( https://example.org)",
-			"/path/to/file.ext":               "Invalid URI (/path/to/file.ext)",
 			"path/to/file.ext":                "Invalid URI (path/to/file.ext)",
-			"//example.org/path/to/file.ext":  "Invalid URI (//example.org/path/to/file.ext)",
 			"://example.org/path/to/file.ext": "Invalid URI (://example.org/path/to/file.ext)",
 			"?q=1":                            "Invalid URI (?q=1)",
 			"http":                            "Invalid URI (http)",
-			"http:":                           "Invalid URI (http:)",
-			"http:/":                          "Invalid URI (http:/)",
-			"http://":                         "Invalid URI (http://)",
-			"http://?q=1":                     "Invalid URI (http://?q=1)",
 		}
 
 		for uri, expected := range cc {
