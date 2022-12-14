@@ -45,7 +45,8 @@ func ValidateLiteralValue(node ischema.Node, jsonValue bytes.Bytes) {
 }
 
 func checkJsonType(node ischema.Node, value bytes.Bytes) {
-	if node.Constraint(constraint.EnumConstraintType) != nil {
+	if node.Constraint(constraint.EnumConstraintType) != nil ||
+		node.Constraint(constraint.AnyConstraintType) != nil {
 		return
 	}
 
