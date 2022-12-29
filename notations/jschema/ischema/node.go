@@ -19,6 +19,7 @@ import (
 type Node interface {
 	// Type returns type of this node.
 	Type() json.Type
+	SchemaType() schema.SchemaType
 
 	SetRealType(string) bool
 	RealType() string

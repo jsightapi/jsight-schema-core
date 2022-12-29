@@ -55,6 +55,6 @@ func checkJsonType(node ischema.Node, value bytes.Bytes) {
 	if !(jsonType == schemaType ||
 		(jsonType == json.TypeInteger && schemaType == json.TypeFloat) ||
 		(jsonType == json.TypeNull && node.Constraint(constraint.NullableConstraintType) != nil)) {
-		panic(errs.ErrInvalidValueType.F(jsonType.String(), schemaType.String()))
+		panic(errs.ErrInvalidValueType.F(jsonType.String(), node.SchemaType()))
 	}
 }
