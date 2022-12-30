@@ -24,19 +24,13 @@ func ValidateLiteralValue(node ischema.Node, jsonValue bytes.Bytes) {
 
 	sort.Ints(keys)
 
-	var isNullable bool
-	if c, ok := m.Get(constraint.NullableConstraintType); ok {
-		isNullable = c.(constraint.BoolKeeper).Bool()
+	if _, ok := m.Get(constraint.NullableConstraintType); ok && jsonValue.String() == "null" {
+		return
 	}
 
 	for _, k := range keys {
 		t := constraint.Type(k)
 		c := m.GetValue(t)
-
-		if _, ok := c.(*constraint.Enum); ok && isNullable && jsonValue.String() == "null" {
-			// Handle cases like `null // {enum: [1, 2], nullable: true}`.
-			continue
-		}
 
 		if v, ok := c.(constraint.LiteralValidator); ok {
 			v.Validate(jsonValue)
