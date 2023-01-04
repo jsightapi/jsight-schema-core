@@ -59,7 +59,7 @@ func (c Const) Validate(v bytes.Bytes) {
 		return
 	}
 
-	if v.String() != c.nodeValue.String() {
+	if v.Unquote().String() != c.nodeValue.Unquote().String() {
 		panic(errs.ErrInvalidConst.F(c.nodeValue.String()))
 	}
 }

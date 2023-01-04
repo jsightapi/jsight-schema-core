@@ -38,6 +38,9 @@ type JSchemaError struct {
 
 	// nl represent new line symbol.
 	nl byte
+
+	// ObjectKey contains the name of the property of the object where the error was detected
+	ObjectKey string
 }
 
 var (
