@@ -277,11 +277,14 @@ func TestCheckRootSchema(t *testing.T) {
 				},
 			},
 
-			// `{
-			// 	"key": [ // {optional: true, minItems: 1}
-			// 		123
-			// 	]
-			// }`,
+			{
+				`{
+					"key": [ // {optional: true, minItems: 1}
+						123
+					]
+				}`,
+				[]typ{},
+			},
 
 			// `// text-1
 			// // text-2
@@ -645,6 +648,14 @@ func TestCheckRootSchema(t *testing.T) {
 					{"@sub8", `{"_id\t": 123}`},
 					{"@sub9", `{"_id\uAAAA": 123}`},
 				},
+			},
+
+			{
+				`[
+					["foo"],
+					123 // {or: ["integer", "string"]}
+				]`,
+				[]typ{},
 			},
 		}
 

@@ -854,6 +854,9 @@ func stateAfterArrayItem(s *Scanner, c byte) state {
 		return scanContinue
 	}
 	if c == ',' {
+		if s.annotation == annotationNone {
+			s.allowAnnotation = true
+		}
 		s.step = stateFoundArrayItemBegin
 		return scanContinue
 	}
