@@ -110,6 +110,7 @@ const (
 	ErrOneElementInArrayInOrRule      Code = 903
 	ErrIncorrectArrayItemTypeInOrRule Code = 904
 	ErrEmptyRuleSet                   Code = 905
+	ErrTypIsRequiredInsideOr          Code = 906
 
 	// Compiler
 
@@ -279,6 +280,7 @@ var errorFormat = map[Code]string{
 	ErrOneElementInArrayInOrRule:      `Array rule "or" must have at least two elements`,
 	ErrIncorrectArrayItemTypeInOrRule: `Incorrect array item type in "or" rule`,
 	ErrEmptyRuleSet:                   `Empty rule set`,
+	ErrTypIsRequiredInsideOr:          `Type is required inside the "or" rule `,
 
 	// compiler
 	ErrRuleOptionalAppliesOnlyToObjectProperties: `The rule "optional" applies only to object properties`,

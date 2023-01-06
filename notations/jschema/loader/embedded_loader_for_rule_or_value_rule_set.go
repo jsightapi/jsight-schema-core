@@ -183,7 +183,12 @@ func (s *orRuleSetLoader) makeTypeFromRuleSet() {
 	an := s.makeTypeASTNode(c.Source())
 
 	typeConstraint := s.typeRoot.Constraint(constraint.TypeConstraintType)
-	if typeConstraint != nil && s.typeRoot.NumberOfConstraints() == 1 {
+
+	if typeConstraint == nil {
+		panic(errs.ErrTypIsRequiredInsideOr.F())
+	}
+
+	if s.typeRoot.NumberOfConstraints() == 1 {
 		typeValue := typeConstraint.(constraint.BytesKeeper).Bytes().Unquote()
 		if typeValue.IsUserTypeName() {
 			c.AddNameWithASTNode(typeValue.String(), typeValue.String(), an)

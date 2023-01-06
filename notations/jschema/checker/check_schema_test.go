@@ -238,7 +238,7 @@ func TestCheckRootSchema(t *testing.T) {
 				[]typ{},
 			},
 			{
-				`5 // {or: [ {min: 0}, {type: "string"} ]}`, // "or" with two simple rule-set (the first rule-set without type specifying)
+				`5 // {or: [ {type: "integer", min: 0}, {type: "string"} ]}`, // "or" with two simple rule-set (the first rule-set without type specifying)
 				[]typ{},
 			},
 			{
@@ -270,7 +270,7 @@ func TestCheckRootSchema(t *testing.T) {
 				},
 			},
 			{
-				`5 // {or: [ {type: "@int"}, "@str", {min: 0}, {type: "string"} ]}`, // "or" with different format or rule-sets
+				`5 // {or: [ {type: "@int"}, "@str", {type: "integer", min: 0}, {type: "string"} ]}`, // "or" with different format or rule-sets
 				[]typ{
 					{`@int`, `123`},
 					{`@str`, `"abc"`},
@@ -824,7 +824,6 @@ func TestCheckRootSchema(t *testing.T) {
 			{`2 // {or: []}`, []typ{}, errs.ErrEmptyArrayInOrRule},
 
 			{`2 // {or: [ {type: "integer", min: 0} ]}`, []typ{}, errs.ErrOneElementInArrayInOrRule},
-			{`2 // {or: [ {min: 0} ]}`, []typ{}, errs.ErrOneElementInArrayInOrRule},
 			{`2 // {or: [ {type: "@type"} ]}`, []typ{}, errs.ErrOneElementInArrayInOrRule},
 			{`2 // {or: [ "@type" ]}`, []typ{}, errs.ErrOneElementInArrayInOrRule},
 
@@ -859,7 +858,7 @@ func TestCheckRootSchema(t *testing.T) {
 				errs.ErrInvalidSchemaName,
 			},
 
-			{`-5 // {or: [ {min: 0}, {type: "string"} ]}`, []typ{}, errs.ErrOrRuleSetValidation},
+			{`-5 // {or: [ {type: "integer", min: 0}, {type: "string"} ]}`, []typ{}, errs.ErrOrRuleSetValidation},
 
 			// duplicate type names
 			{
@@ -1137,7 +1136,7 @@ func TestCheckRootSchema(t *testing.T) {
 				},
 				errs.ErrConstraintValidation},
 
-			{`-5 // {or: [ {min: 0}, {type: "string"}, "@used" ]}`,
+			{`-5 // {or: [ {type: "integer", min: 0}, {type: "string"}, "@used" ]}`,
 				[]typ{
 					{`@used`, `0 // {min: -10}`},
 					{`@unused`, `-1 // {min: 0} - incorrect EXAMPLE value`},

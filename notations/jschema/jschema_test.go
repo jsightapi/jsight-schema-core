@@ -547,7 +547,7 @@ func TestSchema_Check(t *testing.T) {
 			`42 // {type: "any", nullable: true}`: {},
 			`{
 	"foo": 123 /* {or: [
-		{min: 100},
+		{type: "integer", min: 100},
 		{type: "string"}
 	]} */
 }`: {},
@@ -621,17 +621,17 @@ func TestSchema_Check(t *testing.T) {
 
 			`1 /* {or: [
 	{type: "string"},
-	{enum: [1,2,3]}
+	{type: "enum", enum: [1,2,3]}
 ]} */`: {},
 
 			`"foo" /* {or: [
 	{type: "string"},
-	{enum: [1,2,3]}
+	{type: "enum", enum: [1,2,3]}
 ]} */`: {},
 
 			`1 /* {or: [
 	{type: "string"},
-	{enum: @enum}
+	{type: "enum", enum: @enum}
 ]} */`: {
 				enums: map[string]string{
 					"@enum": "[1, 2, 3]",
@@ -640,7 +640,7 @@ func TestSchema_Check(t *testing.T) {
 
 			`"foo" /* {or: [
 	{type: "string"},
-	{enum: @enum}
+	{type: "enum", enum: @enum}
 ]} */`: {
 				enums: map[string]string{
 					"@enum": "[1, 2, 3]",
@@ -649,7 +649,7 @@ func TestSchema_Check(t *testing.T) {
 
 			`"foo" /* {or: [
 	{type: "string"},
-	{enum: @enum}
+	{type: "enum", enum: @enum}
 ]} - comment */`: {
 				enums: map[string]string{
 					"@enum": "[1, 2, 3]",
@@ -658,7 +658,7 @@ func TestSchema_Check(t *testing.T) {
 
 			`"foo" /* {or: [
 	{type: "string"},
-	{enum: @enum}
+	{type: "enum", enum: @enum}
 ]} - multi
 	line
 	comment */`: {
@@ -720,6 +720,35 @@ func TestSchema_Check(t *testing.T) {
 					"@jsonRpcInteractionId": `"json-rpc-2.0 /cats foo" // {regex: "^json-rpc-2.0 \/.* .+"}`,
 				},
 			},
+
+			`1   // {min: 1}`:               {},
+			`1.1 // {min: 1}`:               {},
+			`1.1 // {min: 1, precision: 1}`: {},
+
+			// Type is required inside the "or" rule
+			`"foo" // {or: [ {type: "integer", min: 100}, {type: "string"} ]}`: {},
+			`"foo" // {or: [ {type: "integer", min: 100}, "string" ]}`:         {},
+			`"foo" // {or: [ {type: "integer", min: 100}, "@str" ]}`: {
+				types: map[string]string{
+					"@str": `"str" // {minLength: 1}`, // without explicit type definition
+				},
+			},
+			`"foo" // {or: [ {min: 100, type: "integer"}, {type: "string"} ]}`: {},
+			`"foo" // {or: [ {min: 100, type: "integer"}, "string" ]}`:         {},
+			`"foo" // {or: [ {min: 100, type: "integer"}, "@str" ]}`: {
+				types: map[string]string{
+					"@str": `"str" // {minLength: 1}`,
+				},
+			},
+			`@int | @str`: {
+				types: map[string]string{
+					"@int": `1 // {min: 1}`,
+					"@str": `"str" // {minLength: 1}`,
+				},
+			},
+			`"aa@bb.com" // {or: ["email", "uri", "date", "datetime", "uuid"]}`: {},
+			`"aa@bb.com" // {or: ["email", "null"]}`:                            {},
+			`"aa@bb.com" // {or: ["email", "any"]}`:                             {},
 		}
 
 		for content, c := range cc {
@@ -1659,51 +1688,96 @@ func TestSchema_Check(t *testing.T) {
 		})
 
 		t.Run("req.jschema.rules.or 0.2", func(t *testing.T) {
-			cc := map[string]string{
-				`ERROR (code 1108): You cannot specify child node if you use a "or" rule
-	in line 2 on file 
-	> "myPet1": { // {or: ["@cat", "@dog"]}
-	------------^`: `{
+			cc := map[string]struct {
+				given    string
+				types    map[string]string
+				expected string
+			}{
+				"1108 (1)": {
+					given: `{
 	"myPet1": { // {or: ["@cat", "@dog"]}
 		"id": 1,
 		"name": "Tom"
 	}
 }`,
-
-				`ERROR (code 1108): You cannot specify child node if you use a "or" rule
+					expected: `ERROR (code 1108): You cannot specify child node if you use a "or" rule
 	in line 2 on file 
-	> "myPets": [ // {or: ["@catList", "@dogList"]}
-	------------^`: `{
+	> "myPet1": { // {or: ["@cat", "@dog"]}
+	------------^`,
+				},
+
+				"1108 (2)": {
+					given: `{
 	"myPets": [ // {or: ["@catList", "@dogList"]}
 		@cat
 	]
 }`,
-
-				`ERROR (code 501): Duplicate "types" rule
+					expected: `ERROR (code 1108): You cannot specify child node if you use a "or" rule
 	in line 2 on file 
-	> "myPet4" : @cat | @dog // {or: ["@cat", "@dog"]}
-	---------------------------------^`: `{
+	> "myPets": [ // {or: ["@catList", "@dogList"]}
+	------------^`,
+				},
+
+				"501": {
+					given: `{
 	"myPet4" : @cat | @dog // {or: ["@cat", "@dog"]}
 }`,
-
-				`ERROR (code 1108): You cannot specify child node if you use a "or" rule
+					expected: `ERROR (code 501): Duplicate "types" rule
 	in line 2 on file 
-	> "id": {} // {or: ["@cat", "@dog"]}
-	--------^`: `{
+	> "myPet4" : @cat | @dog // {or: ["@cat", "@dog"]}
+	---------------------------------^`,
+				},
+
+				"1108 (3)": {
+					given: `{
 	"id": {} // {or: ["@cat", "@dog"]}
 }`,
-
-				`ERROR (code 1108): You cannot specify child node if you use a "or" rule
+					expected: `ERROR (code 1108): You cannot specify child node if you use a "or" rule
 	in line 2 on file 
-	> "myPet3" : @cat // {or: ["@cat", "@dog"]}  # --ERROR! It is wrong.
-	-------------^`: `{
+	> "id": {} // {or: ["@cat", "@dog"]}
+	--------^`,
+				},
+
+				"1108 (4)": {
+					given: `{
 	"myPet3" : @cat // {or: ["@cat", "@dog"]}  # --ERROR! It is wrong.
 }`,
+					expected: `ERROR (code 1108): You cannot specify child node if you use a "or" rule
+	in line 2 on file 
+	> "myPet3" : @cat // {or: ["@cat", "@dog"]}  # --ERROR! It is wrong.
+	-------------^`,
+				},
+
+				"Type is required inside the \"or\" rule (1)": {
+					given: `"foo" // {or: [ {min: 100}, {type: "string"} ]}`,
+					expected: `ERROR (code 906): Type is required inside the "or" rule 
+	in line 1 on file 
+	> "foo" // {or: [ {min: 100}, {type: "string"} ]}
+	------------------^`,
+				},
+
+				"Type is required inside the \"or\" rule (2)": {
+					given: `"foo" // {or: [ {min: 100}, "string" ]}`,
+					expected: `ERROR (code 906): Type is required inside the "or" rule 
+	in line 1 on file 
+	> "foo" // {or: [ {min: 100}, "string" ]}
+	------------------^`,
+				},
 			}
 
-			for expected, s := range cc {
-				t.Run(expected, func(t *testing.T) {
-					assert.EqualError(t, New("", s).Check(), expected)
+			for name, c := range cc {
+				t.Run(name, func(t *testing.T) {
+					s := New("", c.given)
+
+					for n, b := range c.types {
+						err := s.AddType(n, New(n, b))
+						if err != nil {
+							t.Fatal(err)
+						}
+					}
+
+					err := s.Check()
+					assert.EqualError(t, err, c.expected)
 				})
 			}
 		})
@@ -2481,7 +2555,7 @@ func TestSchema_GetAST(t *testing.T) {
 
 			`{
 	"foo": 123 /* {or: [
-		{min: 100},
+		{type: "integer", min: 100},
 		{type: "string"}
 	]} */
 }`: {
@@ -2504,6 +2578,12 @@ func TestSchema_GetAST(t *testing.T) {
 												TokenType: schema.TokenTypeObject,
 												Properties: schema.NewRuleASTNodes(
 													map[string]schema.RuleASTNode{
+														"type": {
+															TokenType:  schema.TokenTypeString,
+															Value:      "integer",
+															Properties: &schema.RuleASTNodes{},
+															Source:     schema.RuleASTNodeSourceManual,
+														},
 														"min": {
 															TokenType:  schema.TokenTypeNumber,
 															Value:      "100",
@@ -2511,7 +2591,7 @@ func TestSchema_GetAST(t *testing.T) {
 															Source:     schema.RuleASTNodeSourceManual,
 														},
 													},
-													[]string{"min"},
+													[]string{"type", "min"},
 												),
 												Source: schema.RuleASTNodeSourceManual,
 											},
