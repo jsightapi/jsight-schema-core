@@ -41,7 +41,7 @@ func addORShortcut(node ischema.Node, rootSchema *ischema.ISchema, val string) {
 		typ := ischema.New()
 		typ.SetRootNode(node)
 
-		CompileBasic(&typ, true)
+		CompileBasic(&typ, true, false)
 
 		lex := node.BasisLexEventOfSchemaForNode()
 		rootSchema.AddUnnamedType(&typ, lex.File(), lex.Begin())

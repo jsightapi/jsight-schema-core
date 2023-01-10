@@ -4,7 +4,7 @@ package mocks
 
 import (
 	bytes "github.com/jsightapi/jsight-schema-core/bytes"
-	"github.com/jsightapi/jsight-schema-core/lexeme"
+	lexeme "github.com/jsightapi/jsight-schema-core/lexeme"
 
 	mock "github.com/stretchr/testify/mock"
 )
@@ -36,9 +36,7 @@ func (_m *Document) Content() bytes.Bytes {
 	if rf, ok := ret.Get(0).(func() bytes.Bytes); ok {
 		r0 = rf()
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(bytes.Bytes)
-		}
+		r0 = ret.Get(0).(bytes.Bytes)
 	}
 
 	return r0

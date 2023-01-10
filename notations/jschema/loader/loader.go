@@ -59,7 +59,7 @@ type loader struct {
 
 func LoadSchema(scan *scanner.Scanner, rootSchema *ischema.ISchema) *ischema.ISchema {
 	s := LoadSchemaWithoutCompile(scan, rootSchema, nil)
-	CompileBasic(&s, false)
+	CompileBasic(&s, false, false)
 	return &s
 }
 

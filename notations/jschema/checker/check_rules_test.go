@@ -44,7 +44,7 @@ func TestCheckRules(t *testing.T) {
 			rootSchema.AddNamedType(typ.name, ty, f, 0)
 		}
 
-		loader.CompileAllOf(rootSchema)
+		loader.CompileAllOf(rootSchema, false)
 		loader.AddUnnamedTypes(rootSchema)
 		CheckRootSchema(rootSchema)
 	}

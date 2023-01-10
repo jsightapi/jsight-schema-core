@@ -749,6 +749,17 @@ func TestSchema_Check(t *testing.T) {
 			`"aa@bb.com" // {or: ["email", "uri", "date", "datetime", "uuid"]}`: {},
 			`"aa@bb.com" // {or: ["email", "null"]}`:                            {},
 			`"aa@bb.com" // {or: ["email", "any"]}`:                             {},
+
+			// key case-sensitive
+			`{"aaa": 1, "AAA": 2}`:          {},
+			`{"aaa": {"bbb": 1, "BBB": 2}}`: {},
+			`{ // {allOf: "@obj"}
+	"aaa": 1
+}`: {
+				types: map[string]string{
+					"@obj": `{"AAA": 2}`,
+				},
+			},
 		}
 
 		for content, c := range cc {
@@ -771,9 +782,10 @@ func TestSchema_Check(t *testing.T) {
 
 	t.Run("negative", func(t *testing.T) {
 		cc := map[string]struct {
-			types map[string]string
-			rules map[string]string
-			given string
+			types                  map[string]string
+			rules                  map[string]string
+			given                  string
+			areKeysCaseInsensitive bool
 		}{
 			`ERROR (code 301): Invalid character "i" looking for beginning of value
 	in line 1 on file 
@@ -1629,11 +1641,50 @@ func TestSchema_Check(t *testing.T) {
 					"@num": `12`,
 				},
 			},
+
+			`ERROR (code 402): Duplicate keys (aaa) in the schema
+	in line 1 on file 
+	> {"aaa": 1, "AAA": 2}
+	--^`: {
+				given:                  `{"aaa": 1, "AAA": 2}`,
+				areKeysCaseInsensitive: true,
+			},
+
+			`ERROR (code 402): Duplicate keys (bbb) in the schema
+	in line 1 on file 
+	> {"aaa": {"bbb": 1, "BBB": 2}}
+	----------^`: {
+				given:                  `{"aaa": {"bbb": 1, "BBB": 2}}`,
+				areKeysCaseInsensitive: true,
+			},
+
+			`ERROR (code 402): Duplicate keys (bbb) in the schema
+	in line 1 on file 
+	> [{"bbb": 1, "BBB": 2}]
+	---^`: {
+				given:                  `[{"bbb": 1, "BBB": 2}]`,
+				areKeysCaseInsensitive: true,
+			},
+
+			`ERROR (code 402): Duplicate keys (aaa) in the schema
+	in line 2 on file 
+	> { // {allOf: "@obj"}
+	--^`: {
+				given: `
+{ // {allOf: "@obj"}
+	"aaa": 1
+}`,
+				types: map[string]string{
+					"@obj": `{"AAA": 2}`,
+				},
+				areKeysCaseInsensitive: true,
+			},
 		}
 
 		for expected, c := range cc {
 			t.Run(expected, func(t *testing.T) {
 				s := New("", c.given)
+				s.AreKeysCaseInsensitive = c.areKeysCaseInsensitive
 
 				for n, b := range c.rules {
 					require.NoError(t, s.AddRule(n, enum.New(n, b)))

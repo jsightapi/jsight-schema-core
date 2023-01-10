@@ -31,4 +31,5 @@ const (
 	DateTimeConstraintType                         // datetime
 	UuidConstraintType                             // uuid
 	ConstConstraintType                            // const
+	KeysCaseInsensitiveConstraintType
 )

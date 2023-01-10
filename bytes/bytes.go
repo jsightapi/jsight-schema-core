@@ -69,6 +69,10 @@ func (b Bytes) DecodeRune() rune {
 	return r
 }
 
+func (b Bytes) ToLower() Bytes {
+	return NewBytes(bytes.ToLower(b.data))
+}
+
 func (b Bytes) Sub(low, high any) Bytes {
 	l := Int(low)
 	h := Int(high)

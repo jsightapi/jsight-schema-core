@@ -31,7 +31,7 @@ func TestCheckRootSchema(t *testing.T) {
 			rootSchema.AddNamedType(datum.name, typ, f, 0)
 		}
 
-		loader.CompileAllOf(rootSchema)
+		loader.CompileAllOf(rootSchema, false)
 		loader.AddUnnamedTypes(rootSchema)
 		CheckRootSchema(rootSchema)
 	}

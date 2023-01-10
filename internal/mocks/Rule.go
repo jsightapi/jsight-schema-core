@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	jschema "github.com/jsightapi/jsight-schema-core"
+	schema "github.com/jsightapi/jsight-schema-core"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -27,14 +27,14 @@ func (_m *Rule) Check() error {
 }
 
 // GetAST provides a mock function with given fields:
-func (_m *Rule) GetAST() (jschema.ASTNode, error) {
+func (_m *Rule) GetAST() (schema.ASTNode, error) {
 	ret := _m.Called()
 
-	var r0 jschema.ASTNode
-	if rf, ok := ret.Get(0).(func() jschema.ASTNode); ok {
+	var r0 schema.ASTNode
+	if rf, ok := ret.Get(0).(func() schema.ASTNode); ok {
 		r0 = rf()
 	} else {
-		r0 = ret.Get(0).(jschema.ASTNode)
+		r0 = ret.Get(0).(schema.ASTNode)
 	}
 
 	var r1 error

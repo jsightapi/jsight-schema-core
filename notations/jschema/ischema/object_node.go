@@ -1,6 +1,8 @@
 package ischema
 
 import (
+	"strings"
+
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
 	"github.com/jsightapi/jsight-schema-core/errs"
@@ -178,4 +180,13 @@ func (n *ObjectNode) Copy() Node {
 		nn.keys.Set(v)
 	}
 	return &nn
+}
+
+func (n *ObjectNode) KeysToLowercase() {
+	k := newObjectNodeKeys()
+	for _, v := range n.keys.Data {
+		v.Key = strings.ToLower(v.Key)
+		k.Set(v) // can panic
+	}
+	n.keys = k
 }
