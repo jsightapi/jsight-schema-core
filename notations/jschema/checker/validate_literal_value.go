@@ -38,22 +38,41 @@ func ValidateLiteralValue(node ischema.Node, jsonValue bytes.Bytes) {
 	}
 }
 
+var stringBasedTypes = map[constraint.Type]string{
+	constraint.EmailConstraintType:    "email",
+	constraint.UriConstraintType:      "uri",
+	constraint.DateConstraintType:     "date",
+	constraint.DateTimeConstraintType: "datetime",
+	constraint.UuidConstraintType:     "uuid",
+}
+
 func checkJsonType(node ischema.Node, value bytes.Bytes) {
 	if node.Constraint(constraint.EnumConstraintType) != nil ||
-		node.Constraint(constraint.AnyConstraintType) != nil ||
-		node.Constraint(constraint.EmailConstraintType) != nil ||
-		node.Constraint(constraint.UriConstraintType) != nil ||
-		node.Constraint(constraint.DateConstraintType) != nil ||
-		node.Constraint(constraint.DateTimeConstraintType) != nil ||
-		node.Constraint(constraint.UuidConstraintType) != nil {
+		node.Constraint(constraint.AnyConstraintType) != nil {
 		return
 	}
 
 	jsonType := json.Guess(value).LiteralJsonType() // can panic
 	schemaType := node.Type()
-	if !(jsonType == schemaType ||
-		(jsonType == json.TypeInteger && schemaType == json.TypeFloat) ||
-		(jsonType == json.TypeNull && node.Constraint(constraint.NullableConstraintType) != nil)) {
-		panic(errs.ErrInvalidValueType.F(jsonType.String(), node.SchemaType()))
+
+	if jsonType == json.TypeNull && node.Constraint(constraint.NullableConstraintType) != nil {
+		return
 	}
+
+	for c, name := range stringBasedTypes {
+		if node.Constraint(c) != nil {
+			if jsonType == json.TypeString {
+				return
+			} else {
+				panic(errs.ErrInvalidValueType.F(jsonType.String(), name))
+			}
+		}
+	}
+
+	if jsonType == schemaType ||
+		(jsonType == json.TypeInteger && schemaType == json.TypeFloat) {
+		return
+	}
+
+	panic(errs.ErrInvalidValueType.F(jsonType.String(), node.SchemaType()))
 }

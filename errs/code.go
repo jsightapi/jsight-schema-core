@@ -210,7 +210,7 @@ var errorFormat = map[Code]string{
 	ErrUnexpectedLexInObjectValidator:  `Invalid value, object expected`,
 	ErrUnexpectedLexInArrayValidator:   `Invalid value, array expected`,
 	ErrUnexpectedLexInMixedValidator:   `Invalid value, scalar, array, or object expected`,
-	ErrInvalidValueType:                `Invalid value type "%s", expected "%s"`,
+	ErrInvalidValueType:                "Invalid value type `%s`, expected `%s`",
 	ErrInvalidKeyType:                  `Incorrect key type "%s"`,
 	ErrObjectExpected:                  `An object is expected to validate the property`,
 	ErrPropertyNotFound:                `The %q property was not found`,

@@ -1679,6 +1679,10 @@ func TestSchema_Check(t *testing.T) {
 				},
 				areKeysCaseInsensitive: true,
 			},
+
+			"ERROR (code 1115): Incompatible value of example and \"type\" rule (email)\n\tin line 1 on file \n\t> 123 // {type: \"email\"}\n\t--^": {
+				given: `123 // {type: "email"}`,
+			},
 		}
 
 		for expected, c := range cc {
