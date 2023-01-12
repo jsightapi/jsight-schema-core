@@ -31,7 +31,6 @@ type JSchema struct {
 
 	ASTNode                  schema.ASTNode
 	AreKeysOptionalByDefault bool
-	AreKeysCaseInsensitive   bool
 }
 
 var _ schema.Schema = (*JSchema)(nil)
@@ -195,7 +194,7 @@ func (s *JSchema) load() error {
 		s.Inner = &sc
 		s.ASTNode = s.BuildASTNode()
 		s.CollectUserTypes()
-		loader.CompileBasic(s.Inner, s.AreKeysOptionalByDefault, s.AreKeysCaseInsensitive)
+		loader.CompileBasic(s.Inner, s.AreKeysOptionalByDefault)
 		return nil
 	})
 }
@@ -236,7 +235,7 @@ func (s *JSchema) Compile() error {
 		if err := s.load(); err != nil {
 			return err
 		}
-		loader.CompileAllOf(s.Inner, s.AreKeysCaseInsensitive)
+		loader.CompileAllOf(s.Inner)
 		loader.AddUnnamedTypes(s.Inner)
 		checker.CheckRootSchema(s.Inner)
 		return checker.CheckRecursion(s.File.Name(), s.Inner)

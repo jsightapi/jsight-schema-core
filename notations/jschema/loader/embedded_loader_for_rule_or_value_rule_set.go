@@ -199,7 +199,7 @@ func (s *orRuleSetLoader) makeTypeFromRuleSet() {
 	typ := ischema.New()
 	typ.SetRootNode(s.typeRoot)
 
-	CompileBasic(&typ, false, false)
+	CompileBasic(&typ, false)
 
 	lex := s.node.BasisLexEventOfSchemaForNode()
 	name := s.rootSchema.AddUnnamedType(&typ, lex.File(), lex.Begin())

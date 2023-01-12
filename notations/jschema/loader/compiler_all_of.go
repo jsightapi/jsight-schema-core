@@ -1,8 +1,6 @@
 package loader
 
 import (
-	"strings"
-
 	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema"
@@ -21,19 +19,17 @@ type allOfConstraintCompiler struct {
 	// be compiled (within which the "all Of" rule is not used).
 	compiledTypes map[string]struct{}
 
-	foundTypes             map[string]ischema.Type
-	areKeysCaseInsensitive bool
+	foundTypes map[string]ischema.Type
 }
 
 // CompileAllOf compile "allOf" rules in root schema, and in all types.
 // Adds the necessary properties to objects, removes "allOf" rule.
-func CompileAllOf(rootSchema *ischema.ISchema, areKeysCaseInsensitive bool) {
+func CompileAllOf(rootSchema *ischema.ISchema) {
 	c := allOfConstraintCompiler{
-		rootSchema:             rootSchema,
-		processingTypes:        make(map[string]struct{}),
-		compiledTypes:          make(map[string]struct{}),
-		foundTypes:             make(map[string]ischema.Type),
-		areKeysCaseInsensitive: areKeysCaseInsensitive,
+		rootSchema:      rootSchema,
+		processingTypes: make(map[string]struct{}),
+		compiledTypes:   make(map[string]struct{}),
+		foundTypes:      make(map[string]ischema.Type),
 	}
 
 	c.processSchema(rootSchema)
@@ -125,15 +121,8 @@ func (c *allOfConstraintCompiler) extendWith(node ischema.Node, name string) {
 		toObject.AddChild(key, cn) // can panic ErrDuplicateKeysInSchema
 	}
 
-	if c.areKeysCaseInsensitive {
-		toObject.KeysToLowercase()
-	}
-
 	if requiredKeys := fromObject.Constraint(constraint.RequiredKeysConstraintType); requiredKeys != nil {
 		for _, key := range requiredKeys.(*constraint.RequiredKeys).Keys() {
-			if c.areKeysCaseInsensitive {
-				key = strings.ToLower(key)
-			}
 			addRequiredKey(toObject, key)
 		}
 	}

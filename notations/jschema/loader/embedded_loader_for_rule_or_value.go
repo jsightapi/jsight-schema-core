@@ -147,7 +147,7 @@ func (a *orValueLoader) literal(lex lexeme.LexEvent) {
 		typ := ischema.New()
 		typ.SetRootNode(root)
 
-		CompileBasic(&typ, false, false)
+		CompileBasic(&typ, false)
 
 		lex := a.node.BasisLexEventOfSchemaForNode()
 		name := a.rootSchema.AddUnnamedType(&typ, lex.File(), lex.Begin())

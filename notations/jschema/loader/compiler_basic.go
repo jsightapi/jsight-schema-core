@@ -20,10 +20,9 @@ import (
 type schemaCompiler struct {
 	rootSchema               *ischema.ISchema
 	areKeysOptionalByDefault bool
-	areKeysCaseInsensitive   bool
 }
 
-func CompileBasic(rootSchema *ischema.ISchema, areKeysOptionalByDefault, areKeysCaseInsensitive bool) {
+func CompileBasic(rootSchema *ischema.ISchema, areKeysOptionalByDefault bool) {
 	// The root node can be empty, if you specify only ATTRIBUTES without EXAMPLE.
 	if rootSchema.RootNode() == nil {
 		return
@@ -32,7 +31,6 @@ func CompileBasic(rootSchema *ischema.ISchema, areKeysOptionalByDefault, areKeys
 	compile := schemaCompiler{
 		rootSchema:               rootSchema,
 		areKeysOptionalByDefault: areKeysOptionalByDefault,
-		areKeysCaseInsensitive:   areKeysCaseInsensitive,
 	}
 	compile.compileNode(rootSchema.RootNode(), 0)
 }
@@ -40,8 +38,6 @@ func CompileBasic(rootSchema *ischema.ISchema, areKeysOptionalByDefault, areKeys
 func (compile schemaCompiler) compileNode(node ischema.Node, indexOfNode int) {
 	lex := node.BasisLexEventOfSchemaForNode()
 	defer lexeme.CatchLexEventError(lex)
-
-	compile.objectKeysCaseInsensitive(node) // can panic
 
 	compile.falseConstraints(node)    // can panic
 	compile.orConstraint(node)        // can panic. Must be called before compile.typeConstraint()
@@ -63,15 +59,6 @@ func (compile schemaCompiler) compileNode(node ischema.Node, indexOfNode int) {
 		compile.emptyArray(node) // can panic
 		for i, child := range branchingNode.Children() {
 			compile.compileNode(child, i) // can panic
-		}
-	}
-}
-
-func (compile schemaCompiler) objectKeysCaseInsensitive(node ischema.Node) {
-	if compile.areKeysCaseInsensitive {
-		if obj, ok := node.(*ischema.ObjectNode); ok {
-			obj.KeysToLowercase() // can panic
-			obj.AddConstraint(constraint.NewKeysCaseInsensitive(true))
 		}
 	}
 }

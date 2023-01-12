@@ -167,26 +167,43 @@ func (n *ObjectNode) collectASTProperties() ([]schema.ASTNode, error) {
 }
 
 func (n *ObjectNode) Copy() Node {
-	nn := *n
-	nn.baseNode = n.baseNode.Copy()
-
-	nn.children = make([]Node, 0, len(n.children))
-	for _, v := range n.children {
-		nn.children = append(nn.children, v.Copy())
-	}
-
-	nn.keys = newObjectNodeKeys()
-	for _, v := range n.keys.Data {
-		nn.keys.Set(v)
-	}
+	nn := n.copyBase()
+	nn.copyChildrenFrom(n)
+	nn.copyKeysFrom(n)
 	return &nn
 }
 
-func (n *ObjectNode) KeysToLowercase() {
-	k := newObjectNodeKeys()
-	for _, v := range n.keys.Data {
-		v.Key = strings.ToLower(v.Key)
-		k.Set(v) // can panic
+func (n *ObjectNode) CopyAndLowercaseKeys() *ObjectNode {
+	nn := n.copyBase()
+	nn.copyChildrenFrom(n)
+	nn.copyLowercaseKeysFrom(n)
+	return &nn
+}
+
+func (n *ObjectNode) copyBase() ObjectNode {
+	nn := *n
+	nn.baseNode = n.baseNode.Copy()
+	return nn
+}
+
+func (n *ObjectNode) copyChildrenFrom(from *ObjectNode) {
+	n.children = make([]Node, 0, len(from.children))
+	for _, v := range from.children {
+		n.children = append(n.children, v.Copy())
 	}
-	n.keys = k
+}
+
+func (n *ObjectNode) copyKeysFrom(from *ObjectNode) {
+	n.keys = newObjectNodeKeys()
+	for _, v := range from.keys.Data {
+		n.keys.Set(v)
+	}
+}
+
+func (n *ObjectNode) copyLowercaseKeysFrom(from *ObjectNode) {
+	n.keys = newObjectNodeKeys()
+	for _, v := range from.keys.Data {
+		v.Key = strings.ToLower(v.Key)
+		n.keys.Set(v)
+	}
 }
