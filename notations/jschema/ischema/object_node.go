@@ -2,15 +2,19 @@ package ischema
 
 import (
 	"strings"
+	"sync"
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/bytes"
 	"github.com/jsightapi/jsight-schema-core/errs"
 	"github.com/jsightapi/jsight-schema-core/json"
 	"github.com/jsightapi/jsight-schema-core/lexeme"
+	"github.com/jsightapi/jsight-schema-core/notations/jschema/ischema/constraint"
 )
 
 type ObjectNode struct {
+	mu sync.Mutex
+
 	// children node list.
 	children []Node
 
@@ -36,7 +40,7 @@ func NewObjectNode(lex lexeme.LexEvent) *ObjectNode {
 	return &n
 }
 
-func (ObjectNode) Type() json.Type {
+func (*ObjectNode) Type() json.Type {
 	return json.TypeObject
 }
 
@@ -72,17 +76,17 @@ func (n *ObjectNode) Grow(lex lexeme.LexEvent) (Node, bool) {
 	return n, false
 }
 
-func (n ObjectNode) Children() []Node {
+func (n *ObjectNode) Children() []Node {
 	return n.children
 }
 
-func (n ObjectNode) Len() int {
+func (n *ObjectNode) Len() int {
 	return len(n.children)
 }
 
 // ChildByRawKey returns child by raw key as is present in schema.
 // For instance: "foo" or @foo (shortcut).
-func (n ObjectNode) ChildByRawKey(rawKey bytes.Bytes) (Node, bool) {
+func (n *ObjectNode) ChildByRawKey(rawKey bytes.Bytes) (Node, bool) {
 	key := rawKey
 	isShortcut := rawKey.IsUserTypeName()
 	if !isShortcut {
@@ -92,7 +96,7 @@ func (n ObjectNode) ChildByRawKey(rawKey bytes.Bytes) (Node, bool) {
 }
 
 // Child returns child bye specified key.
-func (n ObjectNode) Child(key string, isShortcut bool) (Node, bool) {
+func (n *ObjectNode) Child(key string, isShortcut bool) (Node, bool) {
 	i, ok := n.keys.Get(key, isShortcut)
 	if ok {
 		return n.children[i.Index], true
@@ -120,14 +124,14 @@ func (n *ObjectNode) AddChild(key ObjectNodeKey, child Node) {
 	n.addChild(child)
 }
 
-func (n ObjectNode) Key(index int) ObjectNodeKey {
+func (n *ObjectNode) Key(index int) ObjectNodeKey {
 	if kv, ok := n.keys.Find(index); ok {
 		return kv
 	}
 	panic(errs.ErrRuntimeFailure.F())
 }
 
-func (n ObjectNode) Keys() *ObjectNodeKeys {
+func (n *ObjectNode) Keys() *ObjectNodeKeys {
 	return n.keys
 }
 
@@ -181,9 +185,9 @@ func (n *ObjectNode) CopyAndLowercaseKeys() *ObjectNode {
 }
 
 func (n *ObjectNode) copyBase() ObjectNode {
-	nn := *n
-	nn.baseNode = n.baseNode.Copy()
-	return nn
+	return ObjectNode{
+		baseNode: n.baseNode.Copy(),
+	}
 }
 
 func (n *ObjectNode) copyChildrenFrom(from *ObjectNode) {
@@ -206,4 +210,13 @@ func (n *ObjectNode) copyLowercaseKeysFrom(from *ObjectNode) {
 		v.Key = strings.ToLower(v.Key)
 		n.keys.Set(v)
 	}
+}
+
+func (n *ObjectNode) EnsureAdditionalProperties() {
+	n.mu.Lock()
+	if c := n.Constraint(constraint.AdditionalPropertiesConstraintType); c == nil {
+		c = constraint.NewAdditionalProperties(bytes.NewBytes("true"))
+		n.AddConstraint(c)
+	}
+	n.mu.Unlock()
 }
