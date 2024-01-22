@@ -42,11 +42,12 @@ func TestNewAdditionalProperties(t *testing.T) {
 		}
 
 		for v, expected := range cc {
+			vv, exp := v, expected
 			t.Run(v, func(t *testing.T) {
 				t.Parallel()
 
-				actual := NewAdditionalProperties(bytes.NewBytes(v))
-				assert.True(t, actual.IsEqual(expected))
+				actual := NewAdditionalProperties(bytes.NewBytes(vv))
+				assert.True(t, actual.IsEqual(exp))
 			})
 		}
 	})
@@ -179,11 +180,12 @@ func TestAdditionalProperties_IsEqual(t *testing.T) {
 	}
 
 	for n, c := range cc {
+		cons := c
 		t.Run(n, func(t *testing.T) {
 			t.Parallel()
 
-			actual := c.c1.IsEqual(c.c2)
-			assert.Equal(t, c.expected, actual)
+			actual := cons.c1.IsEqual(cons.c2)
+			assert.Equal(t, cons.expected, actual)
 		})
 	}
 }
