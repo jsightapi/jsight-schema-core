@@ -1,4 +1,4 @@
-package openapi
+package schema
 
 type Type int
 
@@ -11,3 +11,7 @@ const (
 	TypeArray               // array
 	TypeObject              // object
 )
+
+func (t Type) MarshalJSON() (b []byte, err error) {
+	return quotedBytes(t.String()), nil
+}
