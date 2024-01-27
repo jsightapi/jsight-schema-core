@@ -2,6 +2,7 @@ package schema
 
 import (
 	"encoding/json"
+
 	"github.com/jsightapi/jsight-schema-core/internal/sync"
 )
 
@@ -19,8 +20,8 @@ var _ json.Marshaler = &ObjectProperties{}
 
 var objectPropertiesBufferPool = sync.NewBufferPool(512)
 
-func newObjectProperties(len int) ObjectProperties {
-	return ObjectProperties{properties: make([]Property, 0, len)}
+func newObjectProperties(length int) ObjectProperties {
+	return ObjectProperties{properties: make([]Property, 0, length)}
 }
 
 func (op *ObjectProperties) append(key string, value Node) {

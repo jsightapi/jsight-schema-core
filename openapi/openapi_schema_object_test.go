@@ -1,9 +1,11 @@
 package openapi
 
 import (
-	"github.com/jsightapi/jsight-schema-core/notations/jschema"
-	"github.com/stretchr/testify/require"
 	"testing"
+
+	"github.com/stretchr/testify/require"
+
+	"github.com/jsightapi/jsight-schema-core/notations/jschema"
 )
 
 func TestNewSchemaObject(t *testing.T) {
