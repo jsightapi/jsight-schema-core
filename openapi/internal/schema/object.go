@@ -5,7 +5,8 @@ import (
 )
 
 type Object struct {
-	Type_      Type             `json:"type"`
+	jstType    schema.TokenType
+	OADType    OADType          `json:"type"`
 	Properties ObjectProperties `json:"properties"`
 }
 
@@ -17,13 +18,13 @@ func newObject(astNode schema.ASTNode) Object {
 	}
 
 	o := Object{
-		Type_:      TypeObject,
+		OADType:    OADTypeObject,
 		Properties: props,
 	}
 
 	return o
 }
 
-func (o Object) Type() Type {
-	return o.Type_
+func (o Object) JSightTokenType() schema.TokenType {
+	return o.jstType
 }

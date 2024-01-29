@@ -13,9 +13,21 @@ func TestNewSchemaObject(t *testing.T) {
 	err := j.Check()
 	require.NoError(t, err)
 
-	o := NewSchemaObject(j)
-	json, err := o.MarshalJSON()
-	require.NoError(t, err)
+	t.Run("positive", func(t *testing.T) {
+		t.Run("from JSchema", func(t *testing.T) {
+			o := NewSchemaObject(j)
+			json, err := o.MarshalJSON()
+			require.NoError(t, err)
+			require.JSONEq(t, `{"type": "object", "properties": {}}`, string(json))
+		})
 
-	require.JSONEq(t, `{"type": "object", "properties": {}}`, string(json))
+		t.Run("from ASTNode", func(t *testing.T) {
+			o := NewSchemaObject(j.ASTNode)
+			json, err := o.MarshalJSON()
+			require.NoError(t, err)
+			require.JSONEq(t, `{"type": "object", "properties": {}}`, string(json))
+		})
+
+		// TODO regex
+	})
 }

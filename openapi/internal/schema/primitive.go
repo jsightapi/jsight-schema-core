@@ -5,36 +5,37 @@ import (
 )
 
 type Primitive struct {
-	Type_   Type    `json:"type"`
+	jstType schema.TokenType
+	OADType OADType `json:"type"`
 	Example Example `json:"example"`
 }
 
 func newString(astNode schema.ASTNode) Primitive {
 	return Primitive{
-		Type_:   TypeString,
+		OADType: OADTypeString,
 		Example: newStringExample(astNode.Value),
 	}
 }
 
 func newBoolean(astNode schema.ASTNode) Primitive {
-	return newBasicNode(TypeBoolean, astNode.Value)
+	return newBasicNode(OADTypeBoolean, astNode.Value)
 }
 
 func newNumber(astNode schema.ASTNode) Primitive {
 	if astNode.SchemaType == "integer" {
-		return newBasicNode(TypeInteger, astNode.Value)
+		return newBasicNode(OADTypeInteger, astNode.Value)
 	}
 
-	return newBasicNode(TypeNumber, astNode.Value)
+	return newBasicNode(OADTypeNumber, astNode.Value)
 }
 
-func newBasicNode(t Type, astValue string) Primitive {
+func newBasicNode(t OADType, astValue string) Primitive {
 	return Primitive{
-		Type_:   t,
+		OADType: t,
 		Example: newBasicExample(astValue),
 	}
 }
 
-func (p Primitive) Type() Type {
-	return p.Type_
+func (p Primitive) JSightTokenType() schema.TokenType {
+	return p.jstType
 }

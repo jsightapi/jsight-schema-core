@@ -3,6 +3,8 @@ package schema
 import (
 	"encoding/json"
 
+	schema "github.com/jsightapi/jsight-schema-core"
+
 	"github.com/jsightapi/jsight-schema-core/notations/jschema"
 )
 
@@ -13,9 +15,15 @@ type Schema struct {
 var _ json.Marshaler = Schema{}
 var _ json.Marshaler = &Schema{}
 
-func New(j *jschema.JSchema) Schema {
+func NewFromJSchema(j *jschema.JSchema) Schema {
 	return Schema{
 		root: newNode(j.ASTNode),
+	}
+}
+
+func NewFromASTNode(a schema.ASTNode) Schema {
+	return Schema{
+		root: newNode(a),
 	}
 }
 

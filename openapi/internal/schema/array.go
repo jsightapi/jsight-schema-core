@@ -5,14 +5,15 @@ import (
 )
 
 type Array struct {
-	Type_ Type   `json:"type"`
-	Items []Node `json:"items"`
+	jstType schema.TokenType
+	OADType OADType `json:"type"`
+	Items   []Node  `json:"items"`
 }
 
 func newArray(astNode schema.ASTNode) Array {
 	a := Array{
-		Type_: TypeArray,
-		Items: make([]Node, 0, len(astNode.Children)),
+		OADType: OADTypeArray,
+		Items:   make([]Node, 0, len(astNode.Children)),
 	}
 
 	for _, an := range astNode.Children {
@@ -22,6 +23,6 @@ func newArray(astNode schema.ASTNode) Array {
 	return a
 }
 
-func (a Array) Type() Type {
-	return a.Type_
+func (a Array) JSightTokenType() schema.TokenType {
+	return a.jstType
 }

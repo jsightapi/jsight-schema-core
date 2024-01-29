@@ -9,37 +9,38 @@ import (
 )
 
 func TestNewOpenAPI(t *testing.T) {
-	tests := []struct {
-		jsight  string
-		openapi string
-	}{
-		{
-			`"some string"`,
-			`{"type": "string", "example": "some string"}`,
-		},
-		{
-			`123`,
-			`{"type": "integer", "example": 123}`,
-		},
-		{
-			`123.4`,
-			`{"type": "number", "example": 123.4}`,
-		},
-		{
-			`true`,
-			`{"type": "boolean", "example": true}`,
-		},
-		{
-			`false`,
-			`{"type": "boolean", "example": false}`,
-		},
-		//{
-		//	`null`,
-		//	`{"type": "TODO", "example": null}`,
-		//},
-		{
-			`[1, 2.3, "abc"]`,
-			`{
+	t.Run("positive", func(t *testing.T) {
+		tests := []struct {
+			jsight  string
+			openapi string
+		}{
+			{
+				`"some string"`,
+				`{"type": "string", "example": "some string"}`,
+			},
+			{
+				`123`,
+				`{"type": "integer", "example": 123}`,
+			},
+			{
+				`123.4`,
+				`{"type": "number", "example": 123.4}`,
+			},
+			{
+				`true`,
+				`{"type": "boolean", "example": true}`,
+			},
+			{
+				`false`,
+				`{"type": "boolean", "example": false}`,
+			},
+			{
+				`null`,
+				`{"enum": [null], "example": null}`,
+			},
+			{
+				`[1, 2.3, "abc"]`,
+				`{
 				"type": "array",
 				"items": [
 					{"type": "integer", "example": 1},
@@ -47,9 +48,9 @@ func TestNewOpenAPI(t *testing.T) {
 					{"type": "string", "example": "abc"}
 				]
 			}`,
-		},
-		{
-			`{
+			},
+			{
+				`{
 				"str": "some string",
 				"int": 123,
 				"num": 12.3,
@@ -57,7 +58,7 @@ func TestNewOpenAPI(t *testing.T) {
 				"arr": [1,2],
 				"obj": {"key": "val"}
 			}`,
-			`{
+				`{
 				"type": "object",
 				"properties": {
 					"str": {"type": "string", "example": "some string"},
@@ -79,14 +80,15 @@ func TestNewOpenAPI(t *testing.T) {
 					}
 				}
 			}`,
-		},
-	}
+			},
+		}
 
-	for _, tt := range tests {
-		t.Run(tt.jsight, func(t *testing.T) {
-			jsightToOpenAPI(t, tt.jsight, tt.openapi)
-		})
-	}
+		for _, tt := range tests {
+			t.Run(tt.jsight, func(t *testing.T) {
+				jsightToOpenAPI(t, tt.jsight, tt.openapi)
+			})
+		}
+	})
 }
 
 func jsightToOpenAPI(t *testing.T, jsight string, openapi string) {
@@ -94,9 +96,9 @@ func jsightToOpenAPI(t *testing.T, jsight string, openapi string) {
 	err := j.Check()
 	require.NoError(t, err)
 
-	o := New(j)
+	o := NewFromJSchema(j)
 	json, err := o.MarshalJSON()
 	require.NoError(t, err)
 
-	require.JSONEq(t, openapi, string(json))
+	require.JSONEq(t, openapi, string(json), "Actual: "+string(json))
 }
