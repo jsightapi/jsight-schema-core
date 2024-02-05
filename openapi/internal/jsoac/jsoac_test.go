@@ -97,7 +97,7 @@ func jsightToOpenAPI(t *testing.T, jsight string, openapi string) {
 	require.NoError(t, err)
 
 	o := New(j)
-	json, err := o.JSON()
+	json, err := o.MarshalJSON()
 	require.NoError(t, err)
 
 	require.JSONEq(t, openapi, string(json), "Actual: "+string(json))

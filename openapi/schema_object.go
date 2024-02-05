@@ -10,17 +10,15 @@ import (
 )
 
 type SchemaObject interface {
-	JSON() (b []byte, err error)
+	SetDescription(s string)
+	MarshalJSON() (b []byte, err error)
 }
 
-type SchemaKeeper interface {
-	*jschema.JSchema | *regex.RSchema | schema.ASTNode
-}
+var _ SchemaObject = &jsoac.JSOAC{}
+var _ SchemaObject = &rsoac.RSOAC{}
 
-func NewSchemaObject[T SchemaKeeper](s T) SchemaObject {
+func NewSchemaObject(s schema.Schema) SchemaObject {
 	switch st := any(s).(type) {
-	case schema.ASTNode:
-		return jsoac.NewFromASTNode(st)
 	case *jschema.JSchema:
 		return jsoac.New(st)
 	case *regex.RSchema:

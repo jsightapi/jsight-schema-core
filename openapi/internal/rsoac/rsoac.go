@@ -7,13 +7,17 @@ import (
 )
 
 type RSOAC struct {
-	// TODO props
+	description string
 }
 
-func New(j *regex.RSchema) RSOAC {
+func New(j *regex.RSchema) *RSOAC {
 	panic("TODO regex.RSchema") // TODO method
 }
 
-func (o RSOAC) JSON() (b []byte, err error) {
+func (o *RSOAC) SetDescription(s string) {
+	o.description = s
+}
+
+func (o RSOAC) MarshalJSON() (b []byte, err error) {
 	return []byte("TODO"), nil // TODO method
 }

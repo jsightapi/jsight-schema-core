@@ -7,9 +7,8 @@ import (
 )
 
 type Info struct {
-	jschema    *jschema.JSchema
-	node       *schema.ASTNode // nullable
-	annotation *string         // nullable
+	jschema *jschema.JSchema
+	node    *schema.ASTNode // nullable
 }
 
 func New(s *jschema.JSchema) Info {
@@ -27,7 +26,7 @@ func (i Info) astNode() *schema.ASTNode {
 	return &i.jschema.ASTNode
 }
 
-func (i Info) SchemaObject() jsoac.JSOAC {
+func (i Info) SchemaObject() *jsoac.JSOAC {
 	return jsoac.New(i.jschema)
 }
 
@@ -41,10 +40,6 @@ func (i Info) Optional() bool {
 
 func (i Info) Annotation() string {
 	return i.astNode().Comment
-}
-
-func (i *Info) SetAnnotation(s string) {
-	i.annotation = &s
 }
 
 func (i Info) NestedObjectProperties() []Info {

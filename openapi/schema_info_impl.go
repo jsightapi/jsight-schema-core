@@ -22,10 +22,6 @@ func (i SchemaInfoImpl) Annotation() string {
 	return i.info.Annotation()
 }
 
-func (i SchemaInfoImpl) SetAnnotation(s string) {
-	i.info.SetAnnotation(s)
-}
-
 func (i SchemaInfoImpl) NestedObjectProperties() []SchemaInfo {
 	a := make([]SchemaInfo, 0, len(i.info.NestedObjectProperties()))
 
