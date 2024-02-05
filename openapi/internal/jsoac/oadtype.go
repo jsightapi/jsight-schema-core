@@ -1,4 +1,4 @@
-package schema
+package jsoac
 
 type OADType int // OpenAPI Data Types
 

@@ -1,4 +1,4 @@
-package schema
+package jsoac
 
 import (
 	schema "github.com/jsightapi/jsight-schema-core"

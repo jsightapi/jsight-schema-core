@@ -1,4 +1,4 @@
-package schema
+package jsoac
 
 func quotedBytes(s string) []byte {
 	bb := make([]byte, 0, len(s)+2)

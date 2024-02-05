@@ -1,4 +1,4 @@
-package schema
+package jsoac
 
 import (
 	"encoding/json"

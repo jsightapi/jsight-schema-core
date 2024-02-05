@@ -1,4 +1,4 @@
-package schema
+package jsoac
 
 import (
 	"testing"
@@ -96,8 +96,8 @@ func jsightToOpenAPI(t *testing.T, jsight string, openapi string) {
 	err := j.Check()
 	require.NoError(t, err)
 
-	o := NewFromJSchema(j)
-	json, err := o.MarshalJSON()
+	o := New(j)
+	json, err := o.JSON()
 	require.NoError(t, err)
 
 	require.JSONEq(t, openapi, string(json), "Actual: "+string(json))

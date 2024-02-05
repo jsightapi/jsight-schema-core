@@ -16,14 +16,14 @@ func TestNewSchemaObject(t *testing.T) {
 	t.Run("positive", func(t *testing.T) {
 		t.Run("from JSchema", func(t *testing.T) {
 			o := NewSchemaObject(j)
-			json, err := o.MarshalJSON()
+			json, err := o.JSON()
 			require.NoError(t, err)
 			require.JSONEq(t, `{"type": "object", "properties": {}}`, string(json))
 		})
 
 		t.Run("from ASTNode", func(t *testing.T) {
-			o := NewSchemaObject(j.ASTNode)
-			json, err := o.MarshalJSON()
+			o := NewSchemaObject(j)
+			json, err := o.JSON()
 			require.NoError(t, err)
 			require.JSONEq(t, `{"type": "object", "properties": {}}`, string(json))
 		})
