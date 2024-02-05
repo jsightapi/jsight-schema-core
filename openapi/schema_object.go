@@ -17,7 +17,7 @@ type SchemaKeeper interface {
 	*jschema.JSchema | *regex.RSchema | schema.ASTNode
 }
 
-func NewSchemaObject(s schema.Schema) SchemaObject {
+func NewSchemaObject[T SchemaKeeper](s T) SchemaObject {
 	switch st := any(s).(type) {
 	case schema.ASTNode:
 		return jsoac.NewFromASTNode(st)
