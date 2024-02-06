@@ -15,11 +15,13 @@ type SchemaInfo interface {
 	// Annotation returns the JSight schema root annotation
 	Annotation() string
 
-	// NestedObjectProperties finds the first nested object (only objects and references are processed),
+	// PropertiesInfos finds the first nested object (only objects and references are processed),
 	// returns information on its properties
-	NestedObjectProperties() []SchemaInfo // returns an empty slice if the object is not found
+	PropertiesInfos() PropertiesIterator
 }
 
+var _ SchemaInfo = SchemaInfoImpl{}
+
 func NewSchemaInfo(s *jschema.JSchema) SchemaInfo {
-	return newSchemaInfoImpl(info.New(s))
+	return SchemaInfoImpl{info.NewInfo(s)}
 }

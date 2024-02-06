@@ -9,30 +9,50 @@ import (
 	"github.com/jsightapi/jsight-schema-core/notations/jschema"
 )
 
-func TestObjectProperties(t *testing.T) {
-	// JSIGHT 0.3
-	// TYPE @userType2
-	//   @userType1
-
-	ut1 := jschema.New("@userType1", `{ // object annotation
-"k": "v" // {optional: true} - property annotation
+func TestSchemaInfo(t *testing.T) {
+	j := jschema.New("@userType1", `{ // object annotation
+"k1": "v1", // {optional: true} - property annotation 1
+"k2": "v2", // {optional: false} - property annotation 2
+"k3": "v3" // property annotation 3
 }`)
-	err := ut1.Check()
+	err := j.Check()
 	require.NoError(t, err)
 
-	// TODO ut2 := jschema.New("@userType2", `@userType1`)
-	//err = ut2.AddType("@userType1", ut1)
-	//require.NoError(t, err)
-	//err = ut2.Check()
-	//require.NoError(t, err)
-
-	info := NewSchemaInfo(ut1)
+	info := NewSchemaInfo(j)
 
 	assert.Equal(t, "object annotation", info.Annotation())
 	assert.False(t, info.Optional())
 
-	for _, child := range info.NestedObjectProperties() {
-		assert.Equal(t, "property annotation", child.Annotation())
-		assert.True(t, child.Optional())
-	}
+	p := info.PropertiesInfos()
+
+	p.Next()
+	k := p.GetKey()
+	v := p.GetInfo()
+	assert.Equal(t, "k1", k)
+	assert.Equal(t, "property annotation 1", v.Annotation())
+	assert.True(t, v.Optional())
+
+	p.Next()
+	k = p.GetKey()
+	v = p.GetInfo()
+	assert.Equal(t, "k2", k)
+	assert.Equal(t, "property annotation 2", v.Annotation())
+	assert.False(t, v.Optional())
+
+	p.Next()
+	k = p.GetKey()
+	v = p.GetInfo()
+	assert.Equal(t, "k3", k)
+	assert.Equal(t, "property annotation 3", v.Annotation())
+	assert.False(t, v.Optional())
 }
+
+// TODO JSIGHT 0.3
+// TYPE @userType2
+//   @userType1
+
+// ut2 := jschema.New("@userType2", `@userType1`)
+//err = ut2.AddType("@userType1", ut1)
+//require.NoError(t, err)
+//err = ut2.Check()
+//require.NoError(t, err)

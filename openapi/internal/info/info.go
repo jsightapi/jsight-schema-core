@@ -11,12 +11,12 @@ type Info struct {
 	node    *schema.ASTNode // nullable
 }
 
-func New(s *jschema.JSchema) Info {
+func NewInfo(s *jschema.JSchema) Info {
 	return Info{jschema: s}
 }
 
-func newFromASTNode(s *jschema.JSchema, a *schema.ASTNode) Info {
-	return Info{jschema: s, node: a}
+func newInfoFromASTNode(s *jschema.JSchema, a schema.ASTNode) Info {
+	return Info{jschema: s, node: &a}
 }
 
 func (i Info) astNode() *schema.ASTNode {
@@ -42,15 +42,15 @@ func (i Info) Annotation() string {
 	return i.astNode().Comment
 }
 
-func (i Info) NestedObjectProperties() []Info {
+func (i Info) PropertiesInfos() *Properties {
 	node := i.astNode()
-	pp := make([]Info, 0, len(node.Children))
+	props := newProperties(len(node.Children))
 
 	if node.TokenType == schema.TokenTypeObject {
 		for _, child := range node.Children {
-			pp = append(pp, newFromASTNode(i.jschema, &child)) // #nosec G601 (nolint)
+			props.append(child.Key, newInfoFromASTNode(i.jschema, child))
 		}
 	}
 
-	return pp
+	return props
 }

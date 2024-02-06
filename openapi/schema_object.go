@@ -14,8 +14,8 @@ type SchemaObject interface {
 	MarshalJSON() (b []byte, err error)
 }
 
-var _ SchemaObject = &jsoac.JSOAC{}
-var _ SchemaObject = &rsoac.RSOAC{}
+var _ SchemaObject = (*jsoac.JSOAC)(nil)
+var _ SchemaObject = (*rsoac.RSOAC)(nil)
 
 func NewSchemaObject(s schema.Schema) SchemaObject {
 	switch st := any(s).(type) {
