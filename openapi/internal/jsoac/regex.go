@@ -2,6 +2,8 @@ package jsoac
 
 import (
 	"encoding/json"
+
+	schema "github.com/jsightapi/jsight-schema-core"
 )
 
 type Regex struct {
@@ -11,9 +13,12 @@ type Regex struct {
 var _ json.Marshaler = Regex{}
 var _ json.Marshaler = &Regex{}
 
-// newStringRegex creates an example for: string regex value
-func newStringRegex(ex string) *Regex {
-	return &Regex{value: quotedBytes(ex)}
+// regex creates an example for: string regex value
+func newRegex(astNode schema.ASTNode) *Regex {
+	if astNode.Rules.Has("regex") {
+		return &Regex{value: quotedBytes(astNode.Rules.GetValue("regex").Value)}
+	}
+	return nil
 }
 
 func (ex Regex) MarshalJSON() (b []byte, err error) {

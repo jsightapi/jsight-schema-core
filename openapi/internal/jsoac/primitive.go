@@ -23,11 +23,11 @@ func newBasicNode(t OADType, astNode schema.ASTNode) Primitive {
 	var p = Primitive{
 		OADType: pType,
 		Example: newBasicExample(t, astNode.Value),
-		Pattern: getRegex(astNode),
-		Format:  getFormat(astNode),
+		Pattern: newRegex(astNode),
+		Format:  newFormat(astNode),
 	}
 	if astNode.Rules.Has("const") {
-		getConst(astNode, &p)
+		newConst(astNode, &p)
 	}
 	return p
 }
