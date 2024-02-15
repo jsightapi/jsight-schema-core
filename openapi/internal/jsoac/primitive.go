@@ -9,25 +9,21 @@ type Primitive struct {
 	OADType OADType `json:"type"`
 	Example Example `json:"example"`
 	// optional fields
-	Pattern  *Regex      `json:"pattern,omitempty"`
-	Format   *string     `json:"format,omitempty"`
-	Required *bool       `json:"required,omitempty"`
-	CEnum    *[1]Example `json:"enum,omitempty"`
+	Pattern *Pattern `json:"pattern,omitempty"`
+	Format  *string  `json:"format,omitempty"`
+	Enum    *Enum    `json:"enum,omitempty"`
 }
 
-func newBasicNode(t OADType, astNode schema.ASTNode) Primitive {
-	var pType = t
+func newPrimitive(t OADType, astNode schema.ASTNode) Primitive {
 	if astNode.SchemaType == "integer" {
-		pType = OADTypeInteger
+		t = OADTypeInteger
 	}
 	var p = Primitive{
-		OADType: pType,
-		Example: newBasicExample(t, astNode.Value),
-		Pattern: newRegex(astNode),
+		OADType: t,
+		Example: newExample(astNode.Value, t),
+		Pattern: newPattern(astNode),
 		Format:  newFormat(astNode),
-	}
-	if astNode.Rules.Has("const") {
-		newConst(astNode, &p)
+		Enum:    newEnum(astNode, t),
 	}
 	return p
 }

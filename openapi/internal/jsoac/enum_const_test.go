@@ -12,50 +12,50 @@ func Test_newOpenAPIConst(t *testing.T) {
 		{
 			`"OK" // {const: true}`,
 			`{
-							"type": "string", 
-							"example":"OK",
-							"enum": ["OK"]
-						}`,
+				"type": "string", 
+				"example": "OK",
+				"enum": ["OK"]
+			}`,
 		},
 		{
 			`"OK" // {const: false}`,
 			`{
-							"type": "string", 
-							"example":"OK"
-						}`,
+				"type": "string", 
+				"example":"OK"
+			}`,
 		},
 		{
 			`true // {const: true}`,
 			`{
-							"type": "boolean", 
-							"example": true,
-							"enum": [true]
-						}`,
+				"type": "boolean", 
+				"example": true,
+				"enum": [true]
+			}`,
 		},
 		{
 			`"2024-02-15" // {type: "date", const: true}`,
 			`{
-							"type": "string",
-							"format": "date",
-							"example": "2024-02-15",
-							"enum": ["2024-02-15"]
-						}`,
+				"type": "string",
+				"format": "date",
+				"example": "2024-02-15",
+				"enum": ["2024-02-15"]
+			}`,
 		},
 		{
 			`123 // {const: true}`,
 			`{
-							"type": "integer",
-							"example": 123,
-							"enum": [123]
-						}`,
+				"type": "integer",
+				"example": 123,
+				"enum": [123]
+			}`,
 		},
 		{
 			`123.12 // {const: true}`,
 			`{
-							"type": "number",
-							"example": 123.12,
-							"enum": [123.12]
-						}`,
+				"type": "number",
+				"example": 123.12,
+				"enum": [123.12]
+			}`,
 		},
 		// TODO null with const
 		/*{

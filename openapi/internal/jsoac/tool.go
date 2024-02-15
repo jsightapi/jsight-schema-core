@@ -1,12 +1,15 @@
 package jsoac
 
 import (
+	"github.com/jsightapi/jsight-schema-core/internal/sync"
 	"github.com/jsightapi/jsight-schema-core/notations/jschema"
 
 	"github.com/stretchr/testify/require"
 
 	"testing"
 )
+
+var bufferPool = sync.NewBufferPool(1024)
 
 func quotedBytes(s string) []byte {
 	bb := make([]byte, 0, len(s)+2)

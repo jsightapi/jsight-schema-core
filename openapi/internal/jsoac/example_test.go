@@ -36,7 +36,7 @@ func Test_newBasicExample_String(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.want, func(t *testing.T) {
-			ex := newBasicExample(OADTypeString, tt.args.astExampleString) //newStringExample(tt.args.astExampleString)
+			ex := newExample(tt.args.astExampleString, OADTypeString) //newStringExample(tt.args.astExampleString)
 			want := []byte(tt.want)
 			if !reflect.DeepEqual(ex.value, want) {
 				t.Errorf("newStringExample() = %s, want %s", ex.value, want)
@@ -80,10 +80,10 @@ func Test_newBasicExample(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.want, func(t *testing.T) {
-			ex := newBasicExample(OADTypeInteger, tt.args.astExampleString)
+			ex := newExample(tt.args.astExampleString, OADTypeInteger)
 			want := []byte(tt.want)
 			if !reflect.DeepEqual(ex.value, want) {
-				t.Errorf("newBasicExample() = %s, want %s", ex.value, want)
+				t.Errorf("newExample() = %s, want %s", ex.value, want)
 			}
 		})
 	}

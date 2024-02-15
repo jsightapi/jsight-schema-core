@@ -11,8 +11,8 @@ type Example struct {
 var _ json.Marshaler = Example{}
 var _ json.Marshaler = &Example{}
 
-// newBasicExample creates an example for: integer, number, boolean, string values
-func newBasicExample(t OADType, ex string) Example {
+// newExample creates an example for: integer, number, boolean, string values
+func newExample(ex string, t OADType) Example {
 	if t == OADTypeString {
 		return Example{value: quotedBytes(ex)}
 	} else {

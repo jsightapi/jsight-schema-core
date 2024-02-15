@@ -12,18 +12,18 @@ func Test_newOpenAPIRegex(t *testing.T) {
 		{
 			`"Any string" // {regex: "[A-Za-z ]+"} `,
 			`{
-							"type": "string", 
-							"example": "Any string",
-							"pattern": "[A-Za-z ]+"
-						}`,
+				"type": "string", 
+				"example": "Any string",
+				"pattern": "[A-Za-z ]+"
+			}`,
 		},
 		{
 			`"Any string" // {type: "string", regex: "[A-Za-z ]+"}`,
 			`{
-					"type": "string", 
-					"example": "Any string",
-					"pattern": "[A-Za-z ]+"
-				}`,
+				"type": "string", 
+				"example": "Any string",
+				"pattern": "[A-Za-z ]+"
+			}`,
 		},
 		//TODO - ERROR (code 1117): The "regex" constraint can't be used for the "email" type
 		/*
