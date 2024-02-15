@@ -41,7 +41,7 @@ func getFormat(astNode schema.ASTNode) *string {
 	return format
 }
 
-func addConst(astNode schema.ASTNode, p *Primitive) {
+func getConst(astNode schema.ASTNode, p *Primitive) {
 	if astNode.Rules.GetValue("const").Value == "true" {
 		var v = true
 		p.Required = &v

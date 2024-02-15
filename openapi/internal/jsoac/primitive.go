@@ -27,7 +27,7 @@ func newBasicNode(t OADType, astNode schema.ASTNode) Primitive {
 		Format:  getFormat(astNode),
 	}
 	if astNode.Rules.Has("const") {
-		addConst(astNode, &p)
+		getConst(astNode, &p)
 	}
 	return p
 }
