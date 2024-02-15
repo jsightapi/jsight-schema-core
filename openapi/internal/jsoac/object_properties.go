@@ -2,8 +2,6 @@ package jsoac
 
 import (
 	"encoding/json"
-
-	"github.com/jsightapi/jsight-schema-core/internal/sync"
 )
 
 type ObjectProperties struct {
@@ -18,8 +16,6 @@ type Property struct {
 var _ json.Marshaler = ObjectProperties{}
 var _ json.Marshaler = &ObjectProperties{}
 
-var objectPropertiesBufferPool = sync.NewBufferPool(512)
-
 func newObjectProperties(length int) ObjectProperties {
 	return ObjectProperties{properties: make([]Property, 0, length)}
 }
@@ -33,8 +29,8 @@ func (op *ObjectProperties) append(key string, value Node) {
 }
 
 func (op ObjectProperties) MarshalJSON() ([]byte, error) {
-	b := objectPropertiesBufferPool.Get()
-	defer objectPropertiesBufferPool.Put(b)
+	b := bufferPool.Get()
+	defer bufferPool.Put(b)
 
 	b.WriteByte('{')
 	length := len(op.properties)

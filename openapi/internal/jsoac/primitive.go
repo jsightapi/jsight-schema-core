@@ -9,58 +9,23 @@ type Primitive struct {
 	OADType OADType `json:"type"`
 	Example Example `json:"example"`
 	// optional fields
-	Pattern *Regex  `json:"pattern,omitempty"`
-	Format  *string `json:"format,omitempty"`
+	Pattern *Pattern `json:"pattern,omitempty"`
+	Format  *string  `json:"format,omitempty"`
+	Enum    *Enum    `json:"enum,omitempty"`
 }
 
-func newBasicNode(t OADType, astNode schema.ASTNode) Primitive {
-	var pType = t
+func newPrimitive(t OADType, astNode schema.ASTNode) Primitive {
 	if astNode.SchemaType == "integer" {
-		pType = OADTypeInteger
+		t = OADTypeInteger
 	}
-	return Primitive{
-		OADType: pType,
-		Example: newBasicExample(t, astNode.Value),
-		Pattern: getRegex(astNode),
-		Format:  getFormat(astNode),
+	var p = Primitive{
+		OADType: t,
+		Example: newExample(astNode.Value, t),
+		Pattern: newPattern(astNode),
+		Format:  newFormat(astNode),
+		Enum:    newEnum(astNode, t),
 	}
-}
-
-func getRegex(astNode schema.ASTNode) *Regex {
-	var regex *Regex = nil
-	if astNode.Rules.Has("regex") {
-		regex = newStringRegex(astNode.Rules.GetValue("regex").Value)
-	}
-	return regex
-}
-
-func getFormat(astNode schema.ASTNode) *string {
-	var format *string = nil
-	if astNode.Rules.Has("type") {
-		switch astNode.Rules.GetValue("type").Value {
-		case string(schema.SchemaTypeEmail):
-			var v = "email"
-			format = &v
-		case string(schema.SchemaTypeURI):
-			var v = "uri"
-			format = &v
-		case string(schema.SchemaTypeUUID):
-			var v = "uuid"
-			format = &v
-		case string(schema.SchemaTypeDate):
-			var v = "date"
-			format = &v
-		case string(schema.SchemaTypeDateTime):
-			var v = "date-time"
-			format = &v
-		case string(schema.SchemaTypeFloat):
-			var v = "float"
-			format = &v
-		default:
-			format = nil
-		}
-	}
-	return format
+	return p
 }
 
 func (p Primitive) JSightTokenType() schema.TokenType {

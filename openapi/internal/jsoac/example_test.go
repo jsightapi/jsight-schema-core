@@ -5,90 +5,86 @@ import (
 	"testing"
 )
 
-func Test_newStringExample(t *testing.T) {
-	t.Run("positive", func(t *testing.T) {
-		type args struct {
-			astExampleString string
-		}
-		tests := []struct {
-			args args
-			want string
-		}{
-			{
-				args{"abc"},
-				`"abc"`,
-			},
-			{
-				args{"123"},
-				`"123"`,
-			},
-			{
-				args{"123.4"},
-				`"123.4"`,
-			},
-			{
-				args{"false"},
-				`"false"`,
-			},
-			{
-				args{"any string"},
-				`"any string"`,
-			},
-		}
-		for _, tt := range tests {
-			t.Run(tt.want, func(t *testing.T) {
-				ex := newBasicExample(OADTypeString, tt.args.astExampleString) //newStringExample(tt.args.astExampleString)
-				want := []byte(tt.want)
-				if !reflect.DeepEqual(ex.value, want) {
-					t.Errorf("newStringExample() = %v, want %v", ex.value, want)
-				}
-			})
-		}
-	})
+func Test_newBasicExample_String(t *testing.T) {
+	type args struct {
+		astExampleString string
+	}
+	tests := []struct {
+		args args
+		want string
+	}{
+		{
+			args{"abc"},
+			`"abc"`,
+		},
+		{
+			args{"123"},
+			`"123"`,
+		},
+		{
+			args{"123.4"},
+			`"123.4"`,
+		},
+		{
+			args{"false"},
+			`"false"`,
+		},
+		{
+			args{"any string"},
+			`"any string"`,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.want, func(t *testing.T) {
+			ex := newExample(tt.args.astExampleString, OADTypeString) //newStringExample(tt.args.astExampleString)
+			want := []byte(tt.want)
+			if !reflect.DeepEqual(ex.value, want) {
+				t.Errorf("newStringExample() = %s, want %s", ex.value, want)
+			}
+		})
+	}
 }
 
 func Test_newBasicExample(t *testing.T) {
-	t.Run("positive", func(t *testing.T) {
-		type args struct {
-			astExampleString string
-		}
-		tests := []struct {
-			args args
-			want string
-		}{
-			{
-				args{"abc"},
-				`abc`,
-			},
-			{
-				args{"123"},
-				`123`,
-			},
-			{
-				args{"123.4"},
-				`123.4`,
-			},
-			{
-				args{"false"},
-				`false`,
-			},
-			{
-				args{"any string"},
-				`any string`,
-			},
-			{
-				args{"any string"},
-				`any string`,
-			},
-		}
-		for _, tt := range tests {
-			t.Run(tt.want, func(t *testing.T) {
-				ex := newBasicExample(OADTypeString, tt.args.astExampleString)
-				want := []byte(tt.want)
-				if !reflect.DeepEqual(ex.value, want) {
-					t.Errorf("newBasicExample() = %v, want %v", ex.value, want)
-				}
-			})
-		}
-	})
+	type args struct {
+		astExampleString string
+	}
+	tests := []struct {
+		args args
+		want string
+	}{
+		{
+			args{"abc"},
+			`abc`,
+		},
+		{
+			args{"123"},
+			`123`,
+		},
+		{
+			args{"123.4"},
+			`123.4`,
+		},
+		{
+			args{"false"},
+			`false`,
+		},
+		{
+			args{"any string"},
+			`any string`,
+		},
+		{
+			args{"any string"},
+			`any string`,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.want, func(t *testing.T) {
+			ex := newExample(tt.args.astExampleString, OADTypeInteger)
+			want := []byte(tt.want)
+			if !reflect.DeepEqual(ex.value, want) {
+				t.Errorf("newExample() = %s, want %s", ex.value, want)
+			}
+		})
+	}
 }
