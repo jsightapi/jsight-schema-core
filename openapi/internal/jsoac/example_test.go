@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func Test_newStringExample(t *testing.T) {
+func Test_newBasicExample_String(t *testing.T) {
 	t.Run("positive", func(t *testing.T) {
 		type args struct {
 			astExampleString string
@@ -40,7 +40,7 @@ func Test_newStringExample(t *testing.T) {
 				ex := newBasicExample(OADTypeString, tt.args.astExampleString) //newStringExample(tt.args.astExampleString)
 				want := []byte(tt.want)
 				if !reflect.DeepEqual(ex.value, want) {
-					t.Errorf("newStringExample() = %v, want %v", ex.value, want)
+					t.Errorf("newStringExample() = %s, want %s", ex.value, want)
 				}
 			})
 		}
@@ -83,10 +83,10 @@ func Test_newBasicExample(t *testing.T) {
 		}
 		for _, tt := range tests {
 			t.Run(tt.want, func(t *testing.T) {
-				ex := newBasicExample(OADTypeString, tt.args.astExampleString)
+				ex := newBasicExample(OADTypeInteger, tt.args.astExampleString)
 				want := []byte(tt.want)
 				if !reflect.DeepEqual(ex.value, want) {
-					t.Errorf("newBasicExample() = %v, want %v", ex.value, want)
+					t.Errorf("newBasicExample() = %s, want %s", ex.value, want)
 				}
 			})
 		}
