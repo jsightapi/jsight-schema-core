@@ -5,7 +5,7 @@ import (
 )
 
 func newEnumConst(astNode schema.ASTNode, t OADType) *Enum {
-	if astNode.Rules.Has("const") && astNode.Rules.GetValue("const").Value == "true" {
+	if astNode.Rules.Has("const") && astNode.Rules.GetValue("const").Value == stringTrue {
 		ex := newExample(astNode.Value, t)
 
 		enum := makeEmptyEnum()

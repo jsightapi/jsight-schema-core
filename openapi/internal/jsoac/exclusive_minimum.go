@@ -6,7 +6,7 @@ import (
 
 func newExclusiveMinimum(astNode schema.ASTNode, t OADType) *bool {
 	if astNode.Rules.Has("exclusiveMinimum") && (t == OADTypeInteger || t == OADTypeNumber) {
-		b := astNode.Rules.GetValue("exclusiveMinimum").Value == "true"
+		b := astNode.Rules.GetValue("exclusiveMinimum").Value == stringTrue
 		if b {
 			return &b
 		}
