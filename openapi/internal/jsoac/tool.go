@@ -2,7 +2,10 @@ package jsoac
 
 import (
 	"github.com/jsightapi/jsight-schema-core/internal/sync"
+
 	"github.com/jsightapi/jsight-schema-core/notations/jschema"
+
+	"strconv"
 
 	"github.com/stretchr/testify/require"
 
@@ -45,4 +48,12 @@ func exampleRef(ex Example) *Example {
 
 func int64Ref(i int64) *int64 {
 	return &i
+}
+
+func int64RefByString(s string) *int64 {
+	value, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		return nil
+	}
+	return int64Ref(value)
 }
