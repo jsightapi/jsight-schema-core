@@ -12,6 +12,7 @@ type Primitive struct {
 	Pattern *Pattern `json:"pattern,omitempty"`
 	Format  *string  `json:"format,omitempty"`
 	Enum    *Enum    `json:"enum,omitempty"`
+	Minimum *Example `json:"minimum,omitempty"`
 }
 
 func newPrimitive(t OADType, astNode schema.ASTNode) Primitive {
@@ -24,6 +25,7 @@ func newPrimitive(t OADType, astNode schema.ASTNode) Primitive {
 		Pattern: newPattern(astNode),
 		Format:  newFormat(astNode),
 		Enum:    newEnum(astNode, t),
+		Minimum: newMinimum(astNode, t),
 	}
 	return p
 }

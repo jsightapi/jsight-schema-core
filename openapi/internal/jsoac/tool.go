@@ -36,3 +36,7 @@ func jsightToOpenAPI(t *testing.T, jsight, openapi string) {
 func strRef(s string) *string {
 	return &s
 }
+
+func exampleRef(ex Example) *Example {
+	return &ex
+}
