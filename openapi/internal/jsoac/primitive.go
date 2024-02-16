@@ -16,8 +16,9 @@ type Primitive struct {
 	Maximum          *Example `json:"maximum,omitempty"`
 	ExclusiveMinimum *bool    `json:"exclusiveMinimum,omitempty"`
 	ExclusiveMaximum *bool    `json:"exclusiveMaximum,omitempty"`
-	MinLength        *Example `json:"minLength,omitempty"`
-	MaxLength        *Example `json:"maxLength,omitempty"`
+	MinLength        *int64   `json:"minLength,omitempty"`
+	MaxLength        *int64   `json:"maxLength,omitempty"`
+	MultipleOf       *float64 `json:"multipleOf,omitempty"`
 }
 
 func newPrimitive(t OADType, astNode schema.ASTNode) Primitive {
@@ -36,6 +37,7 @@ func newPrimitive(t OADType, astNode schema.ASTNode) Primitive {
 		ExclusiveMaximum: newExclusiveMaximum(astNode, t),
 		MinLength:        newMinLength(astNode, t),
 		MaxLength:        newMaxLength(astNode, t),
+		MultipleOf:       newMultipleOf(astNode, t),
 	}
 	return p
 }

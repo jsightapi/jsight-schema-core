@@ -42,3 +42,7 @@ func strRef(s string) *string {
 func exampleRef(ex Example) *Example {
 	return &ex
 }
+
+func int64Ref(i int64) *int64 {
+	return &i
+}
