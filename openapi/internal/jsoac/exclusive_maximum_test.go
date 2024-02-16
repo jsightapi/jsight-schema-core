@@ -10,7 +10,7 @@ func Test_newOpenAPIExclusiveMaximum(t *testing.T) {
 		openapi string
 	}{
 		{
-			`1 //{ max: 10, exclusiveMaximum: true }`,
+			`1 // { max: 10, exclusiveMaximum: true }`,
 			`{
 				"type": "integer", 
 				"example": 1,
@@ -19,7 +19,7 @@ func Test_newOpenAPIExclusiveMaximum(t *testing.T) {
 			}`,
 		},
 		{
-			`1.12 //{ max: 10, exclusiveMaximum: true }`,
+			`1.12 // { max: 10, exclusiveMaximum: true }`,
 			`{
 				"type": "number", 
 				"example": 1.12,
@@ -28,7 +28,7 @@ func Test_newOpenAPIExclusiveMaximum(t *testing.T) {
 			}`,
 		},
 		{
-			`0.12 //{ precision: 2, max: 10, exclusiveMaximum: true }`,
+			`0.12 // { precision: 2, max: 10, exclusiveMaximum: true }`,
 			`{
 				"type": "number", 
 				"example": 0.12,

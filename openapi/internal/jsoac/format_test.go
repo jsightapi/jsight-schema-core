@@ -10,7 +10,7 @@ func Test_newOpenAPIFormat(t *testing.T) {
 		openapi string
 	}{
 		{
-			`"test@test.ru" //{ type: "email" }`,
+			`"test@test.ru" // { type: "email" }`,
 			`{
 				"type": "string", 
 				"example": "test@test.ru",
@@ -18,7 +18,7 @@ func Test_newOpenAPIFormat(t *testing.T) {
 			}`,
 		},
 		{
-			`"https://www.com" //{ type: "uri" }`,
+			`"https://www.com" // { type: "uri" }`,
 			`{
 				"type": "string", 
 				"example": "https://www.com",
@@ -26,7 +26,7 @@ func Test_newOpenAPIFormat(t *testing.T) {
 			}`,
 		},
 		{
-			`"53496d7f-1374-4368-a829-74ccd47aec1c" //{ type: "uuid" }`,
+			`"53496d7f-1374-4368-a829-74ccd47aec1c" // { type: "uuid" }`,
 			`{
 				"type": "string", 
 				"example": "53496d7f-1374-4368-a829-74ccd47aec1c",
@@ -34,7 +34,7 @@ func Test_newOpenAPIFormat(t *testing.T) {
 			}`,
 		},
 		{
-			`"2024-02-14" //{ type: "date" }`,
+			`"2024-02-14" // { type: "date" }`,
 			`{
 				"type": "string", 
 				"example": "2024-02-14",
@@ -42,7 +42,7 @@ func Test_newOpenAPIFormat(t *testing.T) {
 			}`,
 		},
 		{
-			`"2024-02-14T09:14:28+03:00" //{ type: "datetime" }`,
+			`"2024-02-14T09:14:28+03:00" // { type: "datetime" }`,
 			`{
 				"type": "string", 
 				"example": "2024-02-14T09:14:28+03:00",
@@ -50,7 +50,7 @@ func Test_newOpenAPIFormat(t *testing.T) {
 			}`,
 		},
 		{
-			`123 // {type: "integer"}`,
+			`123 // { type: "integer" }`,
 			`{"type": "integer", "example": 123}`,
 		},
 	}

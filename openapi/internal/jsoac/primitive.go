@@ -16,6 +16,7 @@ type Primitive struct {
 	Maximum          *Example `json:"maximum,omitempty"`
 	ExclusiveMinimum *bool    `json:"exclusiveMinimum,omitempty"`
 	ExclusiveMaximum *bool    `json:"exclusiveMaximum,omitempty"`
+	MinLength        *Example `json:"minLength,omitempty"`
 }
 
 func newPrimitive(t OADType, astNode schema.ASTNode) Primitive {
@@ -32,6 +33,7 @@ func newPrimitive(t OADType, astNode schema.ASTNode) Primitive {
 		Maximum:          newMaximum(astNode, t),
 		ExclusiveMinimum: newExclusiveMinimum(astNode, t),
 		ExclusiveMaximum: newExclusiveMaximum(astNode, t),
+		MinLength:        newMinLength(astNode, t),
 	}
 	return p
 }

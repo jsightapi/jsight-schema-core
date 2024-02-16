@@ -10,7 +10,7 @@ func Test_newOpenAPIConst(t *testing.T) {
 		openapi string
 	}{
 		{
-			`"OK" // {const: true}`,
+			`"OK" // { const: true }`,
 			`{
 				"type": "string", 
 				"example": "OK",
@@ -18,14 +18,14 @@ func Test_newOpenAPIConst(t *testing.T) {
 			}`,
 		},
 		{
-			`"OK" // {const: false}`,
+			`"OK" // { const: false }`,
 			`{
 				"type": "string", 
 				"example":"OK"
 			}`,
 		},
 		{
-			`true // {const: true}`,
+			`true // { const: true }`,
 			`{
 				"type": "boolean", 
 				"example": true,
@@ -33,7 +33,7 @@ func Test_newOpenAPIConst(t *testing.T) {
 			}`,
 		},
 		{
-			`"2024-02-15" // {type: "date", const: true}`,
+			`"2024-02-15" // { type: "date", const: true }`,
 			`{
 				"type": "string",
 				"format": "date",
@@ -42,7 +42,7 @@ func Test_newOpenAPIConst(t *testing.T) {
 			}`,
 		},
 		{
-			`123 // {const: true}`,
+			`123 // { const: true }`,
 			`{
 				"type": "integer",
 				"example": 123,
@@ -50,7 +50,7 @@ func Test_newOpenAPIConst(t *testing.T) {
 			}`,
 		},
 		{
-			`123.12 // {const: true}`,
+			`123.12 // { const: true }`,
 			`{
 				"type": "number",
 				"example": 123.12,
@@ -59,7 +59,7 @@ func Test_newOpenAPIConst(t *testing.T) {
 		},
 		// TODO null with const
 		/*{
-			`null // {const: true}`,
+			`null // { const: true }`,
 			`{
 				"example": null,
 				"enum": [null]
@@ -67,7 +67,7 @@ func Test_newOpenAPIConst(t *testing.T) {
 		},*/
 		// TODO decimal with precision const
 		/*{
-			`0.12 // {type: "decimal", precision: 2}`,
+			`0.12 // { type: "decimal", precision: 2 }`,
 			`{
 				"type": "number",
 				"example": 0.12,
