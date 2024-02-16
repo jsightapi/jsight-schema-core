@@ -9,11 +9,12 @@ type Primitive struct {
 	OADType OADType `json:"type"`
 	Example Example `json:"example"`
 	// optional fields
-	Pattern *Pattern `json:"pattern,omitempty"`
-	Format  *string  `json:"format,omitempty"`
-	Enum    *Enum    `json:"enum,omitempty"`
-	Minimum *Example `json:"minimum,omitempty"`
-	Maximum *Example `json:"maximum,omitempty"`
+	Pattern          *Pattern `json:"pattern,omitempty"`
+	Format           *string  `json:"format,omitempty"`
+	Enum             *Enum    `json:"enum,omitempty"`
+	Minimum          *Example `json:"minimum,omitempty"`
+	Maximum          *Example `json:"maximum,omitempty"`
+	ExclusiveMinimum *bool    `json:"exclusiveMinimum,omitempty"`
 }
 
 func newPrimitive(t OADType, astNode schema.ASTNode) Primitive {
@@ -21,13 +22,14 @@ func newPrimitive(t OADType, astNode schema.ASTNode) Primitive {
 		t = OADTypeInteger
 	}
 	var p = Primitive{
-		OADType: t,
-		Example: newExample(astNode.Value, t),
-		Pattern: newPattern(astNode),
-		Format:  newFormat(astNode),
-		Enum:    newEnum(astNode, t),
-		Minimum: newMinimum(astNode, t),
-		Maximum: newMaximum(astNode, t),
+		OADType:          t,
+		Example:          newExample(astNode.Value, t),
+		Pattern:          newPattern(astNode),
+		Format:           newFormat(astNode),
+		Enum:             newEnum(astNode, t),
+		Minimum:          newMinimum(astNode, t),
+		Maximum:          newMaximum(astNode, t),
+		ExclusiveMinimum: newExclusiveMinimum(astNode, t),
 	}
 	return p
 }
