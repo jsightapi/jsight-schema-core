@@ -51,7 +51,7 @@ func Test_newOpenAPIFormat(t *testing.T) {
 		},
 		{
 			`12.34 // { type: "float" }`,
-			`{"type": "integer", "format":"float", "example": 12.34}`,
+			`{"type": "number", "format":"float", "example": 12.34}`,
 		},
 	}
 	for _, tt := range tests {
