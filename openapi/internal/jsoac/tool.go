@@ -9,6 +9,8 @@ import (
 	"testing"
 )
 
+const stringTrue = "true"
+
 var bufferPool = sync.NewBufferPool(1024)
 
 func quotedBytes(s string) []byte {
