@@ -13,6 +13,7 @@ type Primitive struct {
 	Format  *string  `json:"format,omitempty"`
 	Enum    *Enum    `json:"enum,omitempty"`
 	Minimum *Example `json:"minimum,omitempty"`
+	Maximum *Example `json:"maximum,omitempty"`
 }
 
 func newPrimitive(t OADType, astNode schema.ASTNode) Primitive {
@@ -26,6 +27,7 @@ func newPrimitive(t OADType, astNode schema.ASTNode) Primitive {
 		Format:  newFormat(astNode),
 		Enum:    newEnum(astNode, t),
 		Minimum: newMinimum(astNode, t),
+		Maximum: newMaximum(astNode, t),
 	}
 	return p
 }
