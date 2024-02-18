@@ -10,7 +10,7 @@ func Test_newOpenAPIRegex(t *testing.T) {
 		openapi string
 	}{
 		{
-			`"Any string" // {regex: "[A-Za-z ]+"} `,
+			`"Any string" // { regex: "[A-Za-z ]+" }`,
 			`{
 				"type": "string", 
 				"example": "Any string",
@@ -18,7 +18,7 @@ func Test_newOpenAPIRegex(t *testing.T) {
 			}`,
 		},
 		{
-			`"Any string" // {type: "string", regex: "[A-Za-z ]+"}`,
+			`"Any string" // { type: "string", regex: "[A-Za-z ]+" }`,
 			`{
 				"type": "string", 
 				"example": "Any string",
@@ -28,7 +28,7 @@ func Test_newOpenAPIRegex(t *testing.T) {
 		//TODO - ERROR (code 1117): The "regex" constraint can't be used for the "email" type
 		/*
 			{
-				`"info@mail.com" // {type: "email", regex: "[A-Za-z ]+"}`,
+				`"info@mail.com" // { type: "email", regex: "[A-Za-z ]+" }`,
 				`{
 								"type": "string",
 								"example": "info@mail.com",

@@ -10,7 +10,7 @@ func Test_newOpenAPIExclusiveMinimum(t *testing.T) {
 		openapi string
 	}{
 		{
-			`1 //{ min: 0, exclusiveMinimum: true }`,
+			`1 // { min: 0, exclusiveMinimum: true }`,
 			`{
 				"type": "integer", 
 				"example": 1,
@@ -19,7 +19,7 @@ func Test_newOpenAPIExclusiveMinimum(t *testing.T) {
 			}`,
 		},
 		{
-			`1.12 //{ min: 0, exclusiveMinimum: true }`,
+			`1.12 // { min: 0, exclusiveMinimum: true }`,
 			`{
 				"type": "number", 
 				"example": 1.12,
@@ -28,7 +28,7 @@ func Test_newOpenAPIExclusiveMinimum(t *testing.T) {
 			}`,
 		},
 		{
-			`0.12 //{ precision: 2, min: 0, exclusiveMinimum: true }`,
+			`0.12 // { precision: 2, min: 0, exclusiveMinimum: true }`,
 			`{
 				"type": "number", 
 				"example": 0.12,
