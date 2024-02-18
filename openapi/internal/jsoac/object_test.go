@@ -4,46 +4,11 @@ import (
 	"testing"
 )
 
-func TestNewOpenAPI(t *testing.T) {
+func Test_Object(t *testing.T) {
 	tests := []struct {
 		jsight  string
 		openapi string
 	}{
-		{
-			`"some string"`,
-			`{"type": "string", "example": "some string"}`,
-		},
-		{
-			`123`,
-			`{"type": "integer", "example": 123}`,
-		},
-		{
-			`123.4`,
-			`{"type": "number", "example": 123.4}`,
-		},
-		{
-			`true`,
-			`{"type": "boolean", "example": true}`,
-		},
-		{
-			`false`,
-			`{"type": "boolean", "example": false}`,
-		},
-		{
-			`null`,
-			`{"enum": [null], "example": null}`,
-		},
-		{
-			`[1, 2.3, "abc"]`,
-			`{
-				"type": "array",
-				"items": [
-					{"type": "integer", "example": 1},
-					{"type": "number", "example": 2.3},
-					{"type": "string", "example": "abc"}
-				]
-			}`,
-		},
 		{
 			`{
 				"str": "some string",
@@ -52,7 +17,7 @@ func TestNewOpenAPI(t *testing.T) {
 				"bool": true,
 				"arr": [1,2],
 				"obj": {"key": "val"}
-				}`,
+			}`,
 			`{
 				"type": "object",
 				"properties": {
@@ -74,7 +39,18 @@ func TestNewOpenAPI(t *testing.T) {
 						}
 					}
 				}
-				}`,
+			}`,
+		},
+		{
+			`{ // { type: "object" }
+				"str": "abc"
+			}`,
+			`{
+				"type": "object",
+				"properties": {
+					"str": {"type": "string", "example": "abc"}
+				}
+			}`,
 		},
 	}
 	for _, tt := range tests {
