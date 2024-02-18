@@ -28,7 +28,7 @@ func Test_newOpenAPIExclusiveMinimum(t *testing.T) {
 			}`,
 		},
 		{
-			`0.12 // { precision: 2, min: 0, exclusiveMinimum: true }`,
+			`0.12 // { min: 0, exclusiveMinimum: true }`,
 			`{
 				"type": "number", 
 				"example": 0.12,

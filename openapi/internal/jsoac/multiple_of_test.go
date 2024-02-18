@@ -4,33 +4,25 @@ import (
 	"testing"
 )
 
-func Test_newOpenAPIMinimum(t *testing.T) {
+func Test_newOpenAPIMultipleOf(t *testing.T) {
 	tests := []struct {
 		jsight  string
 		openapi string
 	}{
 		{
-			`1 // { min: 0 }`,
-			`{
-				"type": "integer", 
-				"example": 1,
-				"minimum": 0
-			}`,
-		},
-		{
-			`1.12 // { min: 0 }`,
-			`{
-				"type": "number", 
-				"example": 1.12,
-				"minimum": 0
-			}`,
-		},
-		{
-			`0.12 // { min: 0 }`,
+			`0.12 // { precision: 2 }`,
 			`{
 				"type": "number", 
 				"example": 0.12,
-				"minimum": 0
+				"multipleOf": 0.01
+			}`,
+		},
+		{
+			`0.9 // { precision: 1 }`,
+			`{
+				"type": "number", 
+				"example": 0.9,
+				"multipleOf": 0.1
 			}`,
 		},
 	}

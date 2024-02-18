@@ -28,7 +28,7 @@ func Test_newOpenAPIExclusiveMaximum(t *testing.T) {
 			}`,
 		},
 		{
-			`0.12 // { precision: 2, max: 10, exclusiveMaximum: true }`,
+			`0.12 // { max: 10, exclusiveMaximum: true }`,
 			`{
 				"type": "number", 
 				"example": 0.12,
