@@ -11,6 +11,32 @@ func Test_Object(t *testing.T) {
 	}{
 		{
 			`{
+				"str": "abc"
+			}`,
+			`{
+				"type": "object",
+				"properties": {
+					"str": {"type": "string", "example": "abc"}
+				},
+				"additionalProperties": false,
+				"required": [ "str" ]
+			}`,
+		},
+		{
+			`{ // { type: "object" }
+				"str": "abc"
+			}`,
+			`{
+				"type": "object",
+				"properties": {
+					"str": {"type": "string", "example": "abc"}
+				},
+				"additionalProperties": false,
+				"required": [ "str" ]
+			}`,
+		},
+		{
+			`{
 				"str": "some string",
 				"int": 123,
 				"num": 12.3,
@@ -36,20 +62,13 @@ func Test_Object(t *testing.T) {
 						"type": "object",
 						"properties": {
 							"key": {"type": "string", "example": "val"}
-						}
+						},
+						"additionalProperties": false,
+						"required": [ "key" ]
 					}
-				}
-			}`,
-		},
-		{
-			`{ // { type: "object" }
-				"str": "abc"
-			}`,
-			`{
-				"type": "object",
-				"properties": {
-					"str": {"type": "string", "example": "abc"}
-				}
+				},
+				"additionalProperties": false,
+				"required": [ "str", "int", "num", "bool", "arr", "obj" ]
 			}`,
 		},
 	}

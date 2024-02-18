@@ -5,24 +5,45 @@ import (
 )
 
 type Object struct {
-	jstType    schema.TokenType
-	OADType    OADType          `json:"type"`
-	Properties ObjectProperties `json:"properties"`
+	cap                  int
+	jstType              schema.TokenType
+	OADType              OADType          `json:"type"`
+	Properties           ObjectProperties `json:"properties"`
+	AdditionalProperties bool             `json:"additionalProperties"`
+	Required             []string         `json:"required,omitempty"`
 }
 
 func newObject(astNode schema.ASTNode) Object {
-	props := newObjectProperties(len(astNode.Children))
-
-	for _, an := range astNode.Children {
-		props.append(an.Key, newNode(an))
+	o := Object{
+		cap:                  len(astNode.Children),
+		OADType:              OADTypeObject,
+		Properties:           newObjectProperties(len(astNode.Children)),
+		AdditionalProperties: false,
+		Required:             nil,
 	}
 
-	o := Object{
-		OADType:    OADTypeObject,
-		Properties: props,
+	for _, an := range astNode.Children {
+		o.appendProperty(an.Key, newNode(an))
 	}
 
 	return o
+}
+
+func (o *Object) appendProperty(key string, value Node) {
+	o.Properties.append(key, value)
+
+	o.appendToRequired(key)
+}
+
+func (o *Object) appendToRequired(key string) {
+	o.initRequiredIfNecessary()
+	o.Required = append(o.Required, key)
+}
+
+func (o *Object) initRequiredIfNecessary() {
+	if o.Required == nil {
+		o.Required = make([]string, 0, o.cap)
+	}
 }
 
 func (o Object) JSightTokenType() schema.TokenType {
