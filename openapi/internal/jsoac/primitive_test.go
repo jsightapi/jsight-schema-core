@@ -50,6 +50,10 @@ func Test_Primitive(t *testing.T) {
 			`null`,
 			`{"enum": [null], "example": null}`,
 		},
+		{
+			`null // { type: "null" }`,
+			`{"enum": [null], "example": null}`,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.jsight, func(t *testing.T) {
