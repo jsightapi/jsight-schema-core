@@ -9,8 +9,7 @@ func newFormat(astNode schema.ASTNode) *string {
 		value := astNode.Rules.GetValue("type").Value
 		switch value {
 		case string(schema.SchemaTypeEmail), string(schema.SchemaTypeURI),
-			string(schema.SchemaTypeUUID), string(schema.SchemaTypeDate),
-			string(schema.SchemaTypeFloat):
+			string(schema.SchemaTypeUUID), string(schema.SchemaTypeDate):
 			return strRef(value)
 		case string(schema.SchemaTypeDateTime):
 			return strRef("date-time")

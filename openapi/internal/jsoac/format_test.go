@@ -49,10 +49,6 @@ func Test_newOpenAPIFormat(t *testing.T) {
 				"format":"date-time"
 			}`,
 		},
-		{
-			`12.34 // { type: "float" }`,
-			`{"type": "number", "format":"float", "example": 12.34}`,
-		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.jsight, func(t *testing.T) {
