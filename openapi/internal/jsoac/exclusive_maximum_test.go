@@ -36,6 +36,30 @@ func Test_newOpenAPIExclusiveMaximum(t *testing.T) {
 				"exclusiveMaximum": true
 			}`,
 		},
+		{
+			`1 // { max: 10, exclusiveMaximum: false }`,
+			`{
+				"type": "integer", 
+				"example": 1,
+				"maximum": 10
+			}`,
+		},
+		{
+			`1.12 // { max: 10, exclusiveMaximum: false }`,
+			`{
+				"type": "number", 
+				"example": 1.12,
+				"maximum": 10
+			}`,
+		},
+		{
+			`0.12 // { max: 10, exclusiveMaximum: false }`,
+			`{
+				"type": "number", 
+				"example": 0.12,
+				"maximum": 10
+			}`,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.jsight, func(t *testing.T) {
