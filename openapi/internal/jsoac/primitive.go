@@ -12,7 +12,7 @@ type Primitive struct {
 	Pattern          *Pattern `json:"pattern,omitempty"`
 	Format           *string  `json:"format,omitempty"`
 	Enum             *Enum    `json:"enum,omitempty"`
-	Minimum          *Example `json:"minimum,omitempty"`
+	Minimum          *Number  `json:"minimum,omitempty"`
 	Maximum          *Number  `json:"maximum,omitempty"`
 	ExclusiveMinimum *bool    `json:"exclusiveMinimum,omitempty"`
 	ExclusiveMaximum *bool    `json:"exclusiveMaximum,omitempty"`

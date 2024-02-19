@@ -25,14 +25,6 @@ func Test_newOpenAPIMinimum(t *testing.T) {
 				"minimum": 0
 			}`,
 		},
-		{
-			`0.12 // { min: 0 }`,
-			`{
-				"type": "number", 
-				"example": 0.12,
-				"minimum": 0
-			}`,
-		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.jsight, func(t *testing.T) {

@@ -42,10 +42,6 @@ func strRef(s string) *string {
 	return &s
 }
 
-func exampleRef(ex Example) *Example {
-	return &ex
-}
-
 func numberRef(n Number) *Number {
 	return &n
 }
