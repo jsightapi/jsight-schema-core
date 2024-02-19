@@ -10,6 +10,14 @@ func Test_Object(t *testing.T) {
 		openapi string
 	}{
 		{
+			`{}`,
+			`{
+				"type": "object",
+				"properties": {},
+				"additionalProperties": false
+			}`,
+		},
+		{
 			`{
 				"str": "abc"
 			}`,

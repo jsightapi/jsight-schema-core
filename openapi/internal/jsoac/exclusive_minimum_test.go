@@ -9,8 +9,9 @@ func Test_newOpenAPIExclusiveMinimum(t *testing.T) {
 		jsight  string
 		openapi string
 	}{
+		// exclusiveMinimum: true
 		{
-			`1 // { min: 0, exclusiveMinimum: true }`,
+			`1 // { type: "integer", min: 0, exclusiveMinimum: true }`,
 			`{
 				"type": "integer", 
 				"example": 1,
@@ -19,44 +20,65 @@ func Test_newOpenAPIExclusiveMinimum(t *testing.T) {
 			}`,
 		},
 		{
-			`1.12 // { min: 0, exclusiveMinimum: true }`,
+			`0.001 // { type: "float", min: 0, exclusiveMinimum: true }`,
 			`{
 				"type": "number", 
-				"example": 1.12,
+				"example": 0.001,
 				"minimum": 0,
 				"exclusiveMinimum": true
 			}`,
 		},
 		{
-			`0.12 // { min: 0, exclusiveMinimum: true }`,
+			`-0.999 // { type: "float", min: -1, exclusiveMinimum: true }`,
 			`{
 				"type": "number", 
-				"example": 0.12,
-				"minimum": 0,
+				"example": -0.999,
+				"minimum": -1,
 				"exclusiveMinimum": true
 			}`,
 		},
 		{
-			`1 // { min: 0, exclusiveMinimum: false }`,
+			`0.01 // { type: "decimal", precision: 2, min: 0, exclusiveMinimum: true }`,
+			`{
+				"type": "number",
+				"multipleOf":0.01,
+				"example": 0.01,
+				"minimum": 0,
+				"exclusiveMinimum": true
+			}`,
+		},
+
+		// exclusiveMinimum: false
+		{
+			`0 // { type: "integer", min: 0, exclusiveMinimum: false }`,
 			`{
 				"type": "integer", 
-				"example": 1,
+				"example": 0,
+				"minimum": 0 
+			}`,
+		},
+		{
+			`0.000 // { type: "float", min: 0, exclusiveMinimum: false }`,
+			`{
+				"type": "number", 
+				"example": 0.000,
 				"minimum": 0
 			}`,
 		},
 		{
-			`1.12 // { min: 0, exclusiveMinimum: false }`,
+			`-1.000 // { type: "float", min: -1, exclusiveMinimum: false }`,
 			`{
 				"type": "number", 
-				"example": 1.12,
-				"minimum": 0
+				"example": -1.000,
+				"minimum": -1
 			}`,
 		},
 		{
-			`0.12 // { min: 0, exclusiveMinimum: false }`,
+			`0.00 // { type: "decimal", precision: 2, min: 0, exclusiveMinimum: false }`,
 			`{
-				"type": "number", 
-				"example": 0.12,
+				"type": "number",
+				"multipleOf":0.01,
+				"example": 0.00,
 				"minimum": 0
 			}`,
 		},

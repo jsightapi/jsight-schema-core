@@ -42,10 +42,6 @@ func strRef(s string) *string {
 	return &s
 }
 
-func numberRef(n Number) *Number {
-	return &n
-}
-
 func int64Ref(i int64) *int64 {
 	return &i
 }
