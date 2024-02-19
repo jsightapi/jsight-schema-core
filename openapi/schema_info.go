@@ -20,8 +20,6 @@ type SchemaInfo interface {
 	PropertiesInfos() PropertiesIterator
 }
 
-var _ SchemaInfo = SchemaInfoImpl{}
-
 func NewSchemaInfo(s *jschema.JSchema) SchemaInfo {
-	return SchemaInfoImpl{info.NewInfo(s)}
+	return newSchemaInfoImpl(info.NewInfo(s))
 }

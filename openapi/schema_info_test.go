@@ -9,7 +9,7 @@ import (
 	"github.com/jsightapi/jsight-schema-core/notations/jschema"
 )
 
-func TestSchemaInfo(t *testing.T) {
+func Test_SchemaInfo(t *testing.T) {
 	j := jschema.New("@userType1", `{ // object annotation
 "k1": "v1", // {optional: true} - property annotation 1
 "k2": "v2", // {optional: false} - property annotation 2
