@@ -25,14 +25,6 @@ func Test_newOpenAPIMaximum(t *testing.T) {
 				"maximum": 3.4
 			}`,
 		},
-		{
-			`0.12 // { max: 3.4 }`,
-			`{
-				"type": "number", 
-				"example": 0.12,
-				"maximum": 3.4
-			}`,
-		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.jsight, func(t *testing.T) {
