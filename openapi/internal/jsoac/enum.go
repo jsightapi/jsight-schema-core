@@ -32,6 +32,12 @@ func newEnum(astNode schema.ASTNode, t OADType) *Enum {
 		}
 		return enum
 	}
+	if astNode.SchemaType == "null" {
+		enum := makeEmptyEnum()
+		ex := newExample("null", OADTypeInteger)
+		enum.append(ex.value)
+		return enum
+	}
 	return nil
 }
 

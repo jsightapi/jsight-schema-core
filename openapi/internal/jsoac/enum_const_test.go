@@ -57,27 +57,36 @@ func Test_newOpenAPIConst(t *testing.T) {
 				"enum": [123.12]
 			}`,
 		},
-		// TODO null with const
-		/*{
+		{
+			`0.12 // { type: "decimal", precision: 2, const: true }`,
+			`{
+				"type": "number",
+				"example": 0.12,
+				"enum": [0.12],
+				"multipleOf": 0.01
+			}`,
+		},
+		{
 			`null // { const: true }`,
 			`{
 				"example": null,
 				"enum": [null]
 			}`,
-		},*/
-		// TODO decimal with precision const
-		/*{
-			`0.12 // { type: "decimal", precision: 2 }`,
+		},
+		{
+			`-3 // { type: "enum", enum: [-3], const: true }`,
 			`{
-				"type": "number",
-				"example": 0.12,
-				"required": true,
-				"enum": [
-					0.12
-				]
+				"example": -3,
+				"enum": [-3]
 			}`,
-		},*/
-		// TODO enum const test
+		},
+		{
+			`null // { type: "enum", enum: [null], const: true }`,
+			`{
+				"example": null,
+				"enum": [null]
+			}`,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.jsight, func(t *testing.T) {
