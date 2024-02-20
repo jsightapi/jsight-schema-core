@@ -29,7 +29,10 @@ func Test_Primitive(t *testing.T) {
 			`12.34`,
 			`{"type": "number", "example": 12.34}`,
 		},
-		// see format_test.go for `12.34 // { type: "float" }`
+		{
+			`12.34 // { type: "float" }`,
+			`{"type": "number", "example": 12.34}`,
+		},
 		{
 			`true`,
 			`{"type": "boolean", "example": true}`,
