@@ -9,60 +9,17 @@ func Test_newOpenAPINullable(t *testing.T) {
 		jsight  string
 		openapi string
 	}{
-		{
-			`"foo" // { nullable: true }`,
-			`{
-				"type": "string",
-  				"example": "foo",
-				"nullable": true
-			}`,
-		},
-		{
-			`1 // { nullable: true }`,
-			`{
-				"type": "integer",
-  				"example": 1,
-				"nullable": true
-			}`,
-		},
-		{
-			`1.12 // { nullable: true }`,
-			`{
-				"type": "number",
-  				"example": 1.12,
-				"nullable": true
-			}`,
-		},
-		{
-			`1.12 // { type: "decimal", precision: 2, nullable: true }`,
-			`{
-				"type": "number",
-  				"example": 1.12,
-				"multipleOf": 0.01,
-				"nullable": true
-			}`,
-		},
+		//TODO: Any tests
+		//TODO: Array tests
+		//TODO: Enum tests
+		//TODO: Mixed tests
+		//TODO: Objects tests
+		//TODO: @UserType tests
 		{
 			`true // { nullable: true }`,
 			`{
 				"type": "boolean",
   				"example": true,
-				"nullable": true
-			}`,
-		},
-		{
-			`"foo" // { nullable: false }`,
-			`{
-				"type": "string",
-  				"example": "foo"
-			}`,
-		},
-		{
-			`"test@example.com" // { type: "email", nullable: true }`,
-			`{
-				"type": "string",
-				"format": "email",
-  				"example": "test@example.com",
 				"nullable": true
 			}`,
 		},
@@ -76,17 +33,78 @@ func Test_newOpenAPINullable(t *testing.T) {
 			}`,
 		},
 		{
-			`null // { type: "null", nullable: true }`,
+			`"2024-02-14T09:14:28+03:00" // { type: "datetime", nullable: true }`,
 			`{
-				"enum": [null], 
-				"example": null,
+				"type": "string",
+				"example": "2024-02-14T09:14:28+03:00",
+				"format": "date-time",
 				"nullable": true
 			}`,
 		},
-		//TODO: Enum tests
-		//TODO: Array tests
-		//TODO: Objects tests
-		//TODO: @UserType tests
+		{
+			`1.12 // { type: "decimal", precision: 2, nullable: true }`,
+			`{
+				"type": "number",
+  				"example": 1.12,
+				"multipleOf": 0.01,
+				"nullable": true
+			}`,
+		},
+		{
+			`"test@example.com" // { type: "email", nullable: true }`,
+			`{
+				"type": "string",
+				"format": "email",
+  				"example": "test@example.com",
+				"nullable": true
+			}`,
+		},
+		{
+			`12.34 // { type: "float", nullable: true }`,
+			`{
+				"type": "number", 
+				"example": 12.34,
+				"nullable": true
+			}`,
+		},
+		{
+			`1 // { type: "integer", nullable: true }`,
+			`{
+				"type": "integer",
+  				"example": 1,
+				"nullable": true
+			}`,
+		},
+		{
+			`null // { type: "null", nullable: true }`,
+			`{"enum": [null],"example": null}`,
+		},
+		{
+			`"foo" // { type: "string", nullable: true }`,
+			`{
+				"type": "string",
+  				"example": "foo",
+				"nullable": true
+			}`,
+		},
+		{
+			`"https://www.com" // { type: "uri", nullable: true }`,
+			`{
+				"type": "string", 
+				"example": "https://www.com",
+				"format":"uri",
+				"nullable": true
+			}`,
+		},
+		{
+			`"53496d7f-1374-4368-a829-74ccd47aec1c" // { type: "uuid", nullable: true }`,
+			`{
+				"type": "string", 
+				"example": "53496d7f-1374-4368-a829-74ccd47aec1c",
+				"format":"uuid",
+				"nullable": true
+			}`,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.jsight, func(t *testing.T) {
