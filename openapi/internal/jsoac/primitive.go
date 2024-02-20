@@ -5,10 +5,9 @@ import (
 )
 
 type Primitive struct {
-	jstType schema.TokenType
-	OADType OADType `json:"type"`
-	Example Example `json:"example"`
-	// optional fields
+	jstType          schema.TokenType
+	OADType          *OADType  `json:"type,omitempty"`
+	Example          Example   `json:"example"`
 	Pattern          *Pattern  `json:"pattern,omitempty"`
 	Format           *string   `json:"format,omitempty"`
 	Enum             *Enum     `json:"enum,omitempty"`
@@ -22,12 +21,19 @@ type Primitive struct {
 	Nullable         *Nullable `json:"nullable,omitempty"`
 }
 
+func oadType(schemaType string, t OADType) *OADType {
+	if schemaType == "enum" {
+		return nil
+	}
+	return &t
+}
+
 func newPrimitive(t OADType, astNode schema.ASTNode) Primitive {
 	if astNode.SchemaType == "integer" {
 		t = OADTypeInteger
 	}
 	var p = Primitive{
-		OADType:          t,
+		OADType:          oadType(astNode.SchemaType, t),
 		Example:          newExample(astNode.Value, t),
 		Pattern:          newPattern(astNode),
 		Format:           newFormat(astNode),
