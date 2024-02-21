@@ -11,7 +11,6 @@ func Test_newOpenAPINullable(t *testing.T) {
 	}{
 		//TODO: Any tests
 		//TODO: Array tests
-		//TODO: Enum tests
 		//TODO: Mixed tests
 		//TODO: Objects tests
 		//TODO: @UserType tests
@@ -60,6 +59,38 @@ func Test_newOpenAPINullable(t *testing.T) {
 			}`,
 		},
 		{
+			`"white" // { nullable: true, enum: ["white", "blue", "red"]}`,
+			`{
+				"example": "white",
+				"enum": ["white", "blue", "red"],
+				"nullable": true
+			}`,
+		},
+		{
+			`-2.1 // { nullable: true, enum: [-3, -2.1, 1.2, true, false, "-3", "0", "1.2", "string", "true"]}`,
+			`{
+				"example": -2.1,
+				"enum": [-3, -2.1, 1.2, true, false, "-3", "0", "1.2", "string", "true"],
+				"nullable": true
+			}`,
+		},
+		{
+			`null // { nullable: true, enum: ["white", "blue", "red", null]}`,
+			`{
+				"example": null,
+				"enum": ["white", "blue", "red", null],
+				"nullable": true
+			}`,
+		},
+		{
+			`null // { nullable: true, enum: ["white", "blue", "red"]}`,
+			`{
+				"example": null,
+				"enum": ["white", "blue", "red"],
+				"nullable": true
+			}`,
+		},
+		{
 			`12.34 // { type: "float", nullable: true }`,
 			`{
 				"type": "number", 
@@ -77,7 +108,11 @@ func Test_newOpenAPINullable(t *testing.T) {
 		},
 		{
 			`null // { type: "null", nullable: true }`,
-			`{"enum": [null],"example": null}`,
+			`{
+						"enum": [null],
+						"example": null,
+						"nullable": true
+					}`,
 		},
 		{
 			`"foo" // { type: "string", nullable: true }`,

@@ -5,19 +5,21 @@ import (
 )
 
 type Null struct {
-	jstType schema.TokenType
+	jstType  schema.TokenType
+	Example  Example   `json:"example"`
+	Enum     *Enum     `json:"enum"`
+	Nullable *Nullable `json:"nullable,omitempty"`
 }
 
-func newNull() Null { // TODO astNode rules etc.
+func newNull(astNode schema.ASTNode) Null {
 	return Null{
-		jstType: schema.TokenTypeNull,
+		jstType:  schema.TokenTypeNull,
+		Example:  newExample("null", OADTypeInteger),
+		Enum:     newEnum(astNode, OADTypeInteger),
+		Nullable: newNullable(astNode),
 	}
 }
 
 func (n Null) JSightTokenType() schema.TokenType {
 	return n.jstType
-}
-
-func (n Null) MarshalJSON() (b []byte, err error) {
-	return []byte(`{"enum": [null], "example": null}`), nil
 }
