@@ -11,6 +11,7 @@ type Object struct {
 	Properties           ObjectProperties `json:"properties"`
 	AdditionalProperties bool             `json:"additionalProperties"`
 	Required             []string         `json:"required,omitempty"`
+	AllOf                *AllOf           `json:"allOf,omitempty"`
 }
 
 func newObject(astNode schema.ASTNode) Object {
@@ -18,8 +19,9 @@ func newObject(astNode schema.ASTNode) Object {
 		cap:                  len(astNode.Children),
 		OADType:              OADTypeObject,
 		Properties:           newObjectProperties(len(astNode.Children)),
-		AdditionalProperties: false,
+		AdditionalProperties: false, // TODO rule additionalProperties
 		Required:             nil,
+		AllOf:                newAllOf(astNode),
 	}
 
 	for _, an := range astNode.Children {

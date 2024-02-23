@@ -5,10 +5,7 @@ import (
 )
 
 func Test_nullable(t *testing.T) {
-	tests := []struct {
-		jsight  string
-		openapi string
-	}{
+	tests := []testConverterData{
 		//TODO: Any tests
 		//TODO: Array tests
 		//TODO: Mixed tests
@@ -141,9 +138,9 @@ func Test_nullable(t *testing.T) {
 			}`,
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.jsight, func(t *testing.T) {
-			jsightToOpenAPI(t, tt.jsight, tt.openapi)
+	for _, data := range tests {
+		t.Run(data.jsight, func(t *testing.T) {
+			assertJSightToOpenAPIConverter(t, data)
 		})
 	}
 }
