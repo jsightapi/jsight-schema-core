@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_newOpenAPIConst(t *testing.T) {
+func Test_enum_const(t *testing.T) {
 	tests := []struct {
 		jsight  string
 		openapi string

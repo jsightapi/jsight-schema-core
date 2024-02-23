@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_newOpenAPINullable(t *testing.T) {
+func Test_nullable(t *testing.T) {
 	tests := []struct {
 		jsight  string
 		openapi string

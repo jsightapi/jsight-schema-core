@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_newOpenAPIMaximum(t *testing.T) {
+func Test_maximum(t *testing.T) {
 	tests := []struct {
 		jsight  string
 		openapi string

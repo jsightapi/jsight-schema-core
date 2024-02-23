@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_Primitive(t *testing.T) {
+func Test_primitive(t *testing.T) {
 	tests := []struct {
 		jsight  string
 		openapi string

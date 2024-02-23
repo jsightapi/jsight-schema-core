@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_newOpenAPIMultipleOf(t *testing.T) {
+func Test_multipleOf(t *testing.T) {
 	tests := []struct {
 		jsight  string
 		openapi string

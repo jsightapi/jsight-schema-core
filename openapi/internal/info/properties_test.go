@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestProperties_has(t *testing.T) {
+func Test_Properties_has(t *testing.T) {
 	p := newProperties(2)
 	p.append("a", Info{})
 	p.append("b", Info{})
@@ -27,7 +27,7 @@ func TestProperties_has(t *testing.T) {
 	assert.False(t, p.has())
 }
 
-func TestProperties_Rewind(t *testing.T) {
+func Test_Properties_Rewind(t *testing.T) {
 	p := newProperties(2)
 	p.append("a", Info{})
 	p.append("b", Info{})
@@ -44,7 +44,7 @@ func TestProperties_Rewind(t *testing.T) {
 	assert.True(t, p.has())
 }
 
-func TestProperties_GetKey(t *testing.T) {
+func Test_Properties_GetKey(t *testing.T) {
 	p := newProperties(2)
 	p.append("a", Info{})
 	p.append("b", Info{})

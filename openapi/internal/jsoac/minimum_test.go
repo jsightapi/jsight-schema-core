@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_newOpenAPIMinimum(t *testing.T) {
+func Test_minimum(t *testing.T) {
 	tests := []struct {
 		jsight  string
 		openapi string

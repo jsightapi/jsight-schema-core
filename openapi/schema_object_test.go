@@ -8,7 +8,7 @@ import (
 	"github.com/jsightapi/jsight-schema-core/notations/jschema"
 )
 
-func TestNewSchemaObject(t *testing.T) {
+func Test_NewSchemaObject(t *testing.T) {
 	j := jschema.New("TestSchemaName", `{}`)
 	err := j.Check()
 	require.NoError(t, err)

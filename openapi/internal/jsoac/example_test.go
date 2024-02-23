@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func Test_newBasicExample_String(t *testing.T) {
+func Test_newExample_string(t *testing.T) {
 	type args struct {
 		astExampleString string
 	}
@@ -45,7 +45,7 @@ func Test_newBasicExample_String(t *testing.T) {
 	}
 }
 
-func Test_newBasicExample(t *testing.T) {
+func Test_newExample(t *testing.T) {
 	type args struct {
 		astExampleString string
 	}
