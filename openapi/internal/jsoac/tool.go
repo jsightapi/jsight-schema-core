@@ -13,6 +13,7 @@ import (
 )
 
 const stringTrue = "true"
+const stringFalse = "false"
 
 var bufferPool = sync.NewBufferPool(1024)
 

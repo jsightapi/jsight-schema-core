@@ -31,6 +31,23 @@ func Test_Object(t *testing.T) {
 			}`,
 		},
 		{
+			`{
+				"required1": 111,
+				"required2": 222, // {optional: false}
+				"optional1": 333  // {optional: true}
+			}`,
+			`{
+				"type": "object",
+				"properties": {
+					"required1": {"type": "integer", "example": 111},
+					"required2": {"type": "integer", "example": 222},
+					"optional1": {"type": "integer", "example": 333}
+				},
+				"additionalProperties": false,
+				"required": [ "required1", "required2" ]
+			}`,
+		},
+		{
 			`{ // { type: "object" }
 				"str": "abc"
 			}`,

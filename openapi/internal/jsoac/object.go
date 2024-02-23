@@ -23,16 +23,21 @@ func newObject(astNode schema.ASTNode) Object {
 	}
 
 	for _, an := range astNode.Children {
-		o.appendProperty(an.Key, newNode(an))
+		o.appendProperty(an)
 	}
 
 	return o
 }
 
-func (o *Object) appendProperty(key string, value Node) {
+func (o *Object) appendProperty(astNode schema.ASTNode) {
+	key := astNode.Key
+	value := newNode(astNode)
+
 	o.Properties.append(key, value)
 
-	o.appendToRequired(key)
+	if !astNode.Rules.Has("optional") || astNode.Rules.GetValue("optional").Value == stringFalse {
+		o.appendToRequired(key)
+	}
 }
 
 func (o *Object) appendToRequired(key string) {
