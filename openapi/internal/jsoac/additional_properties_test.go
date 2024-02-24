@@ -48,6 +48,19 @@ func Test_additionalProperties(t *testing.T) {
 			}`,
 			[]testUserType{},
 		},
+		{
+			`{ // {additionalProperties: "any"}
+				"foo": "bar"
+			}`,
+			`{
+				"type": "object",
+				"properties": {
+					"foo": { "type": "string", "example": "bar" }
+				},
+				"required": ["foo"]
+			}`,
+			[]testUserType{},
+		},
 
 		// primitive types
 		{
@@ -160,20 +173,6 @@ func Test_additionalProperties(t *testing.T) {
 				"additionalProperties": {
 					"enum": [null]
 				}
-			}`,
-			[]testUserType{},
-		},
-		{
-			`{ // {additionalProperties: "any"}
-				"foo": "bar"
-			}`,
-			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"],
-				"additionalProperties": {}
 			}`,
 			[]testUserType{},
 		},

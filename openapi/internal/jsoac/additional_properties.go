@@ -14,7 +14,6 @@ type additionalPropertiesMode int
 const (
 	additionalPropertiesNull additionalPropertiesMode = iota
 	additionalPropertiesFalse
-	additionalPropertiesAny
 	additionalPropertiesArray
 	additionalPropertiesPrimitive
 	additionalPropertiesFormat
@@ -76,7 +75,7 @@ func newStringAdditionalProperties(r schema.RuleASTNode) *AdditionalProperties {
 	}
 
 	if r.Value == "any" {
-		return &AdditionalProperties{mode: additionalPropertiesAny}
+		return nil
 	}
 
 	if r.Value[0] == '@' {
@@ -115,8 +114,6 @@ func newFalseAdditionalProperties() *AdditionalProperties {
 
 func (a AdditionalProperties) MarshalJSON() ([]byte, error) {
 	switch a.mode {
-	case additionalPropertiesAny:
-		return a.anyJSON()
 	case additionalPropertiesFalse:
 		return a.booleanJSON()
 	case additionalPropertiesNull:
@@ -132,10 +129,6 @@ func (a AdditionalProperties) MarshalJSON() ([]byte, error) {
 	default:
 		panic(errs.ErrRuntimeFailure.F())
 	}
-}
-
-func (a AdditionalProperties) anyJSON() ([]byte, error) {
-	return []byte(`{}`), nil
 }
 
 func (a AdditionalProperties) arrayJSON() ([]byte, error) {
