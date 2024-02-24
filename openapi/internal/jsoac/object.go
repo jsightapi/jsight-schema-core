@@ -7,11 +7,11 @@ import (
 type Object struct {
 	cap                  int
 	jstType              schema.TokenType
-	OADType              OADType          `json:"type"`
-	Properties           ObjectProperties `json:"properties"`
-	AdditionalProperties bool             `json:"additionalProperties"`
-	Required             []string         `json:"required,omitempty"`
-	AllOf                *AllOf           `json:"allOf,omitempty"`
+	OADType              OADType               `json:"type"`
+	Properties           ObjectProperties      `json:"properties"`
+	Required             []string              `json:"required,omitempty"`
+	AllOf                *AllOf                `json:"allOf,omitempty"`
+	AdditionalProperties *AdditionalProperties `json:"additionalProperties,omitempty"`
 }
 
 func newObject(astNode schema.ASTNode) Object {
@@ -19,7 +19,7 @@ func newObject(astNode schema.ASTNode) Object {
 		cap:                  len(astNode.Children),
 		OADType:              OADTypeObject,
 		Properties:           newObjectProperties(len(astNode.Children)),
-		AdditionalProperties: false, // TODO rule additionalProperties
+		AdditionalProperties: newAdditionalProperties(astNode),
 		Required:             nil,
 		AllOf:                newAllOf(astNode),
 	}

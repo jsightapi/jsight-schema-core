@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_newAllOf(t *testing.T) {
+func Test_allOf(t *testing.T) {
 	tests := []testComplexConverterData{
 		{
 			`{ // { allOf: "@cat" }
