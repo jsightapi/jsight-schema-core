@@ -11,12 +11,8 @@ type Node interface {
 
 func newNode(astNode schema.ASTNode) Node {
 	switch astNode.TokenType {
-	case schema.TokenTypeNumber:
-		return newPrimitive(OADTypeNumber, astNode)
-	case schema.TokenTypeString:
-		return newPrimitive(OADTypeString, astNode)
-	case schema.TokenTypeBoolean:
-		return newPrimitive(OADTypeBoolean, astNode)
+	case schema.TokenTypeNumber, schema.TokenTypeString, schema.TokenTypeBoolean:
+		return newPrimitive(astNode)
 	case schema.TokenTypeArray:
 		return newArray(astNode)
 	case schema.TokenTypeObject:

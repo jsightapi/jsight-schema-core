@@ -6,7 +6,7 @@ import (
 
 func Test_additionalProperties(t *testing.T) {
 	tests := []testComplexConverterData{
-		// boolean
+		// boolean value
 		{
 			`{
 				"foo": "bar"
@@ -49,7 +49,7 @@ func Test_additionalProperties(t *testing.T) {
 			[]testUserType{},
 		},
 
-		// basic types
+		// primitive types
 		{
 			`{ // {additionalProperties: "array"}
 				"foo": "bar"
@@ -61,8 +61,8 @@ func Test_additionalProperties(t *testing.T) {
 				},
 				"required": ["foo"],
 				"additionalProperties": {
-					"type": "string",
-					"format": "email"
+					"type": "array",
+					"items": {}
 				}
 			}`,
 			[]testUserType{},
@@ -78,25 +78,7 @@ func Test_additionalProperties(t *testing.T) {
 				},
 				"required": ["foo"],
 				"additionalProperties": {
-					"type": "string",
-					"format": "email"
-				}
-			}`,
-			[]testUserType{},
-		},
-		{
-			`{ // {additionalProperties: "decimal"}
-				"foo": "bar"
-			}`,
-			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"],
-				"additionalProperties": {
-					"type": "string",
-					"format": "email"
+					"type": "boolean"
 				}
 			}`,
 			[]testUserType{},
@@ -112,8 +94,7 @@ func Test_additionalProperties(t *testing.T) {
 				},
 				"required": ["foo"],
 				"additionalProperties": {
-					"type": "string",
-					"format": "email"
+					"type": "number"
 				}
 			}`,
 			[]testUserType{},
@@ -129,8 +110,7 @@ func Test_additionalProperties(t *testing.T) {
 				},
 				"required": ["foo"],
 				"additionalProperties": {
-					"type": "string",
-					"format": "email"
+					"type": "integer"
 				}
 			}`,
 			[]testUserType{},
@@ -146,8 +126,7 @@ func Test_additionalProperties(t *testing.T) {
 				},
 				"required": ["foo"],
 				"additionalProperties": {
-					"type": "string",
-					"format": "email"
+					"type": "object"
 				}
 			}`,
 			[]testUserType{},
@@ -163,16 +142,77 @@ func Test_additionalProperties(t *testing.T) {
 				},
 				"required": ["foo"],
 				"additionalProperties": {
-					"type": "string",
-					"format": "email"
+					"type": "string"
 				}
+			}`,
+			[]testUserType{},
+		},
+		{
+			`{ // {additionalProperties: "null"}
+				"foo": "bar"
+			}`,
+			`{
+				"type": "object",
+				"properties": {
+					"foo": { "type": "string", "example": "bar" }
+				},
+				"required": ["foo"],
+				"additionalProperties": {
+					"enum": [null]
+				}
+			}`,
+			[]testUserType{},
+		},
+		{
+			`{ // {additionalProperties: "any"}
+				"foo": "bar"
+			}`,
+			`{
+				"type": "object",
+				"properties": {
+					"foo": { "type": "string", "example": "bar" }
+				},
+				"required": ["foo"],
+				"additionalProperties": {}
 			}`,
 			[]testUserType{},
 		},
 
 		// formatted types
-		// TODO date
-		// TODO datetime
+		{
+			`{ // {additionalProperties: "date"}
+				"foo": "bar"
+			}`,
+			`{
+				"type": "object",
+				"properties": {
+					"foo": { "type": "string", "example": "bar" }
+				},
+				"required": ["foo"],
+				"additionalProperties": {
+					"type": "string",
+					"format": "date"
+				}
+			}`,
+			[]testUserType{},
+		},
+		{
+			`{ // {additionalProperties: "datetime"}
+				"foo": "bar"
+			}`,
+			`{
+				"type": "object",
+				"properties": {
+					"foo": { "type": "string", "example": "bar" }
+				},
+				"required": ["foo"],
+				"additionalProperties": {
+					"type": "string",
+					"format": "date-time"
+				}
+			}`,
+			[]testUserType{},
+		},
 		{
 			`{ // {additionalProperties: "email"}
 				"foo": "bar"
@@ -190,14 +230,8 @@ func Test_additionalProperties(t *testing.T) {
 			}`,
 			[]testUserType{},
 		},
-		// TODO date
-		// TODO datetime
-		// TODO uri
-		// TODO uuid
-
-		// other
 		{
-			`{ // {additionalProperties: "any"}
+			`{ // {additionalProperties: "uri"}
 				"foo": "bar"
 			}`,
 			`{
@@ -208,18 +242,48 @@ func Test_additionalProperties(t *testing.T) {
 				"required": ["foo"],
 				"additionalProperties": {
 					"type": "string",
-					"format": "email"
+					"format": "uri"
 				}
 			}`,
 			[]testUserType{},
 		},
-		// TODO enum
-		// TODO mixed
-		// TODO null
+		{
+			`{ // {additionalProperties: "uuid"}
+				"foo": "bar"
+			}`,
+			`{
+				"type": "object",
+				"properties": {
+					"foo": { "type": "string", "example": "bar" }
+				},
+				"required": ["foo"],
+				"additionalProperties": {
+					"type": "string",
+					"format": "uuid"
+				}
+			}`,
+			[]testUserType{},
+		},
 
 		// user types
-		// TODO additionalProperties: "@cat"
-		// TODO additionalProperties: {type: "@cat"}
+		{
+			`{ // {additionalProperties: "@cat"}
+				"foo": "bar"
+			}`,
+			`{
+				"type": "object",
+				"properties": {
+					"foo": { "type": "string", "example": "bar" }
+				},
+				"required": ["foo"],
+				"additionalProperties": {
+					"$ref": "#/components/schemas/cat"
+				}
+			}`,
+			[]testUserType{
+				testCatUserType,
+			},
+		},
 	}
 	for _, data := range tests {
 		t.Run(data.jsight, func(t *testing.T) {

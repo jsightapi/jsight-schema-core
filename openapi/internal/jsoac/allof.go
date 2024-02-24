@@ -45,20 +45,19 @@ func (a AllOf) MarshalJSON() ([]byte, error) {
 	defer bufferPool.Put(b)
 
 	b.WriteByte('[')
-	b.WriteByte('\n')
 
 	for i, name := range a.userTypeNames {
-		b.WriteString(fmt.Sprintf(`	{ "$ref": "#/components/schemas/%s" }`, strings.TrimLeft(name, "@")))
+		name = strings.TrimLeft(name, "@")
+		str := fmt.Sprintf(`{ "$ref": "#/components/schemas/%s" }`, name)
+
+		b.WriteString(str)
 
 		if i+1 != len(a.userTypeNames) {
 			b.WriteByte(',')
-			b.WriteByte('\n')
 		}
 	}
 
-	b.WriteByte('\n')
 	b.WriteByte(']')
-	b.WriteByte('\n')
 
 	return b.Bytes(), nil
 }

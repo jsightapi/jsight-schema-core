@@ -29,10 +29,8 @@ func oadType(schemaType string, t OADType) *OADType {
 	return &t
 }
 
-func newPrimitive(t OADType, astNode schema.ASTNode) Primitive {
-	if astNode.SchemaType == "integer" {
-		t = OADTypeInteger
-	}
+func newPrimitive(astNode schema.ASTNode) Primitive {
+	t := newOADType(astNode)
 	var p = Primitive{
 		OADType:          oadType(astNode.SchemaType, t),
 		Example:          newExample(astNode.Value, t),
