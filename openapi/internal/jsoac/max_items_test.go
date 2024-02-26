@@ -4,12 +4,15 @@ import (
 	"testing"
 )
 
-func Test_array(t *testing.T) {
+func Test_MaxItems(t *testing.T) {
 	tests := []testConverterData{
 		{
-			`[ "str" ]`,
+			`[ // {maxItems: 1}
+				"str" 
+			]`,
 			`{
 				"type": "array",
+				"maxItems": 1,
 				"items": {
 					"type": "string", 
 					"example": "str"
@@ -17,39 +20,29 @@ func Test_array(t *testing.T) {
 			}`,
 		},
 		{
-			`[ "str", 1 ]`,
+			`[ // { maxItems: 2 }
+				"str", 1 
+			]`,
 			`{
 				"type": "array",
+				"maxItems": 2,
 				"items": {
 					"anyOf": [
 						{"type": "string", "example": "str"},
 						{"type":"integer", "example": 1}
 					]
-				}
+				} 
 			}`,
 		},
 		{
-			`[1, 2.3, "abc"]`,
+			`[ // { type: "array", maxItems: 3 }
+				1, 
+				2.3, 
+				"abc"
+			]`,
 			`{
 					"type": "array",
-					"items": {
-						"anyOf": [
-							{"type": "integer", "example": 1},
-							{"type": "number", "example": 2.3},
-							{"type": "string", "example": "abc"}
-						]
-					}
-				}`,
-		},
-
-		{
-			`[ // { type: "array" }
-					1,
-					2.3,
-					"abc"
-				]`,
-			`{
-					"type": "array",
+					"maxItems": 3,
 					"items": {
 						"anyOf": [
 							{"type": "integer", "example": 1},
@@ -60,31 +53,18 @@ func Test_array(t *testing.T) {
 				}`,
 		},
 		{
-			`[ 1, 2 ]`,
-			`{
-				"type": "array",
-				"items": {
-					"anyOf": [
-						{"type": "integer", "example": 1},
-						{"type": "integer", "example": 2}
-					]
-				}
-			}`,
-		},
-		{
-			`[ // { maxItems: 10, minItems: 2 }
+			`[ // {maxItems: 3} 
 				1, 2 
 			]`,
 			`{
 				"type": "array",
-				"minItems": 2,
-				"maxItems": 10,
+				"maxItems": 3,
 				"items": {
 					"anyOf": [
 						{"type": "integer", "example": 1},
 						{"type": "integer", "example": 2}
 					]
-				}
+				}	
 			}`,
 		},
 		{

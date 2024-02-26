@@ -13,11 +13,12 @@ type Array struct {
 	OADType  OADType    `json:"type"`
 	Items    ArrayItems `json:"items"`
 	Nullable *Nullable  `json:"nullable,omitempty"`
+	MinItems *int64     `json:"minItems,omitempty"`
 	MaxItems *int64     `json:"maxItems,omitempty"`
 }
 
 func newArray(astNode schema.ASTNode) Array {
-	maxItems := int64RefByString("")
+	maxItems := newMaxItems(astNode)
 	if len(astNode.Children) == 0 {
 		maxItems = int64Ref(0)
 	}
@@ -25,6 +26,7 @@ func newArray(astNode schema.ASTNode) Array {
 		OADType:  OADTypeArray,
 		Items:    newArrayItems(len(astNode.Children)),
 		Nullable: newNullable(astNode),
+		MinItems: newMinItems(astNode),
 		MaxItems: maxItems,
 	}
 	for _, an := range astNode.Children {
