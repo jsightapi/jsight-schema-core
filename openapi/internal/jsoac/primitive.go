@@ -23,7 +23,7 @@ type Primitive struct {
 }
 
 func oadType(schemaType string, t OADType) *OADType {
-	if schemaType == "enum" {
+	if schemaType == stringEnum || schemaType == stringAny {
 		return nil
 	}
 	return &t

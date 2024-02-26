@@ -14,7 +14,7 @@ type Null struct {
 func newNull(astNode schema.ASTNode) Null {
 	return Null{
 		jstType:  schema.TokenTypeNull,
-		Example:  newExample("null", OADTypeInteger),
+		Example:  newExample(stringNull, OADTypeInteger),
 		Enum:     newEnum(astNode, OADTypeInteger),
 		Nullable: newNullable(astNode),
 	}

@@ -8,6 +8,10 @@ import (
 
 const stringTrue = "true"
 const stringFalse = "false"
+const stringNull = "null"
+const stringAny = "any"
+const stringEnum = "enum"
+const stringArray = "array"
 
 var bufferPool = sync.NewBufferPool(1024)
 

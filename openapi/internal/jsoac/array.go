@@ -36,8 +36,7 @@ func newArray(astNode schema.ASTNode) Array {
 }
 
 func (a *Array) appendItem(astNode schema.ASTNode) {
-	value := newNode(astNode)
-	a.Items.append(value)
+	a.Items.append(newNode(astNode))
 }
 
 func (a Array) JSightTokenType() schema.TokenType {

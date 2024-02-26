@@ -66,15 +66,15 @@ func oadTypeFromString(s string) OADType {
 }
 
 func newStringAdditionalProperties(r schema.RuleASTNode) *AdditionalProperties {
-	if r.Value == "null" {
+	if r.Value == stringNull {
 		return &AdditionalProperties{mode: additionalPropertiesNull}
 	}
 
-	if r.Value == "array" {
+	if r.Value == stringArray {
 		return &AdditionalProperties{mode: additionalPropertiesArray}
 	}
 
-	if r.Value == "any" {
+	if r.Value == stringAny {
 		return nil
 	}
 
