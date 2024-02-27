@@ -4,10 +4,6 @@ import (
 	schema "github.com/jsightapi/jsight-schema-core"
 )
 
-type AnyOf struct {
-	Items []Node `json:"anyOf"`
-}
-
 type Array struct {
 	jstType  schema.TokenType
 	OADType  OADType    `json:"type"`
