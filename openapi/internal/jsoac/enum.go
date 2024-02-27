@@ -14,7 +14,7 @@ var _ json.Marshaler = Enum{}
 var _ json.Marshaler = &Enum{}
 
 func newEnum(astNode schema.ASTNode, t OADType) *Enum {
-	if enum := newEnumConst(astNode, t); enum != nil {
+	if enum := newConst(astNode, t); enum != nil {
 		return enum
 	}
 

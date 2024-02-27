@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_enum_const(t *testing.T) {
+func Test_const(t *testing.T) {
 	tests := []testConverterData{
 		{
 			`"OK" // { const: true }`,
