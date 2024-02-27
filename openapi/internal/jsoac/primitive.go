@@ -5,7 +5,6 @@ import (
 )
 
 type Primitive struct {
-	jstType          schema.TokenType
 	OADType          *OADType     `json:"type,omitempty"`
 	Example          Example      `json:"example"`
 	Pattern          *Pattern     `json:"pattern,omitempty"`
@@ -23,7 +22,7 @@ type Primitive struct {
 }
 
 func oadType(schemaType string, t OADType) *OADType {
-	if schemaType == stringEnum || schemaType == stringAny {
+	if schemaType == stringEnum {
 		return nil
 	}
 	return &t
@@ -50,6 +49,6 @@ func newPrimitive(astNode schema.ASTNode) Primitive {
 	return p
 }
 
-func (p Primitive) JSightTokenType() schema.TokenType {
-	return p.jstType
+func (Primitive) IsOpenAPINode() bool {
+	return true
 }

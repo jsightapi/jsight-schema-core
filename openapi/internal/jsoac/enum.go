@@ -17,7 +17,7 @@ func newEnum(astNode schema.ASTNode, t OADType) *Enum {
 	if enum := newEnumConst(astNode, t); enum != nil {
 		return enum
 	}
-	// there will be other enums
+
 	if astNode.Rules.Has(stringEnum) &&
 		astNode.Rules.GetValue(stringEnum).TokenType == stringArray &&
 		0 < len(astNode.Rules.GetValue(stringEnum).Items) {
@@ -32,12 +32,14 @@ func newEnum(astNode schema.ASTNode, t OADType) *Enum {
 		}
 		return enum
 	}
-	if astNode.SchemaType == stringNull || (astNode.TokenType == stringNull && astNode.SchemaType == stringAny) {
+
+	if astNode.SchemaType == stringNull {
 		enum := makeEmptyEnum()
 		ex := newExample(stringNull, OADTypeInteger)
 		enum.append(ex.value)
 		return enum
 	}
+
 	return nil
 }
 

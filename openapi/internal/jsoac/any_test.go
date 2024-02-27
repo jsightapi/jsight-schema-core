@@ -11,6 +11,10 @@ func Test_any(t *testing.T) {
 			`{"example": "some string"}`,
 		},
 		{
+			`"some string" // {type: "any"} - some text`,
+			`{"example": "some string", "description": "some text"}`,
+		},
+		{
 			`123 // {type: "any"}`,
 			`{"example": 123}`,
 		},
@@ -35,7 +39,27 @@ func Test_any(t *testing.T) {
 		},
 		{
 			`null // { type: "any" }`,
-			`{"enum": [null], "example": null}`,
+			`{"example": null}`,
+		},
+		{
+			`null // { type: "any" } - some text`,
+			`{"example": null, "description": "some text"}`,
+		},
+		{
+			`{} // { type: "any" }`,
+			`{}`,
+		},
+		{
+			`{} // { type: "any" } - some text`,
+			`{"description": "some text"}`,
+		},
+		{
+			`[] // { type: "any" }`,
+			`{}`,
+		},
+		{
+			`[] // { type: "any" } - some text`,
+			`{"description": "some text"}`,
 		},
 		{
 			`[

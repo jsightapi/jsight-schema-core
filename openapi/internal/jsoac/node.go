@@ -6,10 +6,14 @@ import (
 )
 
 type Node interface {
-	JSightTokenType() schema.TokenType
+	IsOpenAPINode() bool // only for navigation in IDE
 }
 
 func newNode(astNode schema.ASTNode) Node {
+	if astNode.SchemaType == "any" {
+		return newAny(astNode)
+	}
+
 	switch astNode.TokenType {
 	case schema.TokenTypeNumber, schema.TokenTypeString, schema.TokenTypeBoolean:
 		return newPrimitive(astNode)

@@ -11,6 +11,14 @@ func Test_primitive(t *testing.T) {
 			`{"type": "string", "example": "some string"}`,
 		},
 		{
+			`"some string" // some text`,
+			`{"type": "string", "example": "some string", "description": "some text"}`,
+		},
+		{
+			`"some string" // {minLength: 3} - some text`,
+			`{"type": "string", "example": "some string", "description": "some text", "minLength": 3}`,
+		},
+		{
 			`"some string" // { type: "string" }`,
 			`{"type": "string", "example": "some string"}`,
 		},

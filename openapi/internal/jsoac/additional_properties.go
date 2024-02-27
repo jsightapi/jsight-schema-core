@@ -133,11 +133,11 @@ func (a AdditionalProperties) MarshalJSON() ([]byte, error) {
 
 func (a AdditionalProperties) arrayJSON() ([]byte, error) {
 	data := struct {
-		OADType OADType                `json:"type"`
-		Items   map[string]interface{} `json:"items"`
+		OADType OADType        `json:"type"`
+		Items   map[string]any `json:"items"`
 	}{
 		OADType: OADTypeArray,
-		Items:   map[string]interface{}{},
+		Items:   map[string]any{},
 	}
 	return json.Marshal(data)
 }

@@ -15,6 +15,25 @@ func Test_object(t *testing.T) {
 			}`,
 		},
 		{
+			`{} // some text`,
+			`{
+				"type": "object",
+				"properties": {},
+				"additionalProperties": false,
+				"description": "some text"
+			}`,
+		},
+		{
+			`{} // {nullable: true} - some text`,
+			`{
+				"type": "object",
+				"properties": {},
+				"additionalProperties": false,
+				"nullable": true,
+				"description": "some text"
+			}`,
+		},
+		{
 			`{
 				"str": "abc"
 			}`,

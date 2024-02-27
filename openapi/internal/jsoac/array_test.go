@@ -6,6 +6,16 @@ import (
 
 func Test_array(t *testing.T) {
 	tests := []testConverterData{
+		{ // TODO why "type":"string"?
+			`[]`,
+			`{
+				"type": "array",
+				"items": {
+					"type":"string"
+				},
+				"maxItems": 0
+			}`,
+		},
 		{
 			`[ "str" ]`,
 			`{
@@ -14,6 +24,34 @@ func Test_array(t *testing.T) {
 					"type": "string", 
 					"example": "str"
 				}
+			}`,
+		},
+		{
+			`[ // some text
+				"str"
+			]`,
+			`{
+				"type": "array",
+				"items": {
+					"type": "string", 
+					"example": "str"
+				},
+				"description": "some text"
+			}`,
+		},
+		{
+			`[ // {minItems: 1, nullable: true} - some text
+				"str"
+			]`,
+			`{
+				"type": "array",
+				"items": {
+					"type": "string", 
+					"example": "str"
+				},
+				"description": "some text",
+				"minItems": 1,
+				"nullable": true
 			}`,
 		},
 		{

@@ -6,12 +6,13 @@ import (
 
 type Object struct {
 	cap                  int
-	jstType              schema.TokenType
 	OADType              OADType               `json:"type"`
 	Properties           ObjectProperties      `json:"properties"`
 	Required             []string              `json:"required,omitempty"`
 	AllOf                *AllOf                `json:"allOf,omitempty"`
 	AdditionalProperties *AdditionalProperties `json:"additionalProperties,omitempty"`
+	Nullable             *Nullable             `json:"nullable,omitempty"`
+	Description          *Description          `json:"description,omitempty"`
 }
 
 func newObject(astNode schema.ASTNode) Object {
@@ -22,6 +23,8 @@ func newObject(astNode schema.ASTNode) Object {
 		AdditionalProperties: newAdditionalProperties(astNode),
 		Required:             nil,
 		AllOf:                newAllOf(astNode),
+		Nullable:             newNullable(astNode),
+		Description:          newDescription(astNode),
 	}
 
 	for _, an := range astNode.Children {
@@ -53,6 +56,6 @@ func (o *Object) initRequiredIfNecessary() {
 	}
 }
 
-func (o Object) JSightTokenType() schema.TokenType {
-	return o.jstType
+func (Object) IsOpenAPINode() bool {
+	return true
 }
