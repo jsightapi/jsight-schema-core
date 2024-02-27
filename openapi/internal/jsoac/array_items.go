@@ -32,7 +32,7 @@ func (ai ArrayItems) MarshalJSON() ([]byte, error) {
 	length := len(ai.items)
 
 	if length > 1 {
-		b.WriteString("{\"anyOf\": [")
+		b.WriteString(`{"anyOf": [`)
 	}
 	for i, item := range ai.items {
 		value, err := json.Marshal(item.value)
@@ -46,10 +46,10 @@ func (ai ArrayItems) MarshalJSON() ([]byte, error) {
 		}
 	}
 	if length > 1 {
-		b.WriteString("]}")
+		b.WriteString(`]}`)
 	}
 	if length == 0 {
-		b.WriteString("{\"type\":\"string\"}")
+		b.WriteString(`{"type":"string"}`)
 	}
 	return b.Bytes(), nil
 }

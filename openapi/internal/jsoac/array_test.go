@@ -23,7 +23,7 @@ func Test_array(t *testing.T) {
 				"items": {
 					"anyOf": [
 						{"type": "string", "example": "str"},
-						{"type":"integer", "example": 1}
+						{"type": "integer", "example": 1}
 					]
 				}
 			}`,
