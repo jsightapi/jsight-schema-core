@@ -75,10 +75,12 @@ func Test_object(t *testing.T) {
 					"bool": {"type": "boolean", "example": true},
 					"arr": {
 						"type": "array",
-						"items": [
-							{"type": "integer", "example": 1},
-							{"type": "integer", "example": 2}
-						]
+						"items": {
+							"anyOf": [
+								{"type": "integer", "example": 1},
+								{"type": "integer", "example": 2}
+							]
+						}
 					},
 					"obj": {
 						"type": "object",
