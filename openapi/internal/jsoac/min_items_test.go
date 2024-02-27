@@ -4,12 +4,15 @@ import (
 	"testing"
 )
 
-func Test_array(t *testing.T) {
+func Test_MinItems(t *testing.T) {
 	tests := []testConverterData{
 		{
-			`[ "str" ]`,
+			`[ // {minItems: 1}
+				"str" 
+			]`,
 			`{
 				"type": "array",
+				"minItems": 1,
 				"items": {
 					"type": "string", 
 					"example": "str"
@@ -17,92 +20,59 @@ func Test_array(t *testing.T) {
 			}`,
 		},
 		{
-			`[ "str", 1 ]`,
-			`{
-				"type": "array",
-				"items": {
-					"anyOf": [
-						{"type": "string", "example": "str"},
-						{"type": "integer", "example": 1}
-					]
-				}
-			}`,
-		},
-		{
-			`[1, 2.3, "abc"]`,
-			`{
-					"type": "array",
-					"items": {
-						"anyOf": [
-							{"type": "integer", "example": 1},
-							{"type": "number", "example": 2.3},
-							{"type": "string", "example": "abc"}
-						]
-					}
-				}`,
-		},
-
-		{
-			`[ // { type: "array" }
-					1,
-					2.3,
-					"abc"
-				]`,
-			`{
-					"type": "array",
-					"items": {
-						"anyOf": [
-							{"type": "integer", "example": 1},
-							{"type": "number", "example": 2.3},
-							{"type": "string", "example": "abc"}
-						]
-					}
-				}`,
-		},
-		{
-			`[ 1, 2 ]`,
-			`{
-				"type": "array",
-				"items": {
-					"anyOf": [
-						{"type": "integer", "example": 1},
-						{"type": "integer", "example": 2}
-					]
-				}
-			}`,
-		},
-		{
-			`[ // { maxItems: 10, minItems: 2 }
-				1, 2 
+			`[ // { minItems: 2 }
+				"str", 1 
 			]`,
 			`{
 				"type": "array",
 				"minItems": 2,
-				"maxItems": 10,
+				"items": {
+					"anyOf": [
+						{"type": "string", "example": "str"},
+						{"type":"integer", "example": 1}
+					]
+				} 
+			}`,
+		},
+		{
+			`[ // { type: "array", minItems: 3 }
+				1, 
+				2.3, 
+				"abc"
+			]`,
+			`{
+					"type": "array",
+					"minItems": 3,
+					"items": {
+						"anyOf": [
+							{"type": "integer", "example": 1},
+							{"type": "number", "example": 2.3},
+							{"type": "string", "example": "abc"}
+						]
+					}
+				}`,
+		},
+		{
+			`[ // {minItems: 1} 
+				1, 2 
+			]`,
+			`{
+				"type": "array",
+				"minItems": 1,
 				"items": {
 					"anyOf": [
 						{"type": "integer", "example": 1},
 						{"type": "integer", "example": 2}
 					]
-				}
+				}	
 			}`,
 		},
 		{
-			`[ // { type: "array" }
+			`[ // { type: "array", nullable: true, minItems: 0 }
 				]`,
 			`{
 					"type": "array",
-					"maxItems": 0,
-					"items": {
-						"type": "string"
-					}
-				}`,
-		},
-		{
-			`[ // { type: "array", nullable: true }
-				]`,
-			`{
-					"type": "array",
+					"minItems": 0,
 					"maxItems": 0,
 					"items": {
 						"type": "string"
