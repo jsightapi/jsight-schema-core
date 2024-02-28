@@ -10,9 +10,7 @@ func Test_array(t *testing.T) {
 			`[]`,
 			`{
 				"type": "array",
-				"items": {
-					"type":"string"
-				},
+				"items": {},
 				"maxItems": 0
 			}`,
 		},
@@ -131,9 +129,7 @@ func Test_array(t *testing.T) {
 			`{
 					"type": "array",
 					"maxItems": 0,
-					"items": {
-						"type": "string"
-					}
+					"items": {}
 				}`,
 		},
 		{
@@ -142,9 +138,7 @@ func Test_array(t *testing.T) {
 			`{
 					"type": "array",
 					"maxItems": 0,
-					"items": {
-						"type": "string"
-					},
+					"items": {},
 					"nullable": true
 				}`,
 		},

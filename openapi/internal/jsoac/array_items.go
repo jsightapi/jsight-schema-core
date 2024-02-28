@@ -49,7 +49,7 @@ func (ai ArrayItems) MarshalJSON() ([]byte, error) {
 		b.WriteString(`]}`)
 	}
 	if length == 0 {
-		b.WriteString(`{"type":"string"}`)
+		b.WriteString(`{}`)
 	}
 	return b.Bytes(), nil
 }

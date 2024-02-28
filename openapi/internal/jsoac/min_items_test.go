@@ -74,9 +74,7 @@ func Test_minItems(t *testing.T) {
 					"type": "array",
 					"minItems": 0,
 					"maxItems": 0,
-					"items": {
-						"type": "string"
-					},
+					"items": {},
 					"nullable": true
 				}`,
 		},

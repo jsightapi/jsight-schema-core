@@ -73,9 +73,7 @@ func Test_maxItems(t *testing.T) {
 			`{
 					"type": "array",
 					"maxItems": 0,
-					"items": {
-						"type": "string"
-					}
+					"items": {}
 				}`,
 		},
 		{
@@ -84,9 +82,7 @@ func Test_maxItems(t *testing.T) {
 			`{
 					"type": "array",
 					"maxItems": 0,
-					"items": {
-						"type": "string"
-					},
+					"items": {},
 					"nullable": true
 				}`,
 		},
