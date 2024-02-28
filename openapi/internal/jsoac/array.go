@@ -5,12 +5,12 @@ import (
 )
 
 type Array struct {
-	jstType  schema.TokenType
-	OADType  OADType    `json:"type"`
-	Items    ArrayItems `json:"items"`
-	Nullable *Nullable  `json:"nullable,omitempty"`
-	MinItems *int64     `json:"minItems,omitempty"`
-	MaxItems *int64     `json:"maxItems,omitempty"`
+	OADType     OADType      `json:"type"`
+	Items       ArrayItems   `json:"items"`
+	MinItems    *int64       `json:"minItems,omitempty"`
+	MaxItems    *int64       `json:"maxItems,omitempty"`
+	Nullable    *Nullable    `json:"nullable,omitempty"`
+	Description *Description `json:"description,omitempty"`
 }
 
 func newArray(astNode schema.ASTNode) Array {
@@ -19,11 +19,12 @@ func newArray(astNode schema.ASTNode) Array {
 		maxItems = int64Ref(0)
 	}
 	a := Array{
-		OADType:  OADTypeArray,
-		Items:    newArrayItems(len(astNode.Children)),
-		Nullable: newNullable(astNode),
-		MinItems: newMinItems(astNode),
-		MaxItems: maxItems,
+		OADType:     OADTypeArray,
+		Items:       newArrayItems(len(astNode.Children)),
+		MinItems:    newMinItems(astNode),
+		MaxItems:    maxItems,
+		Nullable:    newNullable(astNode),
+		Description: newDescription(astNode),
 	}
 	for _, an := range astNode.Children {
 		a.appendItem(an)
@@ -32,10 +33,9 @@ func newArray(astNode schema.ASTNode) Array {
 }
 
 func (a *Array) appendItem(astNode schema.ASTNode) {
-	value := newNode(astNode)
-	a.Items.append(value)
+	a.Items.append(newNode(astNode))
 }
 
-func (a Array) JSightTokenType() schema.TokenType {
-	return a.jstType
+func (Array) IsOpenAPINode() bool {
+	return true
 }

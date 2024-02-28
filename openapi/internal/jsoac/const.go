@@ -4,7 +4,7 @@ import (
 	schema "github.com/jsightapi/jsight-schema-core"
 )
 
-func newEnumConst(astNode schema.ASTNode, t OADType) *Enum {
+func newConst(astNode schema.ASTNode, t OADType) *Enum {
 	if astNode.Rules.Has("const") && astNode.Rules.GetValue("const").Value == stringTrue {
 		ex := newExample(astNode.Value, t)
 

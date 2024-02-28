@@ -5,21 +5,21 @@ import (
 )
 
 type Null struct {
-	jstType  schema.TokenType
-	Example  Example   `json:"example"`
-	Enum     *Enum     `json:"enum"`
-	Nullable *Nullable `json:"nullable,omitempty"`
+	Example     Example      `json:"example"`
+	Enum        *Enum        `json:"enum,omitempty"`
+	Nullable    *Nullable    `json:"nullable,omitempty"`
+	Description *Description `json:"description,omitempty"`
 }
 
 func newNull(astNode schema.ASTNode) Null {
 	return Null{
-		jstType:  schema.TokenTypeNull,
-		Example:  newExample("null", OADTypeInteger),
-		Enum:     newEnum(astNode, OADTypeInteger),
-		Nullable: newNullable(astNode),
+		Example:     newExample(stringNull, OADTypeInteger),
+		Enum:        newEnum(astNode, OADTypeInteger),
+		Nullable:    newNullable(astNode),
+		Description: newDescription(astNode),
 	}
 }
 
-func (n Null) JSightTokenType() schema.TokenType {
-	return n.jstType
+func (Null) IsOpenAPINode() bool {
+	return true
 }

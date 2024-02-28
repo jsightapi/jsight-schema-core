@@ -14,15 +14,15 @@ var _ json.Marshaler = Enum{}
 var _ json.Marshaler = &Enum{}
 
 func newEnum(astNode schema.ASTNode, t OADType) *Enum {
-	if enum := newEnumConst(astNode, t); enum != nil {
+	if enum := newConst(astNode, t); enum != nil {
 		return enum
 	}
-	// there will be other enums
-	if astNode.Rules.Has("enum") &&
-		astNode.Rules.GetValue("enum").TokenType == "array" &&
-		0 < len(astNode.Rules.GetValue("enum").Items) {
+
+	if astNode.Rules.Has(stringEnum) &&
+		astNode.Rules.GetValue(stringEnum).TokenType == stringArray &&
+		0 < len(astNode.Rules.GetValue(stringEnum).Items) {
 		enum := makeEmptyEnum()
-		for _, s := range astNode.Rules.GetValue("enum").Items {
+		for _, s := range astNode.Rules.GetValue(stringEnum).Items {
 			valueType := t
 			if s.TokenType == "string" {
 				valueType = OADTypeString
@@ -32,12 +32,14 @@ func newEnum(astNode schema.ASTNode, t OADType) *Enum {
 		}
 		return enum
 	}
-	if astNode.SchemaType == "null" {
+
+	if astNode.SchemaType == stringNull {
 		enum := makeEmptyEnum()
-		ex := newExample("null", OADTypeInteger)
+		ex := newExample(stringNull, OADTypeInteger)
 		enum.append(ex.value)
 		return enum
 	}
+
 	return nil
 }
 

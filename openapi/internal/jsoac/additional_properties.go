@@ -66,15 +66,15 @@ func oadTypeFromString(s string) OADType {
 }
 
 func newStringAdditionalProperties(r schema.RuleASTNode) *AdditionalProperties {
-	if r.Value == "null" {
+	if r.Value == stringNull {
 		return &AdditionalProperties{mode: additionalPropertiesNull}
 	}
 
-	if r.Value == "array" {
+	if r.Value == stringArray {
 		return &AdditionalProperties{mode: additionalPropertiesArray}
 	}
 
-	if r.Value == "any" {
+	if r.Value == stringAny {
 		return nil
 	}
 
@@ -133,11 +133,11 @@ func (a AdditionalProperties) MarshalJSON() ([]byte, error) {
 
 func (a AdditionalProperties) arrayJSON() ([]byte, error) {
 	data := struct {
-		OADType OADType                `json:"type"`
-		Items   map[string]interface{} `json:"items"`
+		OADType OADType        `json:"type"`
+		Items   map[string]any `json:"items"`
 	}{
 		OADType: OADTypeArray,
-		Items:   map[string]interface{}{},
+		Items:   map[string]any{},
 	}
 	return json.Marshal(data)
 }
