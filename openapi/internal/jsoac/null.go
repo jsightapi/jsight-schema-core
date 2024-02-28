@@ -13,8 +13,8 @@ type Null struct {
 
 func newNull(astNode schema.ASTNode) Null {
 	return Null{
-		Example:     newExample(stringNull, OADTypeInteger),
-		Enum:        newEnum(astNode, OADTypeInteger),
+		Example:     newExample(stringNull, false),
+		Enum:        newEnum(astNode),
 		Nullable:    newNullable(astNode),
 		Description: newDescription(astNode),
 	}

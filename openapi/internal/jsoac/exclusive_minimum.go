@@ -4,8 +4,8 @@ import (
 	schema "github.com/jsightapi/jsight-schema-core"
 )
 
-func newExclusiveMinimum(astNode schema.ASTNode, t OADType) *bool {
-	if astNode.Rules.Has("exclusiveMinimum") && (t == OADTypeInteger || t == OADTypeNumber) {
+func newExclusiveMinimum(astNode schema.ASTNode) *bool {
+	if astNode.Rules.Has("exclusiveMinimum") {
 		b := astNode.Rules.GetValue("exclusiveMinimum").Value == stringTrue
 		if b {
 			return &b

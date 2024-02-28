@@ -6,12 +6,12 @@ import (
 
 func newFormat(astNode schema.ASTNode) *string {
 	if astNode.Rules.Has("type") {
-		return newFormatFromString(astNode.Rules.GetValue("type").Value)
+		return formatFromSchemaType(astNode.Rules.GetValue("type").Value)
 	}
 	return nil
 }
 
-func newFormatFromString(s string) *string {
+func formatFromSchemaType(s string) *string {
 	switch s {
 	case string(schema.SchemaTypeEmail), string(schema.SchemaTypeURI),
 		string(schema.SchemaTypeUUID), string(schema.SchemaTypeDate):

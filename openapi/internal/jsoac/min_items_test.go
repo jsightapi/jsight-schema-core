@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_MinItems(t *testing.T) {
+func Test_minItems(t *testing.T) {
 	tests := []testConverterData{
 		{
 			`[ // {minItems: 1}

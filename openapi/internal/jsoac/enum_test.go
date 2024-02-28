@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_newOpenAPIEnumType(t *testing.T) {
+func Test_enum(t *testing.T) {
 	tests := []testConverterData{
 		{
 			`"white" // { type: "enum", enum: ["white", "blue", "red", ""] }`,

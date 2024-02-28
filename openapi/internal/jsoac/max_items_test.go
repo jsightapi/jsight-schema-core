@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_MaxItems(t *testing.T) {
+func Test_maxItems(t *testing.T) {
 	tests := []testConverterData{
 		{
 			`[ // {maxItems: 1}

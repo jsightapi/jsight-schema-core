@@ -13,8 +13,8 @@ type Enum struct {
 var _ json.Marshaler = Enum{}
 var _ json.Marshaler = &Enum{}
 
-func newEnum(astNode schema.ASTNode, t OADType) *Enum {
-	if enum := newConst(astNode, t); enum != nil {
+func newEnum(astNode schema.ASTNode) *Enum {
+	if enum := newConst(astNode); enum != nil {
 		return enum
 	}
 
@@ -23,11 +23,7 @@ func newEnum(astNode schema.ASTNode, t OADType) *Enum {
 		0 < len(astNode.Rules.GetValue(stringEnum).Items) {
 		enum := makeEmptyEnum()
 		for _, s := range astNode.Rules.GetValue(stringEnum).Items {
-			valueType := t
-			if s.TokenType == "string" {
-				valueType = OADTypeString
-			}
-			ex := newExample(s.Value, valueType)
+			ex := newExample(s.Value, s.TokenType == "string")
 			enum.append(ex.value)
 		}
 		return enum
@@ -35,7 +31,7 @@ func newEnum(astNode schema.ASTNode, t OADType) *Enum {
 
 	if astNode.SchemaType == stringNull {
 		enum := makeEmptyEnum()
-		ex := newExample(stringNull, OADTypeInteger)
+		ex := newExample(stringNull, false)
 		enum.append(ex.value)
 		return enum
 	}

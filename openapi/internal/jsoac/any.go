@@ -18,11 +18,13 @@ func newAny(astNode schema.ASTNode) Any {
 
 	switch astNode.TokenType {
 	case schema.TokenTypeString:
-		ex := newExample(astNode.Value, OADTypeString)
+		ex := newExample(astNode.Value, true)
 		a.Example = &ex
 	case schema.TokenTypeNumber, schema.TokenTypeBoolean, schema.TokenTypeNull:
-		ex := newExample(astNode.Value, OADTypeNumber)
+		ex := newExample(astNode.Value, false)
 		a.Example = &ex
+	default:
+		a.Example = nil
 	}
 
 	return a

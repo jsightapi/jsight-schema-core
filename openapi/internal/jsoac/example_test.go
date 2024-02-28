@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func Test_newExample_string(t *testing.T) {
+func Test_example_string(t *testing.T) {
 	type args struct {
 		astExampleString string
 	}
@@ -36,7 +36,7 @@ func Test_newExample_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.want, func(t *testing.T) {
-			ex := newExample(tt.args.astExampleString, OADTypeString) //newStringExample(tt.args.astExampleString)
+			ex := newExample(tt.args.astExampleString, true) //newStringExample(tt.args.astExampleString)
 			want := []byte(tt.want)
 			if !reflect.DeepEqual(ex.value, want) {
 				t.Errorf("newStringExample() = %s, want %s", ex.value, want)
@@ -45,7 +45,7 @@ func Test_newExample_string(t *testing.T) {
 	}
 }
 
-func Test_newExample(t *testing.T) {
+func Test_example(t *testing.T) {
 	type args struct {
 		astExampleString string
 	}
@@ -80,7 +80,7 @@ func Test_newExample(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.want, func(t *testing.T) {
-			ex := newExample(tt.args.astExampleString, OADTypeInteger)
+			ex := newExample(tt.args.astExampleString, false)
 			want := []byte(tt.want)
 			if !reflect.DeepEqual(ex.value, want) {
 				t.Errorf("newExample() = %s, want %s", ex.value, want)

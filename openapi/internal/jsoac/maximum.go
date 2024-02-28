@@ -4,8 +4,8 @@ import (
 	schema "github.com/jsightapi/jsight-schema-core"
 )
 
-func newMaximum(astNode schema.ASTNode, t OADType) *Number {
-	if astNode.Rules.Has("max") && (t == OADTypeInteger || t == OADTypeNumber) {
+func newMaximum(astNode schema.ASTNode) *Number {
+	if astNode.Rules.Has("max") {
 		return newNumber(astNode.Rules.GetValue("max").Value)
 	}
 	return nil

@@ -1,6 +1,7 @@
 package jsoac
 
 import (
+	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/internal/sync"
 
 	"strconv"
@@ -23,6 +24,10 @@ func quotedBytes(s string) []byte {
 	bb = append(bb, '"')
 
 	return bb
+}
+
+func isString(astNode schema.ASTNode) bool {
+	return astNode.TokenType == schema.TokenTypeString
 }
 
 func strRef(s string) *string {

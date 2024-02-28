@@ -21,7 +21,7 @@ func (t OADType) MarshalJSON() (b []byte, err error) {
 	return quotedBytes(t.String()), nil
 }
 
-func newOADType(astNode schema.ASTNode) OADType {
+func oadTypeFromASTNode(astNode schema.ASTNode) OADType {
 	if astNode.SchemaType == "integer" {
 		return OADTypeInteger
 	}
@@ -38,7 +38,24 @@ func newOADType(astNode schema.ASTNode) OADType {
 		return OADTypeObject
 	default:
 		// schema.TokenTypeShortcut:
-		// schema.TokenTypeObject
+		panic(errs.ErrRuntimeFailure.F())
+	}
+}
+
+func oadTypeFromSchemaType(s string) OADType {
+	switch s {
+	case string(schema.SchemaTypeString), string(schema.SchemaTypeEmail), string(schema.SchemaTypeURI),
+		string(schema.SchemaTypeUUID), string(schema.SchemaTypeDate), string(schema.SchemaTypeDateTime):
+		return OADTypeString
+	case string(schema.SchemaTypeInteger):
+		return OADTypeInteger
+	case string(schema.SchemaTypeFloat):
+		return OADTypeNumber
+	case string(schema.SchemaTypeBoolean):
+		return OADTypeBoolean
+	case string(schema.SchemaTypeObject):
+		return OADTypeObject
+	default:
 		panic(errs.ErrRuntimeFailure.F())
 	}
 }

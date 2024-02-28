@@ -29,20 +29,20 @@ func oadType(schemaType string, t OADType) *OADType {
 }
 
 func newPrimitive(astNode schema.ASTNode) Primitive {
-	t := newOADType(astNode)
+	t := oadTypeFromASTNode(astNode)
 	var p = Primitive{
 		OADType:          oadType(astNode.SchemaType, t),
-		Example:          newExample(astNode.Value, t),
+		Example:          newExample(astNode.Value, t == OADTypeString),
 		Pattern:          newPattern(astNode),
 		Format:           newFormat(astNode),
-		Enum:             newEnum(astNode, t),
-		Minimum:          newMinimum(astNode, t),
-		Maximum:          newMaximum(astNode, t),
-		ExclusiveMinimum: newExclusiveMinimum(astNode, t),
-		ExclusiveMaximum: newExclusiveMaximum(astNode, t),
-		MinLength:        newMinLength(astNode, t),
-		MaxLength:        newMaxLength(astNode, t),
-		MultipleOf:       newMultipleOf(astNode, t),
+		Enum:             newEnum(astNode),
+		Minimum:          newMinimum(astNode),
+		Maximum:          newMaximum(astNode),
+		ExclusiveMinimum: newExclusiveMinimum(astNode),
+		ExclusiveMaximum: newExclusiveMaximum(astNode),
+		MinLength:        newMinLength(astNode),
+		MaxLength:        newMaxLength(astNode),
+		MultipleOf:       newMultipleOf(astNode),
 		Nullable:         newNullable(astNode),
 		Description:      newDescription(astNode),
 	}

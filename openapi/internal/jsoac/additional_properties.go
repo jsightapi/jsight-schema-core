@@ -47,24 +47,6 @@ func newAdditionalProperties(astNode schema.ASTNode) *AdditionalProperties {
 	return newFalseAdditionalProperties()
 }
 
-func oadTypeFromString(s string) OADType {
-	switch s {
-	case string(schema.SchemaTypeString), string(schema.SchemaTypeEmail), string(schema.SchemaTypeURI),
-		string(schema.SchemaTypeUUID), string(schema.SchemaTypeDate), string(schema.SchemaTypeDateTime):
-		return OADTypeString
-	case string(schema.SchemaTypeInteger):
-		return OADTypeInteger
-	case string(schema.SchemaTypeFloat):
-		return OADTypeNumber
-	case string(schema.SchemaTypeBoolean):
-		return OADTypeBoolean
-	case string(schema.SchemaTypeObject):
-		return OADTypeObject
-	default:
-		panic(errs.ErrRuntimeFailure.F())
-	}
-}
-
 func newStringAdditionalProperties(r schema.RuleASTNode) *AdditionalProperties {
 	if r.Value == stringNull {
 		return &AdditionalProperties{mode: additionalPropertiesNull}
@@ -82,8 +64,8 @@ func newStringAdditionalProperties(r schema.RuleASTNode) *AdditionalProperties {
 		return &AdditionalProperties{mode: additionalPropertiesUserType, userTypeName: r.Value}
 	}
 
-	t := oadTypeFromString(r.Value)
-	f := newFormatFromString(r.Value)
+	t := oadTypeFromSchemaType(r.Value)
+	f := formatFromSchemaType(r.Value)
 
 	if f == nil {
 		return &AdditionalProperties{
