@@ -28,7 +28,12 @@ func oadType(schemaType string, t OADType) *OADType {
 	return &t
 }
 
-func newPrimitive(astNode schema.ASTNode) Primitive {
+func newPrimitive(astNode schema.ASTNode) Node {
+	if rule, ok := astNode.Rules.Get("type"); ok && rule.TokenType == schema.TokenTypeShortcut {
+		ref := newRefFromUserTypeName(rule.Value, isNullable(astNode))
+		return ref
+	}
+
 	t := oadTypeFromASTNode(astNode)
 	var p = Primitive{
 		OADType:          oadType(astNode.SchemaType, t),

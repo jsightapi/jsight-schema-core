@@ -2,8 +2,6 @@ package jsoac
 
 import (
 	"encoding/json"
-	"fmt"
-	"strings"
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/errs"
@@ -153,7 +151,6 @@ func (a AdditionalProperties) formatJSON() ([]byte, error) {
 }
 
 func (a AdditionalProperties) userTypeJSON() ([]byte, error) {
-	name := strings.TrimLeft(a.userTypeName, "@")
-	str := fmt.Sprintf(`{"$ref": "#/components/schemas/%s"}`, name)
-	return []byte(str), nil
+	ref := newRefFromUserTypeName(a.userTypeName, false)
+	return ref.MarshalJSON()
 }

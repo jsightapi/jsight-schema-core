@@ -2,8 +2,6 @@ package jsoac
 
 import (
 	"encoding/json"
-	"fmt"
-	"strings"
 
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/errs"
@@ -47,10 +45,13 @@ func (a AllOf) MarshalJSON() ([]byte, error) {
 	b.WriteByte('[')
 
 	for i, name := range a.userTypeNames {
-		name = strings.TrimLeft(name, "@")
-		str := fmt.Sprintf(`{ "$ref": "#/components/schemas/%s" }`, name)
+		ref := newRefFromUserTypeName(name, false)
+		rb, err := ref.MarshalJSON()
+		if err != nil {
+			return nil, err
+		}
 
-		b.WriteString(str)
+		b.Write(rb)
 
 		if i+1 != len(a.userTypeNames) {
 			b.WriteByte(',')

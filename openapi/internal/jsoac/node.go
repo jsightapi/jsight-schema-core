@@ -23,7 +23,8 @@ func newNode(astNode schema.ASTNode) Node {
 		return newObject(astNode)
 	case schema.TokenTypeNull:
 		return newNull(astNode)
-	// TODO case schema.TokenTypeShortcut:
+	case schema.TokenTypeShortcut:
+		return newRef(astNode)
 	default:
 		panic(errs.ErrRuntimeFailure.F())
 	}

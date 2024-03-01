@@ -26,6 +26,13 @@ func quotedBytes(s string) []byte {
 	return bb
 }
 
+func isNullable(astNode schema.ASTNode) bool {
+	if astNode.Rules.Has("nullable") && astNode.Rules.GetValue("nullable").Value == stringTrue {
+		return true
+	}
+	return false
+}
+
 func isString(astNode schema.ASTNode) bool {
 	return astNode.TokenType == schema.TokenTypeString
 }
