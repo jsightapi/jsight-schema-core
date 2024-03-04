@@ -1,6 +1,7 @@
 package jsoac
 
 import (
+	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -32,6 +33,16 @@ var testCatUserType = testUserType{
 var testDogUserType = testUserType{
 	"@dog",
 	`{ "dogName": "Max" }`,
+}
+
+func (t testConverterData) name() string {
+	re := regexp.MustCompile(`[\s/]+`)
+	return re.ReplaceAllString(t.jsight, "_")
+}
+
+func (t testComplexConverterData) name() string {
+	re := regexp.MustCompile(`[\s/]+`)
+	return re.ReplaceAllString(t.jsight, "_")
 }
 
 func assertJSightToOpenAPIConverter(t *testing.T, data testConverterData) {

@@ -35,7 +35,7 @@ func Test_pattern(t *testing.T) {
 		},*/
 	}
 	for _, data := range tests {
-		t.Run(data.jsight, func(t *testing.T) {
+		t.Run(data.name(), func(t *testing.T) {
 			assertJSightToOpenAPIConverter(t, data)
 		})
 	}
