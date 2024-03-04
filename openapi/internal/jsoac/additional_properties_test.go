@@ -280,7 +280,7 @@ func Test_additionalProperties(t *testing.T) {
 				}
 			}`,
 			[]testUserType{
-				testCatUserType,
+				catUserType,
 			},
 		},
 	}

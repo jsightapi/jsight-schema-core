@@ -6,7 +6,7 @@ import (
 
 func Test_array(t *testing.T) {
 	tests := []testConverterData{
-		{ // TODO why "type":"string"?
+		{
 			`[]`,
 			`{
 				"type": "array",

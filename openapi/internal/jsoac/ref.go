@@ -12,7 +12,11 @@ type Ref struct {
 	nullable     bool
 }
 
-func newRef(astNode schema.ASTNode) Ref {
+func newRef(astNode schema.ASTNode) Node {
+	if astNode.Rules.Has("or") {
+		return newOr(astNode)
+	}
+
 	return newRefFromUserTypeName(astNode.SchemaType, isNullable(astNode))
 }
 

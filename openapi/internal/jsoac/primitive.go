@@ -6,7 +6,7 @@ import (
 
 type Primitive struct {
 	OADType          *OADType     `json:"type,omitempty"`
-	Example          Example      `json:"example"`
+	Example          *Example     `json:"example,omitempty"`
 	Pattern          *Pattern     `json:"pattern,omitempty"`
 	Format           *string      `json:"format,omitempty"`
 	Enum             *Enum        `json:"enum,omitempty"`
@@ -29,6 +29,10 @@ func oadType(schemaType string, t OADType) *OADType {
 }
 
 func newPrimitive(astNode schema.ASTNode) Node {
+	if astNode.Rules.Has("or") {
+		return newOr(astNode)
+	}
+
 	if rule, ok := astNode.Rules.Get("type"); ok && rule.TokenType == schema.TokenTypeShortcut {
 		ref := newRefFromUserTypeName(rule.Value, isNullable(astNode))
 		return ref

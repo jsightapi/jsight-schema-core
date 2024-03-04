@@ -12,11 +12,11 @@ var _ json.Marshaler = Example{}
 var _ json.Marshaler = &Example{}
 
 // newExample creates an example value for primitive types
-func newExample(ex string, isString bool) Example {
+func newExample(ex string, isString bool) *Example {
 	if isString {
-		return Example{value: quotedBytes(ex)}
+		return &Example{value: quotedBytes(ex)}
 	} else {
-		return Example{value: []byte(ex)}
+		return &Example{value: []byte(ex)}
 	}
 }
 

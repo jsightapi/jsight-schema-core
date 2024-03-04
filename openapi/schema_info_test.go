@@ -10,7 +10,7 @@ import (
 )
 
 func Test_SchemaInfo(t *testing.T) {
-	j := jschema.New("@userType1", `{ // object annotation
+	j := jschema.New("root", `{ // object annotation
 "k1": "v1", // {optional: true} - property annotation 1
 "k2": "v2", // {optional: false} - property annotation 2
 "k3": "v3" // property annotation 3
@@ -46,13 +46,3 @@ func Test_SchemaInfo(t *testing.T) {
 	assert.Equal(t, "property annotation 3", v.Annotation())
 	assert.False(t, v.Optional())
 }
-
-// TODO JSIGHT 0.3
-// TYPE @userType2
-//   @userType1
-
-// ut2 := jschema.New("@userType2", `@userType1`)
-//err = ut2.AddType("@userType1", ut1)
-//require.NoError(t, err)
-//err = ut2.Check()
-//require.NoError(t, err)

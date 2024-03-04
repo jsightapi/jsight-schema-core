@@ -4,6 +4,8 @@ import (
 	"regexp"
 	"testing"
 
+	"github.com/jsightapi/jsight-schema-core/errs"
+
 	"github.com/stretchr/testify/require"
 
 	"github.com/jsightapi/jsight-schema-core/notations/jschema"
@@ -25,23 +27,33 @@ type testUserType struct {
 	jsight string
 }
 
-var testCatUserType = testUserType{
+var catUserType = testUserType{
 	"@cat",
 	`{ "catName": "Tom" }`,
 }
 
-var testDogUserType = testUserType{
+var dogUserType = testUserType{
 	"@dog",
 	`{ "dogName": "Max" }`,
 }
 
+var stringIDUserType = testUserType{
+	"@stringId",
+	`"abc-123"`,
+}
+
+var integerIDUserType = testUserType{
+	"@integerId",
+	`123`,
+}
+
 func (t testConverterData) name() string {
-	re := regexp.MustCompile(`[\s/]+`)
+	re := regexp.MustCompile(`[\s/]`)
 	return re.ReplaceAllString(t.jsight, "_")
 }
 
 func (t testComplexConverterData) name() string {
-	re := regexp.MustCompile(`[\s/]+`)
+	re := regexp.MustCompile(`[\s/]`)
 	return re.ReplaceAllString(t.jsight, "_")
 }
 
@@ -55,6 +67,17 @@ func assertJSightToOpenAPIConverter(t *testing.T, data testConverterData) {
 }
 
 func assertJSightToOpenAPIComplexConverter(t *testing.T, data testComplexConverterData) {
+	defer func() {
+		if r := recover(); r != nil {
+			switch e := r.(type) {
+			case *errs.Err:
+				t.Error(e.Error())
+			default:
+				t.Errorf("%s", r)
+			}
+		}
+	}()
+
 	j := jschema.New("root", data.jsight)
 
 	for _, ut := range data.userTypes {

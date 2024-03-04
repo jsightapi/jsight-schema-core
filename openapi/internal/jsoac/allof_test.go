@@ -22,7 +22,7 @@ func Test_allOf(t *testing.T) {
 				}]
 			}`,
 			[]testUserType{
-				testCatUserType,
+				catUserType,
 			},
 		},
 		{
@@ -46,8 +46,8 @@ func Test_allOf(t *testing.T) {
 				]
 			}`,
 			[]testUserType{
-				testCatUserType,
-				testDogUserType,
+				catUserType,
+				dogUserType,
 			},
 		},
 	}

@@ -5,7 +5,7 @@ import (
 )
 
 type Null struct {
-	Example     Example      `json:"example"`
+	Example     *Example     `json:"example,omitempty"`
 	Enum        *Enum        `json:"enum,omitempty"`
 	Nullable    *Nullable    `json:"nullable,omitempty"`
 	Description *Description `json:"description,omitempty"`

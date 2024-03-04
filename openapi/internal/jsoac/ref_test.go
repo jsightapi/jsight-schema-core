@@ -40,7 +40,7 @@ func Test_ref(t *testing.T) {
 				"$ref": "#/components/schemas/cat"
 			}`,
 			[]testUserType{
-				testCatUserType,
+				catUserType,
 			},
 		},
 		{
@@ -49,7 +49,7 @@ func Test_ref(t *testing.T) {
 				"$ref": "#/components/schemas/cat"
 			}`,
 			[]testUserType{
-				testCatUserType,
+				catUserType,
 			},
 		},
 		{
@@ -61,7 +61,7 @@ func Test_ref(t *testing.T) {
 				]
 			}`,
 			[]testUserType{
-				testCatUserType,
+				catUserType,
 			},
 		},
 		{
@@ -73,7 +73,7 @@ func Test_ref(t *testing.T) {
 				}
 			}`,
 			[]testUserType{
-				testCatUserType,
+				catUserType,
 			},
 		},
 		{
@@ -91,7 +91,7 @@ func Test_ref(t *testing.T) {
 				"required": [ "key" ]
 			}`,
 			[]testUserType{
-				testCatUserType,
+				catUserType,
 			},
 		},
 		{
@@ -108,7 +108,7 @@ func Test_ref(t *testing.T) {
 				"additionalProperties": false
 			}`,
 			[]testUserType{
-				testCatUserType,
+				catUserType,
 			},
 		},
 		{
@@ -128,7 +128,7 @@ func Test_ref(t *testing.T) {
 				"additionalProperties": false
 			}`,
 			[]testUserType{
-				testCatUserType,
+				catUserType,
 			},
 		},
 	}

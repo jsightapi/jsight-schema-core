@@ -7,6 +7,10 @@ import (
 func Test_primitive(t *testing.T) {
 	tests := []testConverterData{
 		{
+			`""`,
+			`{"type": "string", "example": ""}`, // TODO discuss
+		},
+		{
 			`"some string"`,
 			`{"type": "string", "example": "some string"}`,
 		},
