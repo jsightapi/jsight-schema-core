@@ -8,7 +8,7 @@ func Test_primitive(t *testing.T) {
 	tests := []testConverterData{
 		{
 			`""`,
-			`{"type": "string", "example": ""}`, // TODO discuss
+			`{"type": "string", "example": ""}`,
 		},
 		{
 			`"some string"`,

@@ -56,7 +56,7 @@ func Test_or(t *testing.T) {
 			[]testUserType{},
 		},
 		//{
-		//	`123 // {or: [ {min: 100}, {type: "string"} ]}`, // TODO discuss
+		//	`123 // {or: [ {min: 100}, {type: "string"} ]}`, // TODO SERV-355
 		//	`{
 		//		"anyOf": [
 		//			{ "type": "integer", "minimum": 100 }
@@ -66,20 +66,20 @@ func Test_or(t *testing.T) {
 		//	}`,
 		//	[]testUserType{},
 		//},
-		//{
-		//	`1.2 // {or: [ {precision: 1}, {type: "object"}, {type: "array"} ]}`, // TODO discuss
-		//	`{
-		//		"anyOf": [
-		//			{ "type": "number", "multipleOf": 0.1 },
-		//			{ "type": "array", "items": {}, "maxItems": 0 },
-		//			{ "type": "object", "properties": {}, "additionalProperties": false }
-		//		],
-		//		"example": 123
-		//	}`,
-		//	[]testUserType{},
-		//},
 		{
-			`1.2 // {or: [ {type: "decimal", precision: 1}, {type: "object"}, {type: "array"} ]}`, // TODO discuss
+			`"abc" // {or: [ "string", "object", "array" ]}`,
+			`{
+				"anyOf": [
+					{ "type": "string" },
+					{ "type": "object", "properties": {}, "additionalProperties": false },
+					{ "type": "array", "items": {}, "maxItems": 0 }
+				],
+				"example": "abc"
+			}`,
+			[]testUserType{},
+		},
+		{
+			`1.2 // {or: [ {type: "decimal", precision: 1}, {type: "object"}, {type: "array"} ]}`,
 			`{
 				"anyOf": [
 					{ "type": "number", "multipleOf": 0.1 },
