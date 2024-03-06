@@ -10,7 +10,7 @@ import (
 
 type JSOAC struct {
 	root        Node
-	description string
+	description *string
 }
 
 func New(j *jschema.JSchema) *JSOAC {
@@ -20,9 +20,12 @@ func New(j *jschema.JSchema) *JSOAC {
 }
 
 func (o *JSOAC) SetDescription(s string) {
-	o.description = s
+	o.description = &s
 }
 
 func (o JSOAC) MarshalJSON() (b []byte, err error) {
+	if o.description != nil {
+		o.root.SetNodeDescription(*o.description)
+	}
 	return json.Marshal(o.root)
 }

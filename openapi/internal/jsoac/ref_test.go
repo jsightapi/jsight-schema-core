@@ -5,9 +5,14 @@ import "testing"
 func Test_ref(t *testing.T) {
 	tests := []testComplexConverterData{
 		{
-			`"1111 222222" // { type: "@passportNumber" }`,
+			`"1111 222222" // { type: "@passportNumber", nullable: true } - Some text`,
 			`{
-				"$ref": "#/components/schemas/passportNumber"
+				"example": "1111 222222",
+				"description": "Some text",
+				"nullable": true,
+				"allOf": [
+					{ "$ref": "#/components/schemas/passportNumber" }
+				]
 			}`,
 			[]testUserType{
 				{name: "@passportNumber", jsight: `"1234 567890" // { regex: "^\\d{4} \\d{6}$" }`},
@@ -16,16 +21,7 @@ func Test_ref(t *testing.T) {
 		{
 			`"1111 222222" // { type: "@passportNumber", nullable: false }`,
 			`{
-				"$ref": "#/components/schemas/passportNumber"
-			}`,
-			[]testUserType{
-				{name: "@passportNumber", jsight: `"1234 567890" // { regex: "^\\d{4} \\d{6}$" }`},
-			},
-		},
-		{
-			`"1111 222222" // { type: "@passportNumber", nullable: true }`,
-			`{
-				"nullable": true,
+				"example": "1111 222222",
 				"allOf": [
 					{ "$ref": "#/components/schemas/passportNumber" }
 				]
@@ -70,6 +66,24 @@ func Test_ref(t *testing.T) {
 				"type": "array",
 				"items": {
 					"$ref": "#/components/schemas/cat"
+				}
+			}`,
+			[]testUserType{
+				catUserType,
+			},
+		},
+		{
+			`[
+				@cat // { nullable: true } - Some text
+			]`,
+			`{
+				"type": "array",
+				"items": {
+					"description": "Some text",
+					"nullable": true,
+					"allOf": [
+						{ "$ref": "#/components/schemas/cat" }
+					]
 				}
 			}`,
 			[]testUserType{

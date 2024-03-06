@@ -10,7 +10,9 @@ type Any struct {
 	Description *Description `json:"description,omitempty"`
 }
 
-func newAny(astNode schema.ASTNode) Any {
+var _ Node = (*Any)(nil)
+
+func newAny(astNode schema.ASTNode) *Any {
 	a := Any{
 		Nullable:    newNullable(astNode),
 		Description: newDescription(astNode),
@@ -25,9 +27,9 @@ func newAny(astNode schema.ASTNode) Any {
 		a.Example = nil
 	}
 
-	return a
+	return &a
 }
 
-func (Any) IsOpenAPINode() bool {
-	return true
+func (n *Any) SetNodeDescription(s string) {
+	n.Description = newDescriptionFromString(s)
 }

@@ -13,7 +13,9 @@ type Array struct {
 	Description *Description `json:"description,omitempty"`
 }
 
-func newArray(astNode schema.ASTNode) Array {
+var _ Node = (*Array)(nil)
+
+func newArray(astNode schema.ASTNode) *Array {
 	maxItems := newMaxItems(astNode)
 	if len(astNode.Children) == 0 {
 		maxItems = int64Ref(0)
@@ -29,13 +31,13 @@ func newArray(astNode schema.ASTNode) Array {
 	for _, an := range astNode.Children {
 		a.appendItem(an)
 	}
-	return a
+	return &a
 }
 
 func (a *Array) appendItem(astNode schema.ASTNode) {
 	a.Items.append(newNode(astNode))
 }
 
-func (Array) IsOpenAPINode() bool {
-	return true
+func (a *Array) SetNodeDescription(s string) {
+	a.Description = newDescriptionFromString(s)
 }

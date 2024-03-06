@@ -11,8 +11,10 @@ type Null struct {
 	Description *Description `json:"description,omitempty"`
 }
 
-func newNull(astNode schema.ASTNode) Null {
-	return Null{
+var _ Node = (*Null)(nil)
+
+func newNull(astNode schema.ASTNode) *Null {
+	return &Null{
 		Example:     newExample(stringNull, false),
 		Enum:        newEnum(astNode),
 		Nullable:    newNullable(astNode),
@@ -20,6 +22,6 @@ func newNull(astNode schema.ASTNode) Null {
 	}
 }
 
-func (Null) IsOpenAPINode() bool {
-	return true
+func (n *Null) SetNodeDescription(s string) {
+	n.Description = newDescriptionFromString(s)
 }

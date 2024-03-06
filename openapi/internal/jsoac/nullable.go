@@ -15,6 +15,13 @@ var _ json.Marshaler = &Nullable{}
 
 func newNullable(astNode schema.ASTNode) *Nullable {
 	if astNode.Rules.Has("nullable") && astNode.Rules.GetValue("nullable").Value == stringTrue {
+		return newNullableFromBool(true)
+	}
+	return nil
+}
+
+func newNullableFromBool(b bool) *Nullable {
+	if b {
 		return &Nullable{[]byte(`true`)}
 	}
 	return nil

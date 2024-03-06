@@ -1,50 +1,63 @@
 package jsoac
 
 import (
-	"fmt"
-	"strings"
+	"encoding/json"
 
 	schema "github.com/jsightapi/jsight-schema-core"
 )
 
 type Ref struct {
-	userTypeName string
-	nullable     bool
+	UserType    UserTypeArray `json:"allOf"`
+	Example     *Example      `json:"example,omitempty"`
+	Nullable    *Nullable     `json:"nullable,omitempty"`
+	Description *Description  `json:"description,omitempty"`
 }
+
+var _ Node = (*Ref)(nil)
 
 func newRef(astNode schema.ASTNode) Node {
 	if astNode.Rules.Has("or") {
 		return newOr(astNode)
 	}
 
-	return newRefFromUserTypeName(astNode.SchemaType, isNullable(astNode))
-}
-
-func newRefFromUserTypeName(name string, nullable bool) Ref {
-	return Ref{
-		userTypeName: name,
-		nullable:     nullable,
+	return &Ref{
+		UserType:    UserTypeArray{UserType{name: astNode.SchemaType}},
+		Nullable:    newNullableFromBool(isNullable(astNode)),
+		Example:     refExample(astNode),
+		Description: newDescription(astNode),
 	}
 }
 
-func (Ref) IsOpenAPINode() bool {
-	return true
+func newRefFromUserTypeName(name string, nullable bool) *Ref {
+	return &Ref{
+		UserType: UserTypeArray{UserType{name: name}},
+		Nullable: newNullableFromBool(nullable),
+	}
+}
+
+func refExample(astNode schema.ASTNode) *Example {
+	if astNode.TokenType == schema.TokenTypeShortcut {
+		return nil
+	}
+	return newExample(astNode.Value, isString(astNode))
+}
+
+func (r *Ref) SetNodeDescription(s string) {
+	r.Description = newDescriptionFromString(s)
 }
 
 func (r Ref) MarshalJSON() ([]byte, error) {
-	if r.nullable {
-		return r.nullableJSON(), nil
+	if r.Example == nil && r.Nullable == nil && r.Description == nil {
+		return r.UserType.UserType.MarshalJSON()
 	}
 
-	return r.basicJSON(), nil
-}
+	type Alias Ref
+	var data = struct {
+		Alias
+	}{
+		Alias: Alias(r),
+	}
 
-func (r Ref) basicJSON() []byte {
-	s := fmt.Sprintf(`{"$ref": "#/components/schemas/%s"}`, strings.TrimLeft(r.userTypeName, "@"))
-	return []byte(s)
-}
-
-func (r Ref) nullableJSON() []byte {
-	s := fmt.Sprintf(`{"nullable": true, "allOf": [ %s ]}`, r.basicJSON())
-	return []byte(s)
+	b, err := json.Marshal(data)
+	return b, err
 }

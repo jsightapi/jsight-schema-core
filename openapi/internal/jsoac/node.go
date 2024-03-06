@@ -6,7 +6,7 @@ import (
 )
 
 type Node interface {
-	IsOpenAPINode() bool
+	SetNodeDescription(string)
 }
 
 func newNode(astNode schema.ASTNode) Node {

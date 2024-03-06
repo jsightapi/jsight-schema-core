@@ -11,7 +11,9 @@ type Or struct {
 	Description *Description `json:"description,omitempty"`
 }
 
-func newOr(astNode schema.ASTNode) Or {
+var _ Node = (*Or)(nil)
+
+func newOr(astNode schema.ASTNode) *Or {
 	rule := astNode.Rules.GetValue("or")
 
 	var ex *Example = nil
@@ -27,7 +29,7 @@ func newOr(astNode schema.ASTNode) Or {
 		Description: newDescription(astNode),
 	}
 
-	return or
+	return &or
 }
 
 func newAnyOf(rr []schema.RuleASTNode) []Node {
@@ -37,7 +39,7 @@ func newAnyOf(rr []schema.RuleASTNode) []Node {
 		ast := ruleToASTNode(r)
 		node := newNode(ast)
 
-		if p, ok := node.(Primitive); ok { // fix empty string Example. See JSight {or: [ {type: "integer"} ]}
+		if p, ok := node.(*Primitive); ok { // fix empty string Example. See JSight {or: [ {type: "integer"} ]}
 			p.Example = nil
 			node = p
 		}
@@ -48,6 +50,6 @@ func newAnyOf(rr []schema.RuleASTNode) []Node {
 	return nn
 }
 
-func (Or) IsOpenAPINode() bool {
-	return true
+func (o *Or) SetNodeDescription(s string) {
+	o.Description = newDescriptionFromString(s)
 }

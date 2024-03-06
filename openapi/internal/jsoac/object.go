@@ -15,7 +15,9 @@ type Object struct {
 	Description          *Description          `json:"description,omitempty"`
 }
 
-func newObject(astNode schema.ASTNode) Object {
+var _ Node = (*Object)(nil)
+
+func newObject(astNode schema.ASTNode) *Object {
 	o := Object{
 		cap:                  len(astNode.Children),
 		OADType:              OADTypeObject,
@@ -31,7 +33,7 @@ func newObject(astNode schema.ASTNode) Object {
 		o.appendProperty(an)
 	}
 
-	return o
+	return &o
 }
 
 func (o *Object) appendProperty(astNode schema.ASTNode) {
@@ -56,6 +58,6 @@ func (o *Object) initRequiredIfNecessary() {
 	}
 }
 
-func (Object) IsOpenAPINode() bool {
-	return true
+func (o *Object) SetNodeDescription(s string) {
+	o.Description = newDescriptionFromString(s)
 }

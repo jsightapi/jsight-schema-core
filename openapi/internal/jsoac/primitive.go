@@ -21,6 +21,8 @@ type Primitive struct {
 	Description      *Description `json:"description,omitempty"`
 }
 
+var _ Node = (*Primitive)(nil)
+
 func oadType(schemaType string, t OADType) *OADType {
 	if schemaType == stringEnum {
 		return nil
@@ -34,7 +36,7 @@ func newPrimitive(astNode schema.ASTNode) Node {
 	}
 
 	if rule, ok := astNode.Rules.Get("type"); ok && rule.TokenType == schema.TokenTypeShortcut {
-		ref := newRefFromUserTypeName(rule.Value, isNullable(astNode))
+		ref := newRef(astNode)
 		return ref
 	}
 
@@ -55,9 +57,9 @@ func newPrimitive(astNode schema.ASTNode) Node {
 		Nullable:         newNullable(astNode),
 		Description:      newDescription(astNode),
 	}
-	return p
+	return &p
 }
 
-func (Primitive) IsOpenAPINode() bool {
-	return true
+func (p *Primitive) SetNodeDescription(s string) {
+	p.Description = newDescriptionFromString(s)
 }

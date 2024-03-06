@@ -15,9 +15,13 @@ var _ json.Marshaler = Description{}
 var _ json.Marshaler = &Description{}
 
 func newDescription(astNode schema.ASTNode) *Description {
-	if 0 < len(astNode.Comment) {
-		comment := regexp.MustCompile(`\s+`).ReplaceAllString(astNode.Comment, " ")
-		return &Description{value: quotedBytes(comment)}
+	return newDescriptionFromString(astNode.Comment)
+}
+
+func newDescriptionFromString(s string) *Description {
+	if 0 < len(s) {
+		s = regexp.MustCompile(`\s+`).ReplaceAllString(s, " ")
+		return &Description{value: quotedBytes(s)}
 	}
 	return nil
 }
