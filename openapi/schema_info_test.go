@@ -32,6 +32,18 @@ func Test_SchemaInfo(t *testing.T) {
 	assert.Equal(t, "property annotation 1", v.Annotation())
 	assert.True(t, v.Optional())
 
+	expJson := `
+		{
+			"type": "string",
+			"optional": true,
+			"example": "v1",
+			"description": "property annotation 1"
+		}
+	`
+	actualJson, err := v.SchemaObject().MarshalJSON()
+	require.NoError(t, err)
+	assert.JSONEq(t, expJson, string(actualJson))
+
 	p.Next()
 	k = p.GetKey()
 	v = p.GetInfo()
