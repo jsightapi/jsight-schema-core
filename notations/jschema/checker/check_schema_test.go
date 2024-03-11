@@ -1223,12 +1223,12 @@ func TestCheckRootSchema(t *testing.T) {
 						"aaa": "aaa"
 					}`},
 				},
-				errs.ErrTypeNotFound,
+				errs.ErrUserTypeNotFound,
 			},
 			{
 				`{} // {allOf: "@aaa"}`,
 				[]typ{},
-				errs.ErrTypeNotFound,
+				errs.ErrUserTypeNotFound,
 			},
 			{
 				`{} // {allOf: "@aaa"}`,

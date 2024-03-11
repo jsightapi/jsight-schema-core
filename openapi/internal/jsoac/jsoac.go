@@ -5,6 +5,8 @@ package jsoac
 import (
 	"encoding/json"
 
+	schema "github.com/jsightapi/jsight-schema-core"
+
 	"github.com/jsightapi/jsight-schema-core/notations/jschema"
 )
 
@@ -14,8 +16,12 @@ type JSOAC struct {
 }
 
 func New(j *jschema.JSchema) *JSOAC {
+	return NewFromASTNode(j.ASTNode)
+}
+
+func NewFromASTNode(astNode schema.ASTNode) *JSOAC {
 	return &JSOAC{
-		root: newNode(j.ASTNode),
+		root: newNode(astNode),
 	}
 }
 

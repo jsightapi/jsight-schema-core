@@ -21,5 +21,5 @@ type SchemaInfo interface {
 }
 
 func NewSchemaInfo(s *jschema.JSchema) SchemaInfo {
-	return newSchemaInfoImpl(info.NewInfo(s))
+	return newSchemaInfoImpl(info.NewInfo(s, s.ASTNode))
 }
