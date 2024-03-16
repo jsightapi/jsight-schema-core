@@ -5,6 +5,8 @@ import (
 	"github.com/jsightapi/jsight-schema-core/openapi/internal/info"
 )
 
+// TODO remove
+
 type SchemaInfo interface {
 	// SchemaObject returns an OpenAPI Schema Object based on the JSight schema root
 	SchemaObject() SchemaObject

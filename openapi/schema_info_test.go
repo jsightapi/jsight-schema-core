@@ -9,6 +9,8 @@ import (
 	"github.com/jsightapi/jsight-schema-core/notations/jschema"
 )
 
+// TODO remove
+
 func Test_SchemaInfo(t *testing.T) {
 	j := jschema.New("root", `{ // object annotation
 "k1": "v1", // {optional: true} - property annotation 1

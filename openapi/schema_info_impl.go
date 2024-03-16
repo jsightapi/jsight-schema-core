@@ -2,6 +2,8 @@ package openapi
 
 import "github.com/jsightapi/jsight-schema-core/openapi/internal/info"
 
+// TODO remove
+
 type SchemaInfoImpl struct {
 	info.Info
 }
