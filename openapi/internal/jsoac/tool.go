@@ -1,6 +1,7 @@
 package jsoac
 
 import (
+	"encoding/json"
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/internal/sync"
 
@@ -16,14 +17,13 @@ const stringArray = "array"
 
 var bufferPool = sync.NewBufferPool(1024)
 
-func quotedBytes(s string) []byte {
-	bb := make([]byte, 0, len(s)+2)
-
-	bb = append(bb, '"')
-	bb = append(bb, []byte(s)...)
-	bb = append(bb, '"')
-
-	return bb
+// toJSONString returns JSON quoted string data
+func toJSONString(s string) []byte {
+	b, err := json.Marshal(s)
+	if err != nil {
+		panic(err)
+	}
+	return b
 }
 
 func isNullable(astNode schema.ASTNode) bool {

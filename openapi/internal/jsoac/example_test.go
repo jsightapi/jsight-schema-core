@@ -1,7 +1,9 @@
 package jsoac
 
 import (
-	"reflect"
+	"fmt"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"testing"
 )
 
@@ -33,14 +35,28 @@ func Test_example_string(t *testing.T) {
 			args{"any string"},
 			`"any string"`,
 		},
+		{
+			args{`"quoted string"`},
+			`"\"quoted string\""`,
+		},
+		{
+			args{`'single quoted string'`},
+			`"'single quoted string'"`,
+		},
+		{
+			args{`\*\/ \*\/`},
+			`"\\*\\/ \\*\\/"`,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.want, func(t *testing.T) {
 			ex := newExample(tt.args.astExampleString, true) //newStringExample(tt.args.astExampleString)
-			want := []byte(tt.want)
-			if !reflect.DeepEqual(ex.value, want) {
-				t.Errorf("newStringExample() = %s, want %s", ex.value, want)
-			}
+			actual, err := ex.MarshalJSON()
+			require.NoError(t, err)
+
+			expected := []byte(tt.want)
+
+			assert.Equal(t, expected, actual, fmt.Sprintf("Expected: %s\nActual: %s\n", expected, actual))
 		})
 	}
 }
@@ -77,14 +93,28 @@ func Test_example(t *testing.T) {
 			args{"any string"},
 			`any string`,
 		},
+		{
+			args{`"quoted string"`},
+			`"quoted string"`,
+		},
+		{
+			args{`'single quoted string'`},
+			`'single quoted string'`,
+		},
+		{
+			args{`\*\/ \*\/`},
+			`\*\/ \*\/`,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.want, func(t *testing.T) {
 			ex := newExample(tt.args.astExampleString, false)
-			want := []byte(tt.want)
-			if !reflect.DeepEqual(ex.value, want) {
-				t.Errorf("newExample() = %s, want %s", ex.value, want)
-			}
+			actual, err := ex.MarshalJSON()
+			require.NoError(t, err)
+
+			expected := []byte(tt.want)
+
+			assert.Equal(t, expected, actual, fmt.Sprintf("Expected: %s\nActual: %s\n", expected, actual))
 		})
 	}
 }
