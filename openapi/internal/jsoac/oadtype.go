@@ -2,6 +2,7 @@ package jsoac
 
 import (
 	"encoding/json"
+
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/errs"
 )
