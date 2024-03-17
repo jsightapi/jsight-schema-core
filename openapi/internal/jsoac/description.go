@@ -8,8 +8,7 @@ import (
 )
 
 type Description struct {
-	value    string
-	isString bool
+	value string
 }
 
 var _ json.Marshaler = Description{}
@@ -20,16 +19,13 @@ func newDescription(astNode schema.ASTNode) *Description {
 }
 
 func newDescriptionFromString(s string) *Description {
-	if 0 < len(s) {
+	if len(s) > 0 {
 		s = regexp.MustCompile(`\s+`).ReplaceAllString(s, " ")
-		return &Description{value: s, isString: true}
+		return &Description{value: s}
 	}
 	return nil
 }
 
 func (ex Description) MarshalJSON() (b []byte, err error) {
-	if ex.isString {
-		return json.Marshal(ex.value) // JSON quoted string
-	}
-	return []byte(ex.value), nil
+	return json.Marshal(ex.value) // JSON quoted string
 }
