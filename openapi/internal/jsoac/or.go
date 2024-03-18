@@ -2,6 +2,7 @@ package jsoac
 
 import (
 	schema "github.com/jsightapi/jsight-schema-core"
+	"github.com/jsightapi/jsight-schema-core/openapi/internal"
 )
 
 type Or struct {
@@ -36,7 +37,7 @@ func newAnyOf(rr []schema.RuleASTNode) []Node {
 	nn := make([]Node, 0, len(rr))
 
 	for _, r := range rr {
-		ast := ruleToASTNode(r)
+		ast := internal.RuleToASTNode(r)
 		node := newNode(ast)
 
 		if p, ok := node.(*Primitive); ok { // fix empty string Example. See JSight {or: [ {type: "integer"} ]}

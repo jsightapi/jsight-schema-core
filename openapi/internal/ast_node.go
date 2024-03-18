@@ -1,11 +1,11 @@
-package jsoac
+package internal
 
 import (
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/errs"
 )
 
-func ruleToASTNode(r schema.RuleASTNode) schema.ASTNode {
+func RuleToASTNode(r schema.RuleASTNode) schema.ASTNode {
 	switch r.TokenType {
 	case schema.TokenTypeString, schema.TokenTypeShortcut:
 		return stringRuleToASTNode(r)
@@ -22,17 +22,23 @@ func stringRuleToASTNode(r schema.RuleASTNode) schema.ASTNode {
 		Rules: schema.MakeRuleASTNodes(1),
 	}
 
-	format := formatFromSchemaType(r.Value)
+	return stringRuleToASTNodeType(a, r.Value)
+}
 
-	if format != nil { // JSight example: // {or: [ "email"... ]}
+func stringRuleToASTNodeType(a schema.ASTNode, s string) schema.ASTNode {
+	if s == "any" {
+		a.TokenType = schema.TokenTypeString
+		a.SchemaType = s // any
+	} else if format := FormatFromSchemaType(s); format != nil { // JSight example: // {or: [ "email"... ]}
 		a.TokenType = schema.TokenTypeString
 		a.Rules.Set("type", schema.RuleASTNode{
 			TokenType: schema.TokenTypeString,
 			Value:     *format,
 		})
 	} else { // JSight example: // {or: [ "integer", "@cat" ]}
-		a.TokenType = tokenType(r.Value)
-		a.SchemaType = r.Value
+		a.TokenType = TokenType(s)
+		a.SchemaType = s
+		a.Value = s
 	}
 
 	return a
@@ -52,14 +58,29 @@ func objectRuleToASTNode(r schema.RuleASTNode) schema.ASTNode {
 	}
 
 	if typeRule, ok := r.Properties.Get("type"); ok { // or: [ { type: ...} ]
-		a.TokenType = tokenType(typeRule.Value)
-		a.SchemaType = typeRule.Value
+		a = stringRuleToASTNodeType(a, typeRule.Value)
 	}
 
 	return a
 }
 
-func tokenType(s string) schema.TokenType {
+func strRef(s string) *string {
+	return &s
+}
+
+func FormatFromSchemaType(s string) *string {
+	switch s {
+	case string(schema.SchemaTypeEmail), string(schema.SchemaTypeURI),
+		string(schema.SchemaTypeUUID), string(schema.SchemaTypeDate):
+		return strRef(s)
+	case string(schema.SchemaTypeDateTime):
+		return strRef("date-time")
+	default:
+		return nil
+	}
+}
+
+func TokenType(s string) schema.TokenType {
 	if s[0] == '@' {
 		return schema.TokenTypeShortcut
 	}
@@ -75,6 +96,8 @@ func tokenType(s string) schema.TokenType {
 		return schema.TokenTypeObject
 	case "array":
 		return schema.TokenTypeArray
+	case "null":
+		return schema.TokenTypeNull
 	default:
 		panic(errs.ErrRuntimeFailure.F())
 	}

@@ -3,6 +3,8 @@ package jsoac
 import (
 	"encoding/json"
 
+	"github.com/jsightapi/jsight-schema-core/openapi/internal"
+
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/errs"
 )
@@ -63,7 +65,7 @@ func newStringAdditionalProperties(r schema.RuleASTNode) *AdditionalProperties {
 	}
 
 	t := oadTypeFromSchemaType(r.Value)
-	f := formatFromSchemaType(r.Value)
+	f := internal.FormatFromSchemaType(r.Value)
 
 	if f == nil {
 		return &AdditionalProperties{

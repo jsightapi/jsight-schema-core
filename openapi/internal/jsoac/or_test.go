@@ -32,6 +32,39 @@ func Test_or(t *testing.T) {
 			[]testUserType{},
 		},
 		{
+			`"cat@mail.com" // {or: [ {type: "uuid"}, {type: "email"} ]}`,
+			`{
+				"anyOf": [
+					{ "type": "string", "format": "uuid" },
+					{ "type": "string", "format": "email" }
+				],
+				"example": "cat@mail.com"
+			}`,
+			[]testUserType{},
+		},
+		{
+			`"cat@mail.com" // {or: [ {type: "null"}, {type: "email"} ]}`,
+			`{
+				"anyOf": [
+					{"enum": [null], "example": null},
+					{ "type": "string", "format": "email" }
+				],
+				"example": "cat@mail.com"
+			}`,
+			[]testUserType{},
+		},
+		{
+			`"cat@mail.com" // {or: [ {type: "any"}, {type: "email"} ]}`,
+			`{
+				"anyOf": [
+					{},
+					{ "type": "string", "format": "email" }
+				],
+				"example": "cat@mail.com"
+			}`,
+			[]testUserType{},
+		},
+		{
 			`"cat@mail.com" // {type: "mixed", or: ["email", "integer"]}`,
 			`{
 				"anyOf": [

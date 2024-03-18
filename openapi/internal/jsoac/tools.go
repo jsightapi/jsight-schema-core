@@ -38,10 +38,6 @@ func isString(astNode schema.ASTNode) bool {
 	return astNode.TokenType == schema.TokenTypeString
 }
 
-func strRef(s string) *string {
-	return &s
-}
-
 func int64Ref(i int64) *int64 {
 	return &i
 }

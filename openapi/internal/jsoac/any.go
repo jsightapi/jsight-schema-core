@@ -20,7 +20,11 @@ func newAny(astNode schema.ASTNode) *Any {
 
 	switch astNode.TokenType {
 	case schema.TokenTypeString:
-		a.Example = newExample(astNode.Value, true)
+		if astNode.Value == "" {
+			a.Example = nil
+		} else {
+			a.Example = newExample(astNode.Value, true)
+		}
 	case schema.TokenTypeNumber, schema.TokenTypeBoolean, schema.TokenTypeNull:
 		a.Example = newExample(astNode.Value, false)
 	default:
