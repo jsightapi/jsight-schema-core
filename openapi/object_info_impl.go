@@ -5,17 +5,18 @@ import (
 )
 
 type ObjectInfoImpl struct {
-	info.ElementInfo
+	ElementInfo
 }
 
-func newObjectInfoImpl(ei info.ElementInfo) ObjectInfoImpl {
+func newObjectInfoImpl(ei ElementInfo) ObjectInfoImpl {
 	return ObjectInfoImpl{ElementInfo: ei}
 }
 
 func (o ObjectInfoImpl) PropertiesInfos() []PropertyInfo {
-	result := make([]PropertyInfo, len(o.Children()))
+	props := o.ElementInfo.(info.ElementInfo).Children()
+	result := make([]PropertyInfo, len(props))
 
-	for i, child := range o.Children() {
+	for i, child := range props {
 		result[i] = newPropertyInfoImpl(child)
 	}
 

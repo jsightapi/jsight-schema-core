@@ -39,7 +39,7 @@ func (t testInfoData) name() string {
 func Test_Info_RSchema(t *testing.T) {
 	rSchema := &regex.RSchema{}
 
-	elements := info.Dereference(rSchema)
+	elements := Dereference(rSchema)
 
 	require.Equal(t, 1, len(elements))
 	require.Equal(t, info.ElementTypeRegex, elements[0].Type())
@@ -294,7 +294,7 @@ func buildJSchema(t *testing.T, jsight string, userTypes []testUserType) *jschem
 func assertInfo(t *testing.T, data testInfoData) {
 	jSchema := buildJSchema(t, data.jsight, data.userTypes)
 
-	elements := info.Dereference(jSchema)
+	elements := Dereference(jSchema)
 
 	require.Equal(t, data.expectedRootAnnotation, jSchema.ASTNode.Comment) // TODO need an interface?
 
@@ -318,7 +318,7 @@ func assertInfo(t *testing.T, data testInfoData) {
 	}
 }
 
-func assertTypes(t *testing.T, expected []info.ElementType, elements []info.ElementInfo) {
+func assertTypes(t *testing.T, expected []info.ElementType, elements []ElementInfo) {
 	actual := make([]info.ElementType, len(elements))
 	for i, ei := range elements {
 		actual[i] = ei.Type()
