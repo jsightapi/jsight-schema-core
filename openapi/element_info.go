@@ -1,4 +1,4 @@
-package info
+package openapi
 
 import (
 	schema "github.com/jsightapi/jsight-schema-core"
@@ -8,6 +8,9 @@ type ElementInfo struct {
 	target ElementType
 	node   *schema.ASTNode
 }
+
+var _ ElementInformer = ElementInfo{}
+var _ ElementInformer = (*ElementInfo)(nil)
 
 func newElementInfo(t ElementType) ElementInfo {
 	return ElementInfo{target: t}
@@ -20,6 +23,7 @@ func (e ElementInfo) Type() ElementType {
 func (e ElementInfo) Children() []schema.ASTNode {
 	return e.node.Children
 }
+
 func (e *ElementInfo) setASTNode(astNode schema.ASTNode) {
 	e.node = &astNode
 }

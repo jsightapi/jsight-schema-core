@@ -1,12 +1,10 @@
-package info
+package openapi
 
 import (
 	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/require"
-
-	"github.com/jsightapi/jsight-schema-core/notations/jschema"
 )
 
 type testDereferenceData struct {
@@ -18,11 +16,6 @@ type testDereferenceData struct {
 func (t testDereferenceData) name() string {
 	re := regexp.MustCompile(`[\s/]`)
 	return re.ReplaceAllString(t.jsight, "_")
-}
-
-type testUserType struct {
-	name   string
-	jsight string
 }
 
 var obj = testUserType{
@@ -150,20 +143,6 @@ func Test_Dereference(t *testing.T) {
 			assertDereference(t, data)
 		})
 	}
-}
-
-func buildJSchema(t *testing.T, jsight string, userTypes []testUserType) *jschema.JSchema {
-	jSchema := jschema.New("root", jsight)
-
-	for _, ut := range userTypes {
-		err := jSchema.AddType(ut.name, jschema.New(ut.name, ut.jsight))
-		require.NoError(t, err)
-	}
-
-	err := jSchema.Check()
-	require.NoError(t, err)
-
-	return jSchema
 }
 
 func assertDereference(t *testing.T, data testDereferenceData) {
