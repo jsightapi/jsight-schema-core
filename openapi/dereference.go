@@ -55,7 +55,7 @@ func (d dereference) jSchema(astNode schema.ASTNode) {
 	switch astNode.TokenType {
 	case schema.TokenTypeNumber, schema.TokenTypeString, schema.TokenTypeBoolean, schema.TokenTypeNull,
 		schema.TokenTypeArray:
-		info := NewJSchemaInfo(astNode)
+		info := newJSchemaInfoFromASTNode(astNode)
 		d.result.append(info)
 	case schema.TokenTypeObject:
 		info := newObjectInfo(astNode)

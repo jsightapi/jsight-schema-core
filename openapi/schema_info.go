@@ -3,6 +3,7 @@ package openapi
 import (
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/errs"
+	"github.com/jsightapi/jsight-schema-core/notations/jschema"
 	"github.com/jsightapi/jsight-schema-core/notations/regex"
 	"github.com/jsightapi/jsight-schema-core/openapi/internal/jsoac"
 	"github.com/jsightapi/jsight-schema-core/openapi/internal/rsoac"
@@ -22,7 +23,13 @@ func NewRSchemaInfo(rs *regex.RSchema) SchemaInfo {
 	}
 }
 
-func NewJSchemaInfo(astNode schema.ASTNode) SchemaInfo {
+func NewJSchemaInfo(js *jschema.JSchema) SchemaInfo {
+	return SchemaInfo{
+		node: &(js.ASTNode),
+	}
+}
+
+func newJSchemaInfoFromASTNode(astNode schema.ASTNode) SchemaInfo {
 	return SchemaInfo{
 		node: &astNode,
 	}
@@ -60,7 +67,10 @@ func (e SchemaInfo) SchemaObject() SchemaObject {
 }
 
 func (e SchemaInfo) Annotation() string {
-	return e.node.Comment
+	if e.node != nil {
+		return e.node.Comment
+	}
+	return ""
 }
 
 func (e SchemaInfo) Children() []schema.ASTNode {
