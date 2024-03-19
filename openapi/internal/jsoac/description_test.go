@@ -7,6 +7,14 @@ import (
 func Test_description(t *testing.T) {
 	tests := []testConverterData{
 		{
+			`1 // Any description string & "quoted string" & \*\/ \*\/`,
+			`{
+				"type": "integer",
+				"example": 1,
+				"description": "Any description string & \"quoted string\" & \\*\\/ \\*\\/"
+			}`,
+		},
+		{
 			`1 // {min: -99, max: 99} - Some note.`,
 			`{
 				"type": "integer",

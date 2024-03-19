@@ -4,8 +4,6 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/jsightapi/jsight-schema-core/errs"
-
 	"github.com/stretchr/testify/require"
 
 	"github.com/jsightapi/jsight-schema-core/notations/jschema"
@@ -76,29 +74,24 @@ func assertJSightToOpenAPIConverter(t *testing.T, data testConverterData) {
 	assertJSightToOpenAPIComplexConverter(t, d)
 }
 
-func assertJSightToOpenAPIComplexConverter(t *testing.T, data testComplexConverterData) {
-	defer func() {
-		if r := recover(); r != nil {
-			switch e := r.(type) {
-			case *errs.Err:
-				t.Error(e.Error())
-			default:
-				t.Errorf("%s", r)
-			}
-		}
-	}()
+func buildJSchema(t *testing.T, jsight string, userTypes []testUserType) *jschema.JSchema {
+	jSchema := jschema.New("root", jsight)
 
-	j := jschema.New("root", data.jsight)
-
-	for _, ut := range data.userTypes {
-		err := j.AddType(ut.name, jschema.New(ut.name, ut.jsight))
+	for _, ut := range userTypes {
+		err := jSchema.AddType(ut.name, jschema.New(ut.name, ut.jsight))
 		require.NoError(t, err)
 	}
 
-	err := j.Check()
+	err := jSchema.Check()
 	require.NoError(t, err)
 
-	o := New(j)
+	return jSchema
+}
+
+func assertJSightToOpenAPIComplexConverter(t *testing.T, data testComplexConverterData) {
+	jSchema := buildJSchema(t, data.jsight, data.userTypes)
+
+	o := New(jSchema)
 	json, err := o.MarshalJSON()
 	require.NoError(t, err)
 

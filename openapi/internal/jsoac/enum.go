@@ -24,7 +24,9 @@ func newEnum(astNode schema.ASTNode) *Enum {
 		enum := makeEmptyEnum()
 		for _, s := range astNode.Rules.GetValue(stringEnum).Items {
 			ex := newExample(s.Value, s.TokenType == "string")
-			enum.append(ex.value)
+			bb := ex.jsonValue()
+
+			enum.append(bb)
 		}
 		return enum
 	}
@@ -32,7 +34,7 @@ func newEnum(astNode schema.ASTNode) *Enum {
 	if astNode.SchemaType == stringNull {
 		enum := makeEmptyEnum()
 		ex := newExample(stringNull, false)
-		enum.append(ex.value)
+		enum.append(ex.jsonValue())
 		return enum
 	}
 

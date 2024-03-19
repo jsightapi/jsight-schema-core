@@ -10,7 +10,7 @@ type Node interface {
 }
 
 func newNode(astNode schema.ASTNode) Node {
-	if astNode.SchemaType == "any" {
+	if astNode.SchemaType == stringAny {
 		return newAny(astNode)
 	}
 

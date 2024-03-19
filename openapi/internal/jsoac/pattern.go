@@ -15,7 +15,7 @@ var _ json.Marshaler = &Pattern{}
 
 func newPattern(astNode schema.ASTNode) *Pattern {
 	if astNode.Rules.Has("regex") {
-		return &Pattern{value: quotedBytes(astNode.Rules.GetValue("regex").Value)}
+		return &Pattern{value: toJSONString(astNode.Rules.GetValue("regex").Value)}
 	}
 	return nil
 }

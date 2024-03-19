@@ -8,7 +8,7 @@ import (
 )
 
 type Description struct {
-	value []byte
+	value string
 }
 
 var _ json.Marshaler = Description{}
@@ -19,13 +19,13 @@ func newDescription(astNode schema.ASTNode) *Description {
 }
 
 func newDescriptionFromString(s string) *Description {
-	if 0 < len(s) {
+	if len(s) > 0 {
 		s = regexp.MustCompile(`\s+`).ReplaceAllString(s, " ")
-		return &Description{value: quotedBytes(s)}
+		return &Description{value: s}
 	}
 	return nil
 }
 
 func (ex Description) MarshalJSON() (b []byte, err error) {
-	return ex.value, nil
+	return json.Marshal(ex.value) // JSON quoted string
 }

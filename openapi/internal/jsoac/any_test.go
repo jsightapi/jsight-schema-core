@@ -50,6 +50,10 @@ func Test_any(t *testing.T) {
 			`{}`,
 		},
 		{
+			`"" // { type: "any" }`,
+			`{}`,
+		},
+		{
 			`{} // { type: "any" } - some text`,
 			`{"description": "some text"}`,
 		},

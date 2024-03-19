@@ -1,21 +1,19 @@
 package rsoac
 
+import "github.com/jsightapi/jsight-schema-core/notations/regex"
+
 // Regex schema to OpenAPi converter
 
-import (
-	"github.com/jsightapi/jsight-schema-core/notations/regex"
-)
-
 type RSOAC struct {
-	description string
+	description *string
 }
 
-func New(j *regex.RSchema) *RSOAC {
-	panic("TODO regex.RSchema") // TODO method
+func New(rs *regex.RSchema) *RSOAC {
+	panic("TODO regex.RSchema") // TODO func
 }
 
 func (o *RSOAC) SetDescription(s string) {
-	o.description = s
+	o.description = &s
 }
 
 func (o RSOAC) MarshalJSON() (b []byte, err error) {

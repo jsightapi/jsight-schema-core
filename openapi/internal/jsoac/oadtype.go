@@ -1,6 +1,8 @@
 package jsoac
 
 import (
+	"encoding/json"
+
 	schema "github.com/jsightapi/jsight-schema-core"
 	"github.com/jsightapi/jsight-schema-core/errs"
 )
@@ -18,7 +20,7 @@ const (
 )
 
 func (t OADType) MarshalJSON() (b []byte, err error) {
-	return quotedBytes(t.String()), nil
+	return json.Marshal(t.String())
 }
 
 func oadTypeFromASTNode(astNode schema.ASTNode) OADType {
