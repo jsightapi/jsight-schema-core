@@ -122,7 +122,6 @@ func Test_objectKeyType(t *testing.T) {
 				@catEmail : 1,
 				@dogEmail : "str"
 			}`,
-			// TODO remove duplication of the "string" type inside anyOf?
 			`{
 				"type": "object",
 				"properties": {
@@ -159,7 +158,6 @@ func Test_objectKeyType(t *testing.T) {
 				@catEmail : 1,
 				@dogEmail : "str"
 			}`,
-			// TODO remove duplication of the "integer" type inside anyOf?
 			`{
 				"type": "object",
 				"properties": {
