@@ -2,18 +2,19 @@ package openapi
 
 import (
 	schema "github.com/jsightapi/jsight-schema-core"
-	"github.com/jsightapi/jsight-schema-core/openapi/internal/jsoac"
 )
 
 type PropertyInfo struct {
-	node schema.ASTNode
+	SchemaInfo
 }
 
 var _ PropertyInformer = PropertyInfo{}
 var _ PropertyInformer = (*PropertyInfo)(nil)
 
 func newPropertyInfo(astNode schema.ASTNode) PropertyInfo {
-	return PropertyInfo{node: astNode}
+	return PropertyInfo{
+		SchemaInfo: newJSchemaInfo(astNode),
+	}
 }
 
 func (i PropertyInfo) Key() string {
@@ -26,12 +27,4 @@ func (i PropertyInfo) Optional() bool {
 		return false
 	}
 	return v.Value == "true"
-}
-
-func (i PropertyInfo) Annotation() string {
-	return i.node.Comment
-}
-
-func (i PropertyInfo) SchemaObject() SchemaObject {
-	return jsoac.NewFromASTNode(i.node)
 }

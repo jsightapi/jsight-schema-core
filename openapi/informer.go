@@ -1,24 +1,28 @@
 package openapi
 
-type ElementInformer interface {
-	Type() ElementType
+type SchemaInformer interface {
+	Type() SchemaInfoType
+
+	// SchemaObject returns an OpenAPI Schema Object based on the JSight schema
+	SchemaObject() SchemaObject
+
+	// Annotation returns the JSight schema annotation
+	Annotation() string
 }
 
 type ObjectInformer interface {
-	Type() ElementType
+	SchemaInformer
+
+	// PropertiesInfos returns properties of the object
 	PropertiesInfos() []PropertyInformer
 }
 
 type PropertyInformer interface {
-	// SchemaObject returns an OpenAPI Schema Object based on the JSight schema root
-	SchemaObject() SchemaObject
+	SchemaInformer
 
-	// Key return the object key name
+	// Key returns the object key name
 	Key() string
 
-	// Optional returns the value for the "optional" rule of the JSight schema root
+	// Optional returns the value for the "optional" rule of the object property
 	Optional() bool
-
-	// Annotation returns the JSight schema root annotation
-	Annotation() string
 }

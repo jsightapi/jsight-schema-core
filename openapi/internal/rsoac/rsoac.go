@@ -1,16 +1,14 @@
 package rsoac
 
-// Regex schema to OpenAPi converter
+import "github.com/jsightapi/jsight-schema-core/notations/regex"
 
-import (
-	"github.com/jsightapi/jsight-schema-core/notations/regex"
-)
+// Regex schema to OpenAPi converter
 
 type RSOAC struct {
 	description string
 }
 
-func New(j *regex.RSchema) *RSOAC {
+func New(rs *regex.RSchema) *RSOAC {
 	panic("TODO regex.RSchema") // TODO method
 }
 

@@ -1,18 +1,22 @@
 package openapi
 
+import schema "github.com/jsightapi/jsight-schema-core"
+
 type ObjectInfo struct {
-	ElementInfo
+	SchemaInfo
 }
 
 var _ ObjectInformer = ObjectInfo{}
 var _ ObjectInformer = (*ObjectInfo)(nil)
 
-func newObjectInfo(t ElementType) ObjectInfo {
-	return ObjectInfo{ElementInfo: newElementInfo(t)}
+func newObjectInfo(astNode schema.ASTNode) ObjectInfo {
+	return ObjectInfo{
+		SchemaInfo: newJSchemaInfo(astNode),
+	}
 }
 
 func (o ObjectInfo) PropertiesInfos() []PropertyInformer {
-	props := o.ElementInfo.Children()
+	props := o.SchemaInfo.Children()
 	result := make([]PropertyInformer, len(props))
 
 	for i, child := range props {

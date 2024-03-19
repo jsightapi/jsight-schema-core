@@ -12,7 +12,7 @@ import (
 type testInfoData struct {
 	jsight                  string
 	userTypes               []testUserType
-	expectedElementTypes    []ElementType
+	expectedSchemaInfoTypes []SchemaInfoType
 	expectedRootAnnotation  string
 	expectedPropertiesInfos []testPropertiesInfos
 }
@@ -29,35 +29,35 @@ func (t testInfoData) name() string {
 	return re.ReplaceAllString(t.jsight, "_")
 }
 
-func Test_Info_RSchema(t *testing.T) {
+func Test_Informer_RSchema(t *testing.T) {
 	rSchema := &regex.RSchema{}
 
-	elements := Dereference(rSchema)
+	informers := Dereference(rSchema)
 
-	require.Equal(t, 1, len(elements))
-	require.Equal(t, ElementTypeRegex, elements[0].Type())
+	require.Equal(t, 1, len(informers))
+	require.Equal(t, SchemaInfoTypeRegex, informers[0].Type())
 }
 
-func Test_Info_JSchema(t *testing.T) {
+func Test_Informer_JSchema(t *testing.T) {
 	tests := []testInfoData{
 		{
 			`"abc" // string annotation`,
 			[]testUserType{},
-			[]ElementType{ElementTypeScalar},
+			[]SchemaInfoType{SchemaInfoTypeScalar},
 			"string annotation",
 			[]testPropertiesInfos{},
 		},
 		{
 			`[] // array annotation`,
 			[]testUserType{},
-			[]ElementType{ElementTypeArray},
+			[]SchemaInfoType{SchemaInfoTypeArray},
 			"array annotation",
 			[]testPropertiesInfos{},
 		},
 		{
 			`123 // {type: "any"} - array annotation`,
 			[]testUserType{},
-			[]ElementType{ElementTypeAny},
+			[]SchemaInfoType{SchemaInfoTypeAny},
 			"array annotation",
 			[]testPropertiesInfos{},
 		},
@@ -68,7 +68,7 @@ func Test_Info_JSchema(t *testing.T) {
 				"k3": "v3" // property annotation 3
 			}`,
 			[]testUserType{},
-			[]ElementType{ElementTypeObject},
+			[]SchemaInfoType{SchemaInfoTypeObject},
 			"object annotation",
 			[]testPropertiesInfos{
 				{
@@ -118,7 +118,7 @@ func Test_Info_JSchema(t *testing.T) {
 					}`,
 				},
 			},
-			[]ElementType{ElementTypeObject},
+			[]SchemaInfoType{SchemaInfoTypeObject},
 			"first reference annotation",
 			[]testPropertiesInfos{
 				{
@@ -166,7 +166,7 @@ func Test_Info_JSchema(t *testing.T) {
 					}`,
 				},
 			},
-			[]ElementType{ElementTypeObject, ElementTypeObject},
+			[]SchemaInfoType{SchemaInfoTypeObject, SchemaInfoTypeObject},
 			"or annotation",
 			[]testPropertiesInfos{
 				{
@@ -208,7 +208,7 @@ func Test_Info_JSchema(t *testing.T) {
 					}`,
 				},
 			},
-			[]ElementType{ElementTypeObject, ElementTypeObject},
+			[]SchemaInfoType{SchemaInfoTypeObject, SchemaInfoTypeObject},
 			"or annotation",
 			[]testPropertiesInfos{
 				{
@@ -248,7 +248,7 @@ func Test_Info_JSchema(t *testing.T) {
 					jsight: `"abc" // string annotation`,
 				},
 			},
-			[]ElementType{ElementTypeObject, ElementTypeScalar},
+			[]SchemaInfoType{SchemaInfoTypeObject, SchemaInfoTypeScalar},
 			"or annotation",
 			[]testPropertiesInfos{
 				{
@@ -273,16 +273,16 @@ func Test_Info_JSchema(t *testing.T) {
 func assertInfo(t *testing.T, data testInfoData) {
 	jSchema := buildJSchema(t, data.jsight, data.userTypes)
 
-	elements := Dereference(jSchema)
+	informers := Dereference(jSchema)
 
 	require.Equal(t, data.expectedRootAnnotation, jSchema.ASTNode.Comment) // TODO need an interface?
 
-	assertTypes(t, data.expectedElementTypes, elements)
+	assertTypes(t, data.expectedSchemaInfoTypes, informers)
 
 	expectedPropertyIndex := 0
 
-	for _, ei := range elements {
-		if ei.Type() == ElementTypeObject {
+	for _, ei := range informers {
+		if ei.Type() == SchemaInfoTypeObject {
 			properties := ei.(ObjectInformer).PropertiesInfos()
 
 			for _, pi := range properties {
@@ -296,9 +296,9 @@ func assertInfo(t *testing.T, data testInfoData) {
 	}
 }
 
-func assertTypes(t *testing.T, expected []ElementType, elements []ElementInformer) {
-	actual := make([]ElementType, len(elements))
-	for i, ei := range elements {
+func assertTypes(t *testing.T, expected []SchemaInfoType, informers []SchemaInformer) {
+	actual := make([]SchemaInfoType, len(informers))
+	for i, ei := range informers {
 		actual[i] = ei.Type()
 	}
 	require.Equal(t, expected, actual)

@@ -10,7 +10,7 @@ import (
 type testDereferenceData struct {
 	jsight    string
 	userTypes []testUserType
-	expected  []ElementType
+	expected  []SchemaInfoType
 }
 
 func (t testDereferenceData) name() string {
@@ -43,99 +43,99 @@ func Test_Dereference(t *testing.T) {
 		{
 			`{ "catName": "Tom" }`,
 			[]testUserType{},
-			[]ElementType{ElementTypeObject},
+			[]SchemaInfoType{SchemaInfoTypeObject},
 		},
 		{
 			`@obj`,
 			[]testUserType{obj},
-			[]ElementType{ElementTypeObject},
+			[]SchemaInfoType{SchemaInfoTypeObject},
 		},
 		{
 			`@refToObj`,
 			[]testUserType{refToObj, obj},
-			[]ElementType{ElementTypeObject},
+			[]SchemaInfoType{SchemaInfoTypeObject},
 		},
 		{
 			`@arr`,
 			[]testUserType{arr},
-			[]ElementType{ElementTypeArray},
+			[]SchemaInfoType{SchemaInfoTypeArray},
 		},
 		{
 			`@objOrArr`,
 			[]testUserType{objOrArr, obj, arr},
-			[]ElementType{ElementTypeObject, ElementTypeArray},
+			[]SchemaInfoType{SchemaInfoTypeObject, SchemaInfoTypeArray},
 		},
 		{
 			`null`,
 			[]testUserType{objOrArr, obj, arr},
-			[]ElementType{ElementTypeScalar},
+			[]SchemaInfoType{SchemaInfoTypeScalar},
 		},
 		{
 			`123 // {type: "any"}`,
 			[]testUserType{objOrArr, obj, arr},
-			[]ElementType{ElementTypeAny},
+			[]SchemaInfoType{SchemaInfoTypeAny},
 		},
 		{
 			`123 // { or: [ {type: "integer"}, {type: "string"} ] }`,
 			[]testUserType{},
-			[]ElementType{ElementTypeScalar, ElementTypeScalar},
+			[]SchemaInfoType{SchemaInfoTypeScalar, SchemaInfoTypeScalar},
 		},
 		// TODO SERV-355
 		// ERROR (code 906): Type is required inside the "or" rule
 		//{
 		//	`123 // {or: [ {minLength: 1}, {type: "integer"} ]}`,
 		//	[]testUserType{},
-		//	[]ElementType{ElementTypeScalar, ElementTypeScalar},
+		//	[]SchemaInfoType{SchemaInfoTypeScalar, SchemaInfoTypeScalar},
 		//},
 		//{
 		//	`123 // {or: [ {minItems: 0}, {type: "integer"} ]}`,
 		//	[]testUserType{},
-		//	[]ElementType{ElementTypeArray, ElementTypeScalar},
+		//	[]SchemaInfoType{SchemaInfoTypeArray, SchemaInfoTypeScalar},
 		//},
 		//{
 		//	`123 // {or: [ {additionalProperties: true}, {type: "integer"} ]}`,
 		//	[]testUserType{},
-		//	[]ElementType{ElementTypeObject, ElementTypeScalar},
+		//	[]SchemaInfoType{SchemaInfoTypeObject, SchemaInfoTypeScalar},
 		//},
 		{
 			`123 // { or: [ "integer", "string" ] }`,
 			[]testUserType{},
-			[]ElementType{ElementTypeScalar, ElementTypeScalar},
+			[]SchemaInfoType{SchemaInfoTypeScalar, SchemaInfoTypeScalar},
 		},
 		{
 			`123 // { or: [ "uuid", "integer" ] }`,
 			[]testUserType{},
-			[]ElementType{ElementTypeScalar, ElementTypeScalar},
+			[]SchemaInfoType{SchemaInfoTypeScalar, SchemaInfoTypeScalar},
 		},
 		{
 			`123 // { or: [ {type: "email"}, "integer"] }`,
 			[]testUserType{},
-			[]ElementType{ElementTypeScalar, ElementTypeScalar},
+			[]SchemaInfoType{SchemaInfoTypeScalar, SchemaInfoTypeScalar},
 		},
 		{
 			`123 // { or: [ {type: "null"}, "integer" ] }`,
 			[]testUserType{},
-			[]ElementType{ElementTypeScalar, ElementTypeScalar},
+			[]SchemaInfoType{SchemaInfoTypeScalar, SchemaInfoTypeScalar},
 		},
 		{
 			`123 // { or: [ "any", "integer" ] }`,
 			[]testUserType{},
-			[]ElementType{ElementTypeAny, ElementTypeScalar},
+			[]SchemaInfoType{SchemaInfoTypeAny, SchemaInfoTypeScalar},
 		},
 		{
 			`123 // { or: [ "@obj", "@arr", "@refToObj", "integer" ] }`,
 			[]testUserType{obj, arr, refToObj},
-			[]ElementType{ElementTypeObject, ElementTypeArray, ElementTypeObject, ElementTypeScalar},
+			[]SchemaInfoType{SchemaInfoTypeObject, SchemaInfoTypeArray, SchemaInfoTypeObject, SchemaInfoTypeScalar},
 		},
 		{
 			`123 // { or: [ {type: "@obj"}, {type: "@arr"}, {type: "@refToObj"}, "integer" ] }`,
 			[]testUserType{obj, arr, refToObj},
-			[]ElementType{ElementTypeObject, ElementTypeArray, ElementTypeObject, ElementTypeScalar},
+			[]SchemaInfoType{SchemaInfoTypeObject, SchemaInfoTypeArray, SchemaInfoTypeObject, SchemaInfoTypeScalar},
 		},
 		{
 			`123 // { or: [ {type: "integer", min: 0}, "string", "@obj", {type: "@arr"}, "@refToObj" ] }`,
 			[]testUserType{obj, arr, refToObj},
-			[]ElementType{ElementTypeScalar, ElementTypeScalar, ElementTypeObject, ElementTypeArray, ElementTypeObject},
+			[]SchemaInfoType{SchemaInfoTypeScalar, SchemaInfoTypeScalar, SchemaInfoTypeObject, SchemaInfoTypeArray, SchemaInfoTypeObject},
 		},
 	}
 	for _, data := range tests {
@@ -148,10 +148,10 @@ func Test_Dereference(t *testing.T) {
 func assertDereference(t *testing.T, data testDereferenceData) {
 	jSchema := buildJSchema(t, data.jsight, data.userTypes)
 
-	elements := Dereference(jSchema)
+	informers := Dereference(jSchema)
 
-	actual := make([]ElementType, 0, len(elements))
-	for _, e := range elements {
+	actual := make([]SchemaInfoType, 0, len(informers))
+	for _, e := range informers {
 		actual = append(actual, e.Type())
 	}
 

@@ -10,13 +10,13 @@ import (
 
 type dereference struct {
 	userTypes map[string]schema.Schema
-	result    *elementInfoList
+	result    *schemaInfoList
 }
 
-func Dereference(s schema.Schema) []ElementInformer {
+func Dereference(s schema.Schema) []SchemaInformer {
 	d := dereference{
 		userTypes: nil,
-		result:    newElementInfoList(),
+		result:    newSchemaInfoList(),
 	}
 
 	if st, ok := s.(*jschema.JSchema); ok {
@@ -33,14 +33,14 @@ func (d dereference) schema(s schema.Schema) {
 	case *jschema.JSchema:
 		d.jSchema(st.ASTNode)
 	case *regex.RSchema:
-		d.rSchema()
+		d.rSchema(st)
 	default:
 		panic(errs.ErrRuntimeFailure.F())
 	}
 }
 
-func (d dereference) rSchema() {
-	info := newElementInfo(ElementTypeRegex)
+func (d dereference) rSchema(rs *regex.RSchema) {
+	info := newRSchemaInfo(rs)
 	d.result.append(info)
 }
 
@@ -52,25 +52,13 @@ func (d dereference) jSchema(astNode schema.ASTNode) {
 		return
 	}
 
-	if astNode.SchemaType == "any" {
-		info := newElementInfo(ElementTypeAny)
-		info.setASTNode(astNode)
-		d.result.append(info)
-		return
-	}
-
 	switch astNode.TokenType {
-	case schema.TokenTypeNumber, schema.TokenTypeString, schema.TokenTypeBoolean, schema.TokenTypeNull:
-		info := newElementInfo(ElementTypeScalar)
-		info.setASTNode(astNode)
+	case schema.TokenTypeNumber, schema.TokenTypeString, schema.TokenTypeBoolean, schema.TokenTypeNull,
+		schema.TokenTypeArray:
+		info := newJSchemaInfo(astNode)
 		d.result.append(info)
 	case schema.TokenTypeObject:
-		info := newObjectInfo(ElementTypeObject)
-		info.setASTNode(astNode)
-		d.result.append(info)
-	case schema.TokenTypeArray:
-		info := newElementInfo(ElementTypeArray)
-		info.setASTNode(astNode)
+		info := newObjectInfo(astNode)
 		d.result.append(info)
 	case schema.TokenTypeShortcut:
 		name := astNode.Value
