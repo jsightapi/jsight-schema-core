@@ -13,7 +13,7 @@ var _ PropertyInformer = (*PropertyInfo)(nil)
 
 func newPropertyInfo(astNode schema.ASTNode) PropertyInfo {
 	return PropertyInfo{
-		SchemaInfo: newJSchemaInfo(astNode),
+		SchemaInfo: NewJSchemaInfo(astNode),
 	}
 }
 

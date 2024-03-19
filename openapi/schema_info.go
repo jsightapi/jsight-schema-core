@@ -16,13 +16,13 @@ type SchemaInfo struct {
 var _ SchemaInformer = SchemaInfo{}
 var _ SchemaInformer = (*SchemaInfo)(nil)
 
-func newRSchemaInfo(rs *regex.RSchema) SchemaInfo {
+func NewRSchemaInfo(rs *regex.RSchema) SchemaInfo {
 	return SchemaInfo{
 		regex: rs,
 	}
 }
 
-func newJSchemaInfo(astNode schema.ASTNode) SchemaInfo {
+func NewJSchemaInfo(astNode schema.ASTNode) SchemaInfo {
 	return SchemaInfo{
 		node: &astNode,
 	}

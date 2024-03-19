@@ -11,7 +11,7 @@ var _ ObjectInformer = (*ObjectInfo)(nil)
 
 func newObjectInfo(astNode schema.ASTNode) ObjectInfo {
 	return ObjectInfo{
-		SchemaInfo: newJSchemaInfo(astNode),
+		SchemaInfo: NewJSchemaInfo(astNode),
 	}
 }
 

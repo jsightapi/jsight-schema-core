@@ -40,7 +40,7 @@ func (d dereference) schema(s schema.Schema) {
 }
 
 func (d dereference) rSchema(rs *regex.RSchema) {
-	info := newRSchemaInfo(rs)
+	info := NewRSchemaInfo(rs)
 	d.result.append(info)
 }
 
@@ -55,7 +55,7 @@ func (d dereference) jSchema(astNode schema.ASTNode) {
 	switch astNode.TokenType {
 	case schema.TokenTypeNumber, schema.TokenTypeString, schema.TokenTypeBoolean, schema.TokenTypeNull,
 		schema.TokenTypeArray:
-		info := newJSchemaInfo(astNode)
+		info := NewJSchemaInfo(astNode)
 		d.result.append(info)
 	case schema.TokenTypeObject:
 		info := newObjectInfo(astNode)
