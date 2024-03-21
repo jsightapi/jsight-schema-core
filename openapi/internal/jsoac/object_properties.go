@@ -35,11 +35,14 @@ func (op ObjectProperties) MarshalJSON() ([]byte, error) {
 	b.WriteByte('{')
 	length := len(op.properties)
 	for i, property := range op.properties {
-		b.WriteByte('"')
-		b.WriteString(property.key)
-		b.WriteString(`":`)
+		value, err := json.Marshal(property.key)
+		if err != nil {
+			return nil, err
+		}
+		b.Write(value)
+		b.WriteString(`:`)
 
-		value, err := json.Marshal(property.value)
+		value, err = json.Marshal(property.value)
 		if err != nil {
 			return nil, err
 		}
