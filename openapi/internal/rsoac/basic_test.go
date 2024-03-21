@@ -1,47 +1,26 @@
 package rsoac
 
 import (
-	"regexp"
-	"testing"
+	"github.com/jsightapi/jsight-schema-core/notations/regex"
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/jsightapi/jsight-schema-core/notations/jschema"
+	"regexp"
+
+	"testing"
 )
 
-type testConverterData struct {
+type testConverterRegex struct {
 	jsight  string
 	openapi string
 }
 
-func (t testConverterData) name() string {
+func (t testConverterRegex) name() string {
 	re := regexp.MustCompile(`[\s/]`)
 	return re.ReplaceAllString(t.jsight, "_")
 }
 
-func assertJSightToOpenAPIConverter(t *testing.T, data testConverterData) {
-	d := testComplexConverterData{
-		jsight:    data.jsight,
-		openapi:   data.openapi
-	}
-	assertJSightToOpenAPIComplexConverter(t, d)
-}
-
-func buildRSchema(t *testing.T, jsight string, userTypes []testUserType) *jschema.JSchema {
-	jSchema := jschema.New("root", jsight)
-
-	for _, ut := range userTypes {
-		err := jSchema.AddType(ut.name, jschema.New(ut.name, ut.jsight))
-		require.NoError(t, err)
-	}
-
-	err := jSchema.Check()
-	require.NoError(t, err)
-
-	return jSchema
-}
-
-func assertJSightToOpenAPIComplexConverter(t *testing.T, data testComplexConverterData) {
+func assertJSightToOpenAPIConverter(t *testing.T, data testConverterRegex) {
 	rSchema := buildRSchema(t, data.jsight)
 
 	o := New(rSchema)
@@ -50,4 +29,13 @@ func assertJSightToOpenAPIComplexConverter(t *testing.T, data testComplexConvert
 
 	jsonString := string(json)
 	require.JSONEq(t, data.openapi, jsonString, "Actual: "+jsonString)
+}
+
+func buildRSchema(t *testing.T, jsight string) *regex.RSchema {
+	rSchema := regex.New("root", jsight)
+
+	err := rSchema.Check()
+	require.NoError(t, err)
+
+	return rSchema
 }

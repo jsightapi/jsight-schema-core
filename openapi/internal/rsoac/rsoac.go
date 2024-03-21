@@ -1,15 +1,36 @@
 package rsoac
 
-import "github.com/jsightapi/jsight-schema-core/notations/regex"
+import (
+	"encoding/json"
+
+	schema "github.com/jsightapi/jsight-schema-core"
+
+	"github.com/jsightapi/jsight-schema-core/notations/regex"
+)
 
 // Regex schema to OpenAPi converter
-
 type RSOAC struct {
+	root        Node
 	description *string
 }
 
 func New(rs *regex.RSchema) *RSOAC {
-	panic("TODO regex.RSchema") // TODO func
+	astNode := getASTNode(rs)
+	return NewFromASTNode(astNode)
+}
+
+func getASTNode(rs *regex.RSchema) schema.ASTNode {
+	an, err := rs.GetAST()
+	if err != nil {
+		panic(err)
+	}
+	return an
+}
+
+func NewFromASTNode(astNode schema.ASTNode) *RSOAC {
+	return &RSOAC{
+		root: newNode(astNode),
+	}
 }
 
 func (o *RSOAC) SetDescription(s string) {
@@ -17,5 +38,5 @@ func (o *RSOAC) SetDescription(s string) {
 }
 
 func (o RSOAC) MarshalJSON() (b []byte, err error) {
-	return []byte("TODO"), nil // TODO method
+	return json.Marshal(o.root)
 }
