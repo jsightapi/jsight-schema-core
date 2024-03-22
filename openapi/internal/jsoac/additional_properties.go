@@ -6,6 +6,7 @@ import (
 	"github.com/jsightapi/jsight-schema-core/openapi/internal"
 
 	schema "github.com/jsightapi/jsight-schema-core"
+
 	"github.com/jsightapi/jsight-schema-core/errs"
 )
 
@@ -18,6 +19,7 @@ const (
 	additionalPropertiesPrimitive
 	additionalPropertiesFormat
 	additionalPropertiesUserType
+	additionalPropertiesAnyOf
 )
 
 type AdditionalProperties struct {
@@ -25,12 +27,22 @@ type AdditionalProperties struct {
 	oadType      *OADType
 	format       string
 	userTypeName string
+	childrens    []schema.ASTNode
 }
 
 var _ json.Marshaler = AdditionalProperties{}
 var _ json.Marshaler = &AdditionalProperties{}
 
 func newAdditionalProperties(astNode schema.ASTNode) *AdditionalProperties {
+
+	//Priority first
+	for _, node := range astNode.Children {
+		if node.Key != "" && node.Key[0] == '@' {
+			return newAnyOfAdditionalProperties(astNode)
+		}
+	}
+
+	//Priority second
 	if astNode.Rules.Has("additionalProperties") {
 		r := astNode.Rules.GetValue("additionalProperties")
 		switch r.TokenType {
@@ -43,8 +55,18 @@ func newAdditionalProperties(astNode schema.ASTNode) *AdditionalProperties {
 		}
 	}
 
+	//Priority third
 	// The additionalProperties JSight rule is missing
 	return newFalseAdditionalProperties()
+}
+
+func newAnyOfAdditionalProperties(node schema.ASTNode) *AdditionalProperties {
+	oadType := OADTypeObject
+	return &AdditionalProperties{
+		mode:      additionalPropertiesAnyOf,
+		oadType:   &oadType,
+		childrens: node.Children,
+	}
 }
 
 func newStringAdditionalProperties(r schema.RuleASTNode) *AdditionalProperties {
@@ -108,9 +130,28 @@ func (a AdditionalProperties) MarshalJSON() ([]byte, error) {
 		return a.primitiveJSON()
 	case additionalPropertiesUserType:
 		return a.userTypeJSON()
+	case additionalPropertiesAnyOf:
+		return a.anyOfJSON(a.childrens)
 	default:
 		panic(errs.ErrRuntimeFailure.F())
 	}
+}
+
+func (a AdditionalProperties) anyOfJSON(childrens []schema.ASTNode) ([]byte, error) {
+	items := []any{}
+	for _, astNode := range childrens {
+		if astNode.Key != "" && astNode.Key[0] == '@' {
+			node := newNode(astNode)
+			items = append(items, node)
+		}
+	}
+
+	data := struct {
+		Items []any `json:"anyOf"`
+	}{
+		Items: items,
+	}
+	return json.Marshal(data)
 }
 
 func (a AdditionalProperties) arrayJSON() ([]byte, error) {
