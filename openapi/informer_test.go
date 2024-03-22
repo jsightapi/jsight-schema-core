@@ -1,8 +1,6 @@
 package openapi
 
 import (
-	"github.com/stretchr/testify/assert"
-
 	"regexp"
 
 	"testing"
@@ -32,16 +30,6 @@ func (t testInfoData) name() string {
 	return re.ReplaceAllString(t.jsight, "_")
 }
 
-func (t testRInfoData) name() string {
-	re := regexp.MustCompile(`[\s/]`)
-	return re.ReplaceAllString(t.jsight, "_")
-}
-
-type testRInfoData struct {
-	jsight                  string
-	expectedSchemaInfoTypes []SchemaInfoType
-}
-
 func Test_Informer_RSchema(t *testing.T) {
 	rSchema := &regex.RSchema{}
 
@@ -50,30 +38,62 @@ func Test_Informer_RSchema(t *testing.T) {
 	require.Equal(t, 1, len(informers))
 	require.Equal(t, SchemaInfoTypeRegex, informers[0].Type())
 
-	tests := []testRInfoData{
+	tests := []testInfoData{
 		{
-			`/OK/`,
+			`/OK/ // string annotation`,
+			[]testUserType{},
 			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
 		},
 		{
-			`/ /`,
+			`/OK/ // -- string annotation`,
+			[]testUserType{},
 			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
 		},
 		{
-			`/^[A-Z][a-z]*( [A-Z][a-z]*)*$/`,
+			`/OK/ // {"type": "string"} -- string annotation`,
+			[]testUserType{},
 			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
 		},
 		{
-			`/^[a-zA-Z0-9.!#$%&'*+\/=?^_` + "`" + `{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/`,
+			`/OK/ // {"type": "email"} -- string annotation`,
+			[]testUserType{},
 			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
 		},
 		{
-			`/(?:[a-z0-9!#$%&'*+\\\/=?^_` + "`" + `{|}~-])+(?:\\.[a-z0-9!#$%&'*+\\\/=?^_` + "`" + `{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e\-\\x1f\\x21\\x23-\\x5b\\x5d\-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e\-\\x7f])*\"\)@\(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?\)\\.\){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e\-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e\-\\x7f])+)\\]\)/`,
+			`/OK/ // {min: 10, max: 30.0} -- string annotation`,
+			[]testUserType{},
 			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
 		},
 		{
-			`/([^][()<>@,;:\\". \x00-\x1F\x7F]+|"(\n|(\\\r)*([^"\\\r\n]|\\[^\r]))*(\\\r)*")(\.([^][()<>@,;:\\". \x00-\x1F\x7F]+|"(\n|(\\\r)*([^"\\\r\n]|\\[^\r]))*(\\\r)*"))*@([^][()<>@,;:\\". \x00-\x1F\x7F]+|\[(\n|(\\\r)*([^][\\\r\n]|\\[^\r]))*(\\\r)*])(\.([^][()<>@,;:\\". \x00-\x1F\x7F]+|\[(\n|(\\\r)*([^][\\\r\n]|\\[^\r]))*(\\\r)*]))*/`,
+			`/OK/ // {"":""} -- string annotation`,
+			[]testUserType{},
 			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
+		},
+		{
+			`/OK/ // {} -- string annotation`,
+			[]testUserType{},
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
+		},
+		{
+			`/(?:[a-z0-9!#$%&'*+\\\/=?^_` + "`" + `{|}~-])+(?:\\.[a-z0-9!#$%&'*+\\\/=?^_` + "`" + `{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e\-\\x1f\\x21\\x23-\\x5b\\x5d\-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e\-\\x7f])*\"\)@\(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?\)\\.\){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e\-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e\-\\x7f])+)\\]\)/ // {type: "regex"} -- string annotation`,
+			[]testUserType{},
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
 		},
 	}
 	for _, data := range tests {
@@ -341,14 +361,32 @@ func assertInfo(t *testing.T, data testInfoData) {
 	}
 }
 
-func assertRInfo(t *testing.T, data testRInfoData) {
+func assertRInfo(t *testing.T, data testInfoData) {
 	rSchema := buildRSchema(t, data.jsight)
 
 	informers := Dereference(rSchema)
-	info := NewRSchemaInfo(rSchema)
 
-	assert.Equal(t, SchemaInfoTypeRegex, info.Type())
+	node, err := rSchema.GetAST()
+	require.NoError(t, err)
+
+	require.Equal(t, data.expectedRootAnnotation, node.Comment)
 	assertTypes(t, data.expectedSchemaInfoTypes, informers)
+
+	expectedPropertyIndex := 0
+
+	for _, ei := range informers {
+		if ei.Type() == SchemaInfoTypeObject {
+			properties := ei.(ObjectInformer).PropertiesInfos()
+
+			for _, pi := range properties {
+				require.True(t, expectedPropertyIndex < len(data.expectedPropertiesInfos))
+
+				assertProperty(t, data.expectedPropertiesInfos[expectedPropertyIndex], pi)
+
+				expectedPropertyIndex++
+			}
+		}
+	}
 }
 
 func assertTypes(t *testing.T, expected []SchemaInfoType, informers []SchemaInformer) {
