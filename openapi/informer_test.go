@@ -2,6 +2,7 @@ package openapi
 
 import (
 	"regexp"
+
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -36,6 +37,70 @@ func Test_Informer_RSchema(t *testing.T) {
 
 	require.Equal(t, 1, len(informers))
 	require.Equal(t, SchemaInfoTypeRegex, informers[0].Type())
+
+	tests := []testInfoData{
+		{
+			`/OK/ // string annotation`,
+			[]testUserType{},
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
+		},
+		{
+			`/OK/ // -- string annotation`,
+			[]testUserType{},
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
+		},
+		{
+			`/OK/ // {"type": "string"} -- string annotation`,
+			[]testUserType{},
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
+		},
+		{
+			`/OK/ // {"type": "email"} -- string annotation`,
+			[]testUserType{},
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
+		},
+		{
+			`/OK/ // {min: 10, max: 30.0} -- string annotation`,
+			[]testUserType{},
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
+		},
+		{
+			`/OK/ // {"":""} -- string annotation`,
+			[]testUserType{},
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
+		},
+		{
+			`/OK/ // {} -- string annotation`,
+			[]testUserType{},
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
+		},
+		{
+			`/(?:[a-z0-9!#$%&'*+\\\/=?^_` + "`" + `{|}~-])+(?:\\.[a-z0-9!#$%&'*+\\\/=?^_` + "`" + `{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e\-\\x1f\\x21\\x23-\\x5b\\x5d\-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e\-\\x7f])*\"\)@\(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?\)\\.\){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e\-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e\-\\x7f])+)\\]\)/ // {type: "regex"} -- string annotation`,
+			[]testUserType{},
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
+		},
+	}
+	for _, data := range tests {
+		t.Run(data.name(), func(t *testing.T) {
+			assertRInfo(t, data)
+		})
+	}
 }
 
 func Test_Informer_JSchema(t *testing.T) {
@@ -277,6 +342,34 @@ func assertInfo(t *testing.T, data testInfoData) {
 
 	require.Equal(t, data.expectedRootAnnotation, jSchema.ASTNode.Comment) // TODO need an interface?
 
+	assertTypes(t, data.expectedSchemaInfoTypes, informers)
+
+	expectedPropertyIndex := 0
+
+	for _, ei := range informers {
+		if ei.Type() == SchemaInfoTypeObject {
+			properties := ei.(ObjectInformer).PropertiesInfos()
+
+			for _, pi := range properties {
+				require.True(t, expectedPropertyIndex < len(data.expectedPropertiesInfos))
+
+				assertProperty(t, data.expectedPropertiesInfos[expectedPropertyIndex], pi)
+
+				expectedPropertyIndex++
+			}
+		}
+	}
+}
+
+func assertRInfo(t *testing.T, data testInfoData) {
+	rSchema := buildRSchema(t, data.jsight)
+
+	informers := Dereference(rSchema)
+
+	node, err := rSchema.GetAST()
+	require.NoError(t, err)
+
+	require.Equal(t, data.expectedRootAnnotation, node.Comment)
 	assertTypes(t, data.expectedSchemaInfoTypes, informers)
 
 	expectedPropertyIndex := 0
