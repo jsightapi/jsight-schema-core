@@ -10,7 +10,7 @@ import (
 
 // Regex schema to OpenAPi converter
 type RSOAC struct {
-	root        Node
+	root        *RegexString
 	description *string
 }
 
@@ -29,7 +29,7 @@ func getASTNode(rs *regex.RSchema) schema.ASTNode {
 
 func NewFromASTNode(astNode schema.ASTNode) *RSOAC {
 	return &RSOAC{
-		root: newNode(astNode),
+		root: newRegexString(astNode),
 	}
 }
 

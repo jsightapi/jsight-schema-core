@@ -1,7 +1,10 @@
 package openapi
 
 import (
+	"github.com/stretchr/testify/assert"
+
 	"regexp"
+
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -29,6 +32,16 @@ func (t testInfoData) name() string {
 	return re.ReplaceAllString(t.jsight, "_")
 }
 
+func (t testRInfoData) name() string {
+	re := regexp.MustCompile(`[\s/]`)
+	return re.ReplaceAllString(t.jsight, "_")
+}
+
+type testRInfoData struct {
+	jsight                  string
+	expectedSchemaInfoTypes []SchemaInfoType
+}
+
 func Test_Informer_RSchema(t *testing.T) {
 	rSchema := &regex.RSchema{}
 
@@ -36,6 +49,38 @@ func Test_Informer_RSchema(t *testing.T) {
 
 	require.Equal(t, 1, len(informers))
 	require.Equal(t, SchemaInfoTypeRegex, informers[0].Type())
+
+	tests := []testRInfoData{
+		{
+			`/OK/`,
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+		},
+		{
+			`/ /`,
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+		},
+		{
+			`/^[A-Z][a-z]*( [A-Z][a-z]*)*$/`,
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+		},
+		{
+			`/^[a-zA-Z0-9.!#$%&'*+\/=?^_` + "`" + `{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/`,
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+		},
+		{
+			`/(?:[a-z0-9!#$%&'*+\\\/=?^_` + "`" + `{|}~-])+(?:\\.[a-z0-9!#$%&'*+\\\/=?^_` + "`" + `{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e\-\\x1f\\x21\\x23-\\x5b\\x5d\-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e\-\\x7f])*\"\)@\(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?\)\\.\){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e\-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e\-\\x7f])+)\\]\)/`,
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+		},
+		{
+			`/([^][()<>@,;:\\". \x00-\x1F\x7F]+|"(\n|(\\\r)*([^"\\\r\n]|\\[^\r]))*(\\\r)*")(\.([^][()<>@,;:\\". \x00-\x1F\x7F]+|"(\n|(\\\r)*([^"\\\r\n]|\\[^\r]))*(\\\r)*"))*@([^][()<>@,;:\\". \x00-\x1F\x7F]+|\[(\n|(\\\r)*([^][\\\r\n]|\\[^\r]))*(\\\r)*])(\.([^][()<>@,;:\\". \x00-\x1F\x7F]+|\[(\n|(\\\r)*([^][\\\r\n]|\\[^\r]))*(\\\r)*]))*/`,
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+		},
+	}
+	for _, data := range tests {
+		t.Run(data.name(), func(t *testing.T) {
+			assertRInfo(t, data)
+		})
+	}
 }
 
 func Test_Informer_JSchema(t *testing.T) {
@@ -294,6 +339,16 @@ func assertInfo(t *testing.T, data testInfoData) {
 			}
 		}
 	}
+}
+
+func assertRInfo(t *testing.T, data testRInfoData) {
+	rSchema := buildRSchema(t, data.jsight)
+
+	informers := Dereference(rSchema)
+	info := NewRSchemaInfo(rSchema)
+
+	assert.Equal(t, SchemaInfoTypeRegex, info.Type())
+	assertTypes(t, data.expectedSchemaInfoTypes, informers)
 }
 
 func assertTypes(t *testing.T, expected []SchemaInfoType, informers []SchemaInformer) {
