@@ -15,6 +15,18 @@ const stringNull = "null"
 const stringAny = "any"
 const stringEnum = "enum"
 const stringArray = "array"
+const stringString = "string"
+const stringInteger = "integer"
+const stringBoolean = "boolean"
+const stringDate = "date"
+const stringFloat = "float"
+const stringObject = "object"
+const stringNumber = "number"
+const stringDatetime = "datetime"
+const stringEmail = "email"
+const stringUri = "uri"
+const stringUuid = "uuid"
+const stringAdditionalProperties = "additionalProperties"
 
 var bufferPool = sync.NewBufferPool(1024)
 
@@ -48,4 +60,16 @@ func int64RefByString(s string) *int64 {
 		return nil
 	}
 	return int64Ref(value)
+}
+
+func stringRef(s string) *string {
+	return &s
+}
+
+func boolRef(b bool) *bool {
+	return &b
+}
+
+func refRuleASTNode(r schema.RuleASTNode) *schema.RuleASTNode {
+	return &r
 }
