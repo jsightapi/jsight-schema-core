@@ -30,9 +30,7 @@ func newObject(astNode schema.ASTNode) *Object {
 	}
 
 	for _, an := range astNode.Children {
-		if an.IsKeyShortcut {
-			// TODO key shortcut
-		} else {
+		if !an.IsKeyShortcut {
 			o.appendProperty(an)
 		}
 	}
