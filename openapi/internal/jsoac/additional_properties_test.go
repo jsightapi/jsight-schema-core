@@ -7,12 +7,11 @@ import (
 func Test_additionalProperties(t *testing.T) {
 	tests := []testComplexConverterData{
 		// boolean value
-		/*
-			{
-				`{
+		{
+			`{
 					"foo": "bar"
 				}`,
-				`{
+			`{
 					"type": "object",
 					"properties": {
 						"foo": { "type": "string", "example": "bar" }
@@ -20,13 +19,13 @@ func Test_additionalProperties(t *testing.T) {
 					"required": ["foo"],
 					"additionalProperties": false
 				}`,
-				[]testUserType{},
-			},
-			{
-				`{ // {additionalProperties: false}
+			[]testUserType{},
+		},
+		{
+			`{ // {additionalProperties: false}
 					"foo": "bar"
 				}`,
-				`{
+			`{
 					"type": "object",
 					"properties": {
 						"foo": { "type": "string", "example": "bar" }
@@ -34,41 +33,40 @@ func Test_additionalProperties(t *testing.T) {
 					"required": ["foo"],
 					"additionalProperties": false
 				}`,
-				[]testUserType{},
-			},
-			{
-				`{ // {additionalProperties: true}
+			[]testUserType{},
+		},
+		{
+			`{ // {additionalProperties: true}
 					"foo": "bar"
 				}`,
-				`{
+			`{
 					"type": "object",
 					"properties": {
 						"foo": { "type": "string", "example": "bar" }
 					},
 					"required": ["foo"]
 				}`,
-				[]testUserType{},
-			},
-			{
-				`{ // {additionalProperties: "any"}
+			[]testUserType{},
+		},
+		{
+			`{ // {additionalProperties: "any"}
 						"foo": "bar"
 					}`,
-				`{
+			`{
 						"type": "object",
 						"properties": {
 							"foo": { "type": "string", "example": "bar" }
 						},
 						"required": ["foo"]
 					}`,
-				[]testUserType{},
-			},
-
-			// primitive types
-			{
-				`{ // {additionalProperties: "array"}
+			[]testUserType{},
+		},
+		// primitive types
+		{
+			`{ // {additionalProperties: "array"}
 						"foo": "bar"
 					}`,
-				`{
+			`{
 						"type": "object",
 						"properties": {
 							"foo": { "type": "string", "example": "bar" }
@@ -79,13 +77,13 @@ func Test_additionalProperties(t *testing.T) {
 							"items": {}
 						}
 					}`,
-				[]testUserType{},
-			},
-			{
-				`{ // {additionalProperties: "boolean"}
+			[]testUserType{},
+		},
+		{
+			`{ // {additionalProperties: "boolean"}
 						"foo": "bar"
 					}`,
-				`{
+			`{
 						"type": "object",
 						"properties": {
 							"foo": { "type": "string", "example": "bar" }
@@ -95,13 +93,13 @@ func Test_additionalProperties(t *testing.T) {
 							"type": "boolean"
 						}
 					}`,
-				[]testUserType{},
-			},
-			{
-				`{ // {additionalProperties: "float"}
+			[]testUserType{},
+		},
+		{
+			`{ // {additionalProperties: "float"}
 						"foo": "bar"
 					}`,
-				`{
+			`{
 						"type": "object",
 						"properties": {
 							"foo": { "type": "string", "example": "bar" }
@@ -111,13 +109,13 @@ func Test_additionalProperties(t *testing.T) {
 							"type": "number"
 						}
 					}`,
-				[]testUserType{},
-			},
-			{
-				`{ // {additionalProperties: "integer"}
+			[]testUserType{},
+		},
+		{
+			`{ // {additionalProperties: "integer"}
 						"foo": "bar"
 					}`,
-				`{
+			`{
 						"type": "object",
 						"properties": {
 							"foo": { "type": "string", "example": "bar" }
@@ -127,8 +125,8 @@ func Test_additionalProperties(t *testing.T) {
 							"type": "integer"
 						}
 					}`,
-				[]testUserType{},
-			},*/
+			[]testUserType{},
+		},
 		{
 			`{ // {additionalProperties: "object"}
 					"foo": "bar"
@@ -147,12 +145,12 @@ func Test_additionalProperties(t *testing.T) {
 				}`,
 			[]testUserType{},
 		},
-		/*
-			{
-				`{ // {additionalProperties: "string"}
+
+		{
+			`{ // {additionalProperties: "string"}
 						"foo": "bar"
 					}`,
-				`{
+			`{
 						"type": "object",
 						"properties": {
 							"foo": { "type": "string", "example": "bar" }
@@ -162,13 +160,13 @@ func Test_additionalProperties(t *testing.T) {
 							"type": "string"
 						}
 					}`,
-				[]testUserType{},
-			},
-			{
-				`{ // {additionalProperties: "null"}
+			[]testUserType{},
+		},
+		{
+			`{ // {additionalProperties: "null"}
 						"foo": "bar"
 					}`,
-				`{
+			`{
 						"type": "object",
 						"properties": {
 							"foo": { "type": "string", "example": "bar" }
@@ -178,15 +176,15 @@ func Test_additionalProperties(t *testing.T) {
 							"enum": [null]
 						}
 					}`,
-				[]testUserType{},
-			},
+			[]testUserType{},
+		},
 
-			// formatted types
-			{
-				`{ // {additionalProperties: "date"}
+		// formatted types
+		{
+			`{ // {additionalProperties: "date"}
 						"foo": "bar"
 					}`,
-				`{
+			`{
 						"type": "object",
 						"properties": {
 							"foo": { "type": "string", "example": "bar" }
@@ -197,13 +195,13 @@ func Test_additionalProperties(t *testing.T) {
 							"format": "date"
 						}
 					}`,
-				[]testUserType{},
-			},
-			{
-				`{ // {additionalProperties: "datetime"}
+			[]testUserType{},
+		},
+		{
+			`{ // {additionalProperties: "datetime"}
 						"foo": "bar"
 					}`,
-				`{
+			`{
 						"type": "object",
 						"properties": {
 							"foo": { "type": "string", "example": "bar" }
@@ -214,13 +212,13 @@ func Test_additionalProperties(t *testing.T) {
 							"format": "date-time"
 						}
 					}`,
-				[]testUserType{},
-			},
-			{
-				`{ // {additionalProperties: "email"}
+			[]testUserType{},
+		},
+		{
+			`{ // {additionalProperties: "email"}
 						"foo": "bar"
 					}`,
-				`{
+			`{
 						"type": "object",
 						"properties": {
 							"foo": { "type": "string", "example": "bar" }
@@ -231,13 +229,13 @@ func Test_additionalProperties(t *testing.T) {
 							"format": "email"
 						}
 					}`,
-				[]testUserType{},
-			},
-			{
-				`{ // {additionalProperties: "uri"}
+			[]testUserType{},
+		},
+		{
+			`{ // {additionalProperties: "uri"}
 						"foo": "bar"
 					}`,
-				`{
+			`{
 						"type": "object",
 						"properties": {
 							"foo": { "type": "string", "example": "bar" }
@@ -248,13 +246,13 @@ func Test_additionalProperties(t *testing.T) {
 							"format": "uri"
 						}
 					}`,
-				[]testUserType{},
-			},
-			{
-				`{ // {additionalProperties: "uuid"}
+			[]testUserType{},
+		},
+		{
+			`{ // {additionalProperties: "uuid"}
 						"foo": "bar"
 					}`,
-				`{
+			`{
 						"type": "object",
 						"properties": {
 							"foo": { "type": "string", "example": "bar" }
@@ -265,15 +263,15 @@ func Test_additionalProperties(t *testing.T) {
 							"format": "uuid"
 						}
 					}`,
-				[]testUserType{},
-			},
+			[]testUserType{},
+		},
 
-			// user types
-			{
-				`{ // {additionalProperties: "@cat"}
+		// user types
+		{
+			`{ // {additionalProperties: "@cat"}
 						"foo": "bar"
 					}`,
-				`{
+			`{
 						"type": "object",
 						"properties": {
 							"foo": { "type": "string", "example": "bar" }
@@ -283,10 +281,10 @@ func Test_additionalProperties(t *testing.T) {
 							"$ref": "#/components/schemas/cat"
 						}
 					}`,
-				[]testUserType{
-					catUserType,
-				},
-			},*/
+			[]testUserType{
+				catUserType,
+			},
+		},
 	}
 	for _, data := range tests {
 		t.Run(data.name(), func(t *testing.T) {
