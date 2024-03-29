@@ -20,6 +20,7 @@ const (
 	additionalPropertiesFormat
 	additionalPropertiesUserType
 	additionalPropertiesAnyOf
+	additionalPropertiesObject
 )
 
 type AdditionalProperties struct {
@@ -103,6 +104,10 @@ func newStringAdditionalProperties(r *schema.RuleASTNode) *AdditionalProperties 
 		return &AdditionalProperties{mode: additionalPropertiesArray}
 	}
 
+	if r.Value == stringObject {
+		return &AdditionalProperties{mode: additionalPropertiesObject}
+	}
+
 	if r.Value == stringAny {
 		return nil
 	}
@@ -149,6 +154,8 @@ func (a *AdditionalProperties) MarshalJSON() ([]byte, error) {
 		return a.nullJSON()
 	case additionalPropertiesArray:
 		return a.arrayJSON()
+	case additionalPropertiesObject:
+		return a.objectJSON()
 	case additionalPropertiesFormat:
 		return a.formatJSON()
 	case additionalPropertiesPrimitive:
@@ -196,6 +203,19 @@ func (a *AdditionalProperties) arrayJSON() ([]byte, error) {
 	}{
 		OADType: OADTypeArray,
 		Items:   map[string]any{},
+	}
+	return json.Marshal(data)
+}
+
+func (a *AdditionalProperties) objectJSON() ([]byte, error) {
+	data := struct {
+		OADType              OADType        `json:"type"`
+		Properties           map[string]any `json:"properties"`
+		AdditionalProperties bool           `json:"additionalProperties"`
+	}{
+		OADType:              OADTypeObject,
+		Properties:           map[string]any{},
+		AdditionalProperties: false,
 	}
 	return json.Marshal(data)
 }
