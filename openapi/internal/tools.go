@@ -15,6 +15,18 @@ const StringNull = "null"
 const StringAny = "any"
 const StringEnum = "enum"
 const StringArray = "array"
+const StringString = "string"
+const StringInteger = "integer"
+const StringBoolean = "boolean"
+const StringDate = "date"
+const StringFloat = "float"
+const StringObject = "object"
+const StringNumber = "number"
+const StringDatetime = "datetime"
+const StringEmail = "email"
+const StringUri = "uri"
+const StringUuid = "uuid"
+const StringAdditionalProperties = "additionalProperties"
 
 var BufferPool = sync.NewBufferPool(1024)
 
@@ -48,4 +60,12 @@ func Int64RefByString(s string) *int64 {
 		return nil
 	}
 	return Int64Ref(value)
+}
+
+func StringRef(s string) *string {
+	return &s
+}
+
+func BoolRef(b bool) *bool {
+	return &b
 }

@@ -35,6 +35,16 @@ var dogUserType = testUserType{
 	`{ "dogName": "Max" }`,
 }
 
+var catEmailUserType = testUserType{
+	"@catEmail",
+	`"abc@cat.com" // { regex: "^[a-z]+@cat.com$" }`,
+}
+
+var dogEmailUserType = testUserType{
+	"@dogEmail",
+	`"abc@dog.com" // { regex: "^[a-z]+@dog.com$" }`,
+}
+
 var stringIDUserType = testUserType{
 	"@stringId",
 	`"abc-123"`,

@@ -9,276 +9,278 @@ func Test_additionalProperties(t *testing.T) {
 		// boolean value
 		{
 			`{
-				"foo": "bar"
-			}`,
+					"foo": "bar"
+				}`,
 			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"],
-				"additionalProperties": false
-			}`,
+					"type": "object",
+					"properties": {
+						"foo": { "type": "string", "example": "bar" }
+					},
+					"required": ["foo"],
+					"additionalProperties": false
+				}`,
 			[]testUserType{},
 		},
 		{
 			`{ // {additionalProperties: false}
-				"foo": "bar"
-			}`,
+					"foo": "bar"
+				}`,
 			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"],
-				"additionalProperties": false
-			}`,
+					"type": "object",
+					"properties": {
+						"foo": { "type": "string", "example": "bar" }
+					},
+					"required": ["foo"],
+					"additionalProperties": false
+				}`,
 			[]testUserType{},
 		},
 		{
 			`{ // {additionalProperties: true}
-				"foo": "bar"
-			}`,
+					"foo": "bar"
+				}`,
 			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"]
-			}`,
+					"type": "object",
+					"properties": {
+						"foo": { "type": "string", "example": "bar" }
+					},
+					"required": ["foo"]
+				}`,
 			[]testUserType{},
 		},
 		{
 			`{ // {additionalProperties: "any"}
-				"foo": "bar"
-			}`,
+						"foo": "bar"
+					}`,
 			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"]
-			}`,
+						"type": "object",
+						"properties": {
+							"foo": { "type": "string", "example": "bar" }
+						},
+						"required": ["foo"]
+					}`,
 			[]testUserType{},
 		},
-
 		// primitive types
 		{
 			`{ // {additionalProperties: "array"}
-				"foo": "bar"
-			}`,
+						"foo": "bar"
+					}`,
 			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"],
-				"additionalProperties": {
-					"type": "array",
-					"items": {}
-				}
-			}`,
+						"type": "object",
+						"properties": {
+							"foo": { "type": "string", "example": "bar" }
+						},
+						"required": ["foo"],
+						"additionalProperties": {
+							"type": "array",
+							"items": {}
+						}
+					}`,
 			[]testUserType{},
 		},
 		{
 			`{ // {additionalProperties: "boolean"}
-				"foo": "bar"
-			}`,
+						"foo": "bar"
+					}`,
 			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"],
-				"additionalProperties": {
-					"type": "boolean"
-				}
-			}`,
+						"type": "object",
+						"properties": {
+							"foo": { "type": "string", "example": "bar" }
+						},
+						"required": ["foo"],
+						"additionalProperties": {
+							"type": "boolean"
+						}
+					}`,
 			[]testUserType{},
 		},
 		{
 			`{ // {additionalProperties: "float"}
-				"foo": "bar"
-			}`,
+						"foo": "bar"
+					}`,
 			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"],
-				"additionalProperties": {
-					"type": "number"
-				}
-			}`,
+						"type": "object",
+						"properties": {
+							"foo": { "type": "string", "example": "bar" }
+						},
+						"required": ["foo"],
+						"additionalProperties": {
+							"type": "number"
+						}
+					}`,
 			[]testUserType{},
 		},
 		{
 			`{ // {additionalProperties: "integer"}
-				"foo": "bar"
-			}`,
+						"foo": "bar"
+					}`,
 			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"],
-				"additionalProperties": {
-					"type": "integer"
-				}
-			}`,
+						"type": "object",
+						"properties": {
+							"foo": { "type": "string", "example": "bar" }
+						},
+						"required": ["foo"],
+						"additionalProperties": {
+							"type": "integer"
+						}
+					}`,
 			[]testUserType{},
 		},
 		{
 			`{ // {additionalProperties: "object"}
-				"foo": "bar"
-			}`,
+					"foo": "bar"
+				}`,
 			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"],
-				"additionalProperties": {
-					"type": "object"
-				}
-			}`,
+					"type": "object",
+					"properties": {
+						"foo": { "type": "string", "example": "bar" }
+					},
+					"required": ["foo"],
+					"additionalProperties": {
+						"type": "object",
+						"properties": {},
+						"additionalProperties": false
+					}
+				}`,
 			[]testUserType{},
 		},
+
 		{
 			`{ // {additionalProperties: "string"}
-				"foo": "bar"
-			}`,
+						"foo": "bar"
+					}`,
 			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"],
-				"additionalProperties": {
-					"type": "string"
-				}
-			}`,
+						"type": "object",
+						"properties": {
+							"foo": { "type": "string", "example": "bar" }
+						},
+						"required": ["foo"],
+						"additionalProperties": {
+							"type": "string"
+						}
+					}`,
 			[]testUserType{},
 		},
 		{
 			`{ // {additionalProperties: "null"}
-				"foo": "bar"
-			}`,
+						"foo": "bar"
+					}`,
 			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"],
-				"additionalProperties": {
-					"enum": [null]
-				}
-			}`,
+						"type": "object",
+						"properties": {
+							"foo": { "type": "string", "example": "bar" }
+						},
+						"required": ["foo"],
+						"additionalProperties": {
+							"enum": [null]
+						}
+					}`,
 			[]testUserType{},
 		},
 
 		// formatted types
 		{
 			`{ // {additionalProperties: "date"}
-				"foo": "bar"
-			}`,
+						"foo": "bar"
+					}`,
 			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"],
-				"additionalProperties": {
-					"type": "string",
-					"format": "date"
-				}
-			}`,
+						"type": "object",
+						"properties": {
+							"foo": { "type": "string", "example": "bar" }
+						},
+						"required": ["foo"],
+						"additionalProperties": {
+							"type": "string",
+							"format": "date"
+						}
+					}`,
 			[]testUserType{},
 		},
 		{
 			`{ // {additionalProperties: "datetime"}
-				"foo": "bar"
-			}`,
+						"foo": "bar"
+					}`,
 			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"],
-				"additionalProperties": {
-					"type": "string",
-					"format": "date-time"
-				}
-			}`,
+						"type": "object",
+						"properties": {
+							"foo": { "type": "string", "example": "bar" }
+						},
+						"required": ["foo"],
+						"additionalProperties": {
+							"type": "string",
+							"format": "date-time"
+						}
+					}`,
 			[]testUserType{},
 		},
 		{
 			`{ // {additionalProperties: "email"}
-				"foo": "bar"
-			}`,
+						"foo": "bar"
+					}`,
 			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"],
-				"additionalProperties": {
-					"type": "string",
-					"format": "email"
-				}
-			}`,
+						"type": "object",
+						"properties": {
+							"foo": { "type": "string", "example": "bar" }
+						},
+						"required": ["foo"],
+						"additionalProperties": {
+							"type": "string",
+							"format": "email"
+						}
+					}`,
 			[]testUserType{},
 		},
 		{
 			`{ // {additionalProperties: "uri"}
-				"foo": "bar"
-			}`,
+						"foo": "bar"
+					}`,
 			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"],
-				"additionalProperties": {
-					"type": "string",
-					"format": "uri"
-				}
-			}`,
+						"type": "object",
+						"properties": {
+							"foo": { "type": "string", "example": "bar" }
+						},
+						"required": ["foo"],
+						"additionalProperties": {
+							"type": "string",
+							"format": "uri"
+						}
+					}`,
 			[]testUserType{},
 		},
 		{
 			`{ // {additionalProperties: "uuid"}
-				"foo": "bar"
-			}`,
+						"foo": "bar"
+					}`,
 			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"],
-				"additionalProperties": {
-					"type": "string",
-					"format": "uuid"
-				}
-			}`,
+						"type": "object",
+						"properties": {
+							"foo": { "type": "string", "example": "bar" }
+						},
+						"required": ["foo"],
+						"additionalProperties": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}`,
 			[]testUserType{},
 		},
 
 		// user types
 		{
 			`{ // {additionalProperties: "@cat"}
-				"foo": "bar"
-			}`,
+						"foo": "bar"
+					}`,
 			`{
-				"type": "object",
-				"properties": {
-					"foo": { "type": "string", "example": "bar" }
-				},
-				"required": ["foo"],
-				"additionalProperties": {
-					"$ref": "#/components/schemas/cat"
-				}
-			}`,
+						"type": "object",
+						"properties": {
+							"foo": { "type": "string", "example": "bar" }
+						},
+						"required": ["foo"],
+						"additionalProperties": {
+							"$ref": "#/components/schemas/cat"
+						}
+					}`,
 			[]testUserType{
 				catUserType,
 			},
