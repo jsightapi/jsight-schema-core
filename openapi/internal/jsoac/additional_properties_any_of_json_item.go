@@ -3,6 +3,8 @@ package jsoac
 import (
 	"bytes"
 
+	"github.com/jsightapi/jsight-schema-core/openapi/internal"
+
 	"fmt"
 
 	schema "github.com/jsightapi/jsight-schema-core"
@@ -30,27 +32,27 @@ func makeAdditionalAnyJSONObjects(r schema.RuleASTNode) AdditionalPropertiesAnyJ
 	var emptyByteObject SimpleByteArray = []byte("{}")
 
 	switch r.Value {
-	case stringString, stringInteger, stringBoolean:
+	case internal.StringString, internal.StringInteger, internal.StringBoolean:
 		s = AdditionalPropertiesAnyJsonItem{
-			Type: stringRef(r.Value),
+			Type: internal.StringRef(r.Value),
 		}
-	case stringFloat:
+	case internal.StringFloat:
 		s = AdditionalPropertiesAnyJsonItem{
-			Type: stringRef(stringNumber),
+			Type: internal.StringRef(internal.StringNumber),
 		}
-	case stringArray:
+	case internal.StringArray:
 		s = AdditionalPropertiesAnyJsonItem{
-			Type:  stringRef(r.Value),
+			Type:  internal.StringRef(r.Value),
 			Items: &emptyByteObject,
 		}
-	case stringObject:
+	case internal.StringObject:
 		s = AdditionalPropertiesAnyJsonItem{
-			Type:                 stringRef(stringObject),
+			Type:                 internal.StringRef(internal.StringObject),
 			Properties:           &emptyByteObject,
-			AdditionalProperties: boolRef(false),
+			AdditionalProperties: internal.BoolRef(false),
 		}
-	case stringNull:
-		var nullBytes SimpleByteArray = []byte(stringNull)
+	case internal.StringNull:
+		var nullBytes SimpleByteArray = []byte(internal.StringNull)
 		simpleEnum := []SimpleByteArray{
 			nullBytes,
 		}
@@ -58,35 +60,35 @@ func makeAdditionalAnyJSONObjects(r schema.RuleASTNode) AdditionalPropertiesAnyJ
 			Enum:    &simpleEnum,
 			Example: &nullBytes,
 		}
-	case stringDate:
+	case internal.StringDate:
 		s = AdditionalPropertiesAnyJsonItem{
-			Type:   stringRef(stringString),
-			Format: stringRef(stringDate),
+			Type:   internal.StringRef(internal.StringString),
+			Format: internal.StringRef(internal.StringDate),
 		}
-	case stringDatetime:
+	case internal.StringDatetime:
 		s = AdditionalPropertiesAnyJsonItem{
-			Type:   stringRef(stringString),
-			Format: stringRef("date-time"),
+			Type:   internal.StringRef(internal.StringString),
+			Format: internal.StringRef("date-time"),
 		}
-	case stringEmail:
+	case internal.StringEmail:
 		s = AdditionalPropertiesAnyJsonItem{
-			Type:   stringRef(stringString),
-			Format: stringRef(stringEmail),
+			Type:   internal.StringRef(internal.StringString),
+			Format: internal.StringRef(internal.StringEmail),
 		}
-	case stringUri:
+	case internal.StringUri:
 		s = AdditionalPropertiesAnyJsonItem{
-			Type:   stringRef(stringString),
-			Format: stringRef(stringUri),
+			Type:   internal.StringRef(internal.StringString),
+			Format: internal.StringRef(internal.StringUri),
 		}
-	case stringUuid:
+	case internal.StringUuid:
 		s = AdditionalPropertiesAnyJsonItem{
-			Type:   stringRef(stringString),
-			Format: stringRef(stringUuid),
+			Type:   internal.StringRef(internal.StringString),
+			Format: internal.StringRef(internal.StringUuid),
 		}
 	default:
 		if r.Value[0] == '@' {
 			s = AdditionalPropertiesAnyJsonItem{
-				Ref: stringRef(fmt.Sprintf(`#/components/schemas/%s`, strings.TrimLeft(r.Value, "@"))),
+				Ref: internal.StringRef(fmt.Sprintf(`#/components/schemas/%s`, strings.TrimLeft(r.Value, "@"))),
 			}
 		} else {
 			panic(errs.ErrRuntimeFailure.F()) // FIXME: may be: s = AdditionalPropertiesAnyJsonItem{}
@@ -98,7 +100,7 @@ func makeAdditionalAnyJSONObjects(r schema.RuleASTNode) AdditionalPropertiesAnyJ
 func (s SimpleByteArray) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	if len(s) == 0 {
-		buf.Write([]byte(stringNull))
+		buf.Write([]byte(internal.StringNull))
 	} else {
 		buf.Write(s)
 	}
