@@ -19,8 +19,6 @@ const (
 	additionalPropertiesPrimitive
 	additionalPropertiesFormat
 	additionalPropertiesUserType
-	additionalPropertiesAnyOf
-	additionalPropertiesObject
 )
 
 type AdditionalProperties struct {
@@ -31,6 +29,7 @@ type AdditionalProperties struct {
 	node         schema.ASTNode
 }
 
+var _ json.Marshaler = AdditionalProperties{}
 var _ json.Marshaler = &AdditionalProperties{}
 
 func newAdditionalProperties(astNode schema.ASTNode) *AdditionalProperties {
@@ -76,7 +75,7 @@ func newAdditionalProperties(astNode schema.ASTNode) *AdditionalProperties {
 	return newFalseAdditionalProperties()
 }
 
-// check is astNode have childrens with some key as shortcut and with additional properties
+// check is astNode have children with some key as shortcut and with additional properties
 func isKeyShortcutWithAP(astNode schema.ASTNode) bool {
 	for _, an := range astNode.Children {
 		if an.IsKeyShortcut && astNode.Rules.Has(stringAdditionalProperties) {
@@ -100,7 +99,7 @@ func newStringAdditionalProperties(r *schema.RuleASTNode) *AdditionalProperties 
 		return &AdditionalProperties{mode: additionalPropertiesNull}
 	}
 
-	if r.Value == stringArray {
+	if r.Value == internal.StringArray {
 		return &AdditionalProperties{mode: additionalPropertiesArray}
 	}
 
@@ -133,7 +132,7 @@ func newStringAdditionalProperties(r *schema.RuleASTNode) *AdditionalProperties 
 	}
 }
 
-func newBooleanAdditionalProperties(r *schema.RuleASTNode) *AdditionalProperties {
+func newBooleanAdditionalProperties(r schema.RuleASTNode) *AdditionalProperties {
 	if r.Value == stringFalse {
 		return newFalseAdditionalProperties()
 	}
@@ -146,7 +145,7 @@ func newFalseAdditionalProperties() *AdditionalProperties {
 	}
 }
 
-func (a *AdditionalProperties) MarshalJSON() ([]byte, error) {
+func (a AdditionalProperties) MarshalJSON() ([]byte, error) {
 	switch a.mode {
 	case additionalPropertiesFalse:
 		return a.booleanJSON()
@@ -224,11 +223,11 @@ func (a *AdditionalProperties) booleanJSON() ([]byte, error) {
 	return []byte(stringFalse), nil
 }
 
-func (a *AdditionalProperties) nullJSON() ([]byte, error) {
+func (a AdditionalProperties) nullJSON() ([]byte, error) {
 	return []byte(`{ "enum": [null] }`), nil
 }
 
-func (a *AdditionalProperties) primitiveJSON() ([]byte, error) {
+func (a AdditionalProperties) primitiveJSON() ([]byte, error) {
 	data := struct {
 		OADType OADType `json:"type"`
 	}{
@@ -237,7 +236,7 @@ func (a *AdditionalProperties) primitiveJSON() ([]byte, error) {
 	return json.Marshal(data)
 }
 
-func (a *AdditionalProperties) formatJSON() ([]byte, error) {
+func (a AdditionalProperties) formatJSON() ([]byte, error) {
 	data := struct {
 		OADType OADType `json:"type"`
 		Format  string  `json:"format"`
@@ -248,7 +247,7 @@ func (a *AdditionalProperties) formatJSON() ([]byte, error) {
 	return json.Marshal(data)
 }
 
-func (a *AdditionalProperties) userTypeJSON() ([]byte, error) {
+func (a AdditionalProperties) userTypeJSON() ([]byte, error) {
 	ref := newRefFromUserTypeName(a.userTypeName, false)
 	return ref.MarshalJSON()
 }

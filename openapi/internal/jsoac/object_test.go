@@ -114,6 +114,24 @@ func Test_object(t *testing.T) {
 				"required": [ "str", "int", "num", "bool", "arr", "obj" ]
 			}`,
 		},
+		{
+			`{
+				"\u005C \uD834\uDD1E\" \\ \/ \b \f \n \r \t АБВГДЕЁЖЗабвгдеёжзABCDEFGabcdefg": "bar2" 
+			}`,
+			`{
+				"type":"object",
+				"properties": {
+					"\u005C \uD834\uDD1E\" \\ \/ \b \f \n \r \t АБВГДЕЁЖЗабвгдеёжзABCDEFGabcdefg": {
+						"type":"string",
+						"example":"bar2"
+					}		
+				}, 
+				"additionalProperties":false, 
+				"required": [
+					"\u005C \uD834\uDD1E\" \\ \/ \b \f \n \r \t АБВГДЕЁЖЗабвгдеёжзABCDEFGabcdefg"
+				]
+			}`,
+		},
 	}
 	for _, data := range tests {
 		t.Run(data.name(), func(t *testing.T) {

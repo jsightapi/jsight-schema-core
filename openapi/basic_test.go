@@ -1,6 +1,8 @@
 package openapi
 
 import (
+	"github.com/jsightapi/jsight-schema-core/notations/regex"
+
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -25,4 +27,13 @@ func buildJSchema(t *testing.T, jsight string, userTypes []testUserType) *jschem
 	require.NoError(t, err)
 
 	return jSchema
+}
+
+func buildRSchema(t *testing.T, jsight string) *regex.RSchema {
+	rSchema := regex.New("root", jsight)
+
+	err := rSchema.Check()
+	require.NoError(t, err)
+
+	return rSchema
 }

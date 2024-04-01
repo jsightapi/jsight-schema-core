@@ -4,28 +4,26 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
-	"github.com/jsightapi/jsight-schema-core/notations/regex"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_NewRSchemaInfo(t *testing.T) {
-	rSchema := &regex.RSchema{}
+	rSchema := buildRSchema(t, `/OK/`)
 
 	info := NewRSchemaInfo(rSchema)
 
 	assert.Equal(t, SchemaInfoTypeRegex, info.Type())
 	assert.Equal(t, "", info.Annotation())
 
-	// TODO after rsoac.go
-	// so := info.SchemaObject()
-	// so.SetDescription("Some text 2")
-	// json, err := so.MarshalJSON()
-	//
-	// require.NoError(t, err)
+	so := info.SchemaObject()
+	so.SetDescription("Some text 2")
+	json, err := so.MarshalJSON()
 
-	// jsonString := string(json)
-	// require.JSONEq(t, `...`, jsonString, "Actual: "+jsonString)
+	require.NoError(t, err)
+
+	jsonString := string(json)
+	require.JSONEq(t, `{"type":"string","pattern":"OK"}`, jsonString, "Actual: "+jsonString)
 }
 
 func Test_NewJSchemaInfo(t *testing.T) {

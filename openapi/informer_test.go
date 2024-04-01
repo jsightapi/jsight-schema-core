@@ -2,6 +2,7 @@ package openapi
 
 import (
 	"regexp"
+
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -36,6 +37,29 @@ func Test_Informer_RSchema(t *testing.T) {
 
 	require.Equal(t, 1, len(informers))
 	require.Equal(t, SchemaInfoTypeRegex, informers[0].Type())
+
+	tests := []testInfoData{
+		{
+			`/OK/`,
+			[]testUserType{},
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
+		},
+		// Actually JSight API Core doesn't allow annotation after regex. I left this test as an example of unexpected work.
+		{
+			`/OK/ // string annotation`,
+			[]testUserType{},
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
+		},
+	}
+	for _, data := range tests {
+		t.Run(data.name(), func(t *testing.T) {
+			assertRInfo(t, data)
+		})
+	}
 }
 
 func Test_Informer_JSchema(t *testing.T) {
@@ -294,6 +318,19 @@ func assertInfo(t *testing.T, data testInfoData) {
 			}
 		}
 	}
+}
+
+func assertRInfo(t *testing.T, data testInfoData) {
+	rSchema := buildRSchema(t, data.jsight)
+
+	informers := Dereference(rSchema)
+
+	node, err := rSchema.GetAST()
+	require.NoError(t, err)
+
+	assertTypes(t, data.expectedSchemaInfoTypes, informers)
+	require.Equal(t, data.expectedRootAnnotation, node.Comment)
+	require.Equal(t, data.expectedPropertiesInfos, []testPropertiesInfos{})
 }
 
 func assertTypes(t *testing.T, expected []SchemaInfoType, informers []SchemaInformer) {
