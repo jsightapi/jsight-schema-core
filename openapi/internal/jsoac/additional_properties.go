@@ -48,15 +48,15 @@ func newAdditionalProperties(astNode schema.ASTNode) *AdditionalProperties {
 }
 
 func newStringAdditionalProperties(r schema.RuleASTNode) *AdditionalProperties {
-	if r.Value == stringNull {
+	if r.Value == internal.StringNull {
 		return &AdditionalProperties{mode: additionalPropertiesNull}
 	}
 
-	if r.Value == stringArray {
+	if r.Value == internal.StringArray {
 		return &AdditionalProperties{mode: additionalPropertiesArray}
 	}
 
-	if r.Value == stringAny {
+	if r.Value == internal.StringAny {
 		return nil
 	}
 
@@ -82,7 +82,7 @@ func newStringAdditionalProperties(r schema.RuleASTNode) *AdditionalProperties {
 }
 
 func newBooleanAdditionalProperties(r schema.RuleASTNode) *AdditionalProperties {
-	if r.Value == stringFalse {
+	if r.Value == internal.StringFalse {
 		return newFalseAdditionalProperties()
 	}
 	return nil // JSight additionalProperties: true
@@ -125,7 +125,7 @@ func (a AdditionalProperties) arrayJSON() ([]byte, error) {
 }
 
 func (a AdditionalProperties) booleanJSON() ([]byte, error) {
-	return []byte(stringFalse), nil
+	return []byte(internal.StringFalse), nil
 }
 
 func (a AdditionalProperties) nullJSON() ([]byte, error) {
