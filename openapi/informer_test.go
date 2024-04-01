@@ -40,56 +40,15 @@ func Test_Informer_RSchema(t *testing.T) {
 
 	tests := []testInfoData{
 		{
+			`/OK/`,
+			[]testUserType{},
+			[]SchemaInfoType{SchemaInfoTypeRegex},
+			"",
+			[]testPropertiesInfos{},
+		},
+		// Actually JSight API Core doesn't allow annotation after regex. I left this test as an example of unexpected work.
+		{
 			`/OK/ // string annotation`,
-			[]testUserType{},
-			[]SchemaInfoType{SchemaInfoTypeRegex},
-			"",
-			[]testPropertiesInfos{},
-		},
-		{
-			`/OK/ // -- string annotation`,
-			[]testUserType{},
-			[]SchemaInfoType{SchemaInfoTypeRegex},
-			"",
-			[]testPropertiesInfos{},
-		},
-		{
-			`/OK/ // {"type": "string"} -- string annotation`,
-			[]testUserType{},
-			[]SchemaInfoType{SchemaInfoTypeRegex},
-			"",
-			[]testPropertiesInfos{},
-		},
-		{
-			`/OK/ // {"type": "email"} -- string annotation`,
-			[]testUserType{},
-			[]SchemaInfoType{SchemaInfoTypeRegex},
-			"",
-			[]testPropertiesInfos{},
-		},
-		{
-			`/OK/ // {min: 10, max: 30.0} -- string annotation`,
-			[]testUserType{},
-			[]SchemaInfoType{SchemaInfoTypeRegex},
-			"",
-			[]testPropertiesInfos{},
-		},
-		{
-			`/OK/ // {"":""} -- string annotation`,
-			[]testUserType{},
-			[]SchemaInfoType{SchemaInfoTypeRegex},
-			"",
-			[]testPropertiesInfos{},
-		},
-		{
-			`/OK/ // {} -- string annotation`,
-			[]testUserType{},
-			[]SchemaInfoType{SchemaInfoTypeRegex},
-			"",
-			[]testPropertiesInfos{},
-		},
-		{
-			`/(?:[a-z0-9!#$%&'*+\\\/=?^_` + "`" + `{|}~-])+(?:\\.[a-z0-9!#$%&'*+\\\/=?^_` + "`" + `{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e\-\\x1f\\x21\\x23-\\x5b\\x5d\-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e\-\\x7f])*\"\)@\(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?\)\\.\){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e\-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e\-\\x7f])+)\\]\)/ // {type: "regex"} -- string annotation`,
 			[]testUserType{},
 			[]SchemaInfoType{SchemaInfoTypeRegex},
 			"",
@@ -369,24 +328,9 @@ func assertRInfo(t *testing.T, data testInfoData) {
 	node, err := rSchema.GetAST()
 	require.NoError(t, err)
 
-	require.Equal(t, data.expectedRootAnnotation, node.Comment)
 	assertTypes(t, data.expectedSchemaInfoTypes, informers)
-
-	expectedPropertyIndex := 0
-
-	for _, ei := range informers {
-		if ei.Type() == SchemaInfoTypeObject {
-			properties := ei.(ObjectInformer).PropertiesInfos()
-
-			for _, pi := range properties {
-				require.True(t, expectedPropertyIndex < len(data.expectedPropertiesInfos))
-
-				assertProperty(t, data.expectedPropertiesInfos[expectedPropertyIndex], pi)
-
-				expectedPropertyIndex++
-			}
-		}
-	}
+	require.Equal(t, data.expectedRootAnnotation, node.Comment)
+	require.Equal(t, data.expectedPropertiesInfos, []testPropertiesInfos{})
 }
 
 func assertTypes(t *testing.T, expected []SchemaInfoType, informers []SchemaInformer) {

@@ -8,7 +8,7 @@ import (
 	"github.com/jsightapi/jsight-schema-core/notations/regex"
 )
 
-// Regex schema to OpenAPi converter
+// RSOAC Regex schema to OpenAPi converter
 type RSOAC struct {
 	root        *RegexString
 	description *string
@@ -33,6 +33,7 @@ func NewFromASTNode(astNode schema.ASTNode) *RSOAC {
 	}
 }
 
+// SetDescription has no effect on the resulting OpenAPI
 func (o *RSOAC) SetDescription(s string) {
 	o.description = &s
 }

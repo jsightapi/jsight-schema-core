@@ -13,11 +13,60 @@ func Test_Regex(t *testing.T) {
         		"pattern": "OK"
 			}`,
 		},
+		{ // regular expression matches the slash character
+			`/\\/`,
+			`{ 
+					"type": "string",
+					"pattern": "\\\\"
+			}`,
+		},
+		{ // regular expression matches the backward slash character
+			`/\//`,
+			`{ 
+					"type": "string",
+					"pattern": "\\/"
+			}`,
+		},
+		{
+			`/\n/`,
+			`{ 
+					"type": "string",
+					"pattern": "\\n"
+			}`,
+		},
+		{
+			`/\x0A/`,
+			`{ 
+					"type": "string",
+					"pattern": "\\x0A"
+			}`,
+		},
+		{
+			`/"/`,
+			`{ 
+					"type": "string",
+					"pattern": "\""
+			}`,
+		},
+		{
+			`/'/`,
+			`{ 
+					"type": "string",
+					"pattern": "'"
+			}`,
+		},
+		{
+			`/Hello, 世界/`,
+			`{ 
+					"type": "string",
+					"pattern": "Hello, 世界"
+			}`,
+		},
 		{
 			`/ /`,
 			`{ 
 					"type": "string",
-					"pattern": " "		
+					"pattern": " "
 			}`,
 		},
 		{
