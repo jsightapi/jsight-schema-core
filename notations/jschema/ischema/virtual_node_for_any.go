@@ -22,7 +22,7 @@ func VirtualNodeForAny() Node {
 }
 
 func makeVirtualNodeForAny() Node {
-	f := fs.NewFile("virtual", `{} // {type: "any"}`)
+	f := fs.NewFile("virtual", `"" // {type: "any"}`)
 	lex := lexeme.NewLexEvent(lexeme.LiteralEnd, 0, 1, f)
 
 	node := newLiteralNode(lex)
