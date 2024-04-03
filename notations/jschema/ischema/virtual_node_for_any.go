@@ -26,7 +26,7 @@ func makeVirtualNodeForAny() Node {
 	lex := lexeme.NewLexEvent(lexeme.LiteralEnd, 0, 1, f)
 
 	node := newLiteralNode(lex)
-	node.jsonType = json.TypeObject
+	node.jsonType = json.TypeString
 	node.AddConstraint(constraint.NewType(bytes.NewBytes(`"any"`), schema.RuleASTNodeSourceUnknown))
 
 	return node
