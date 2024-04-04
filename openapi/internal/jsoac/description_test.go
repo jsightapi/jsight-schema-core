@@ -58,17 +58,19 @@ func Test_description(t *testing.T) {
 				"prt1": 1 // Type integer. 			
 			}`,
 			`{
-				"type": "object",
-				"properties": {
-					"prt1": {
-						"description": "Type integer.",
-						"type": "integer",
-						"example": 1,
-					},
-				},
-				"additionalProperties": false,
-				"required": [ "prt1" ],
-		  }`,
+    		"type": "object",
+    		"properties": {
+        	"prt1": {
+            "type": "integer",
+            "example": 1,
+            "description": "Type integer."
+        	}
+    		},
+    		"required": [
+        	"prt1"
+    		],
+    		"additionalProperties": false
+			}`,
 		},
 	}
 	for _, data := range tests {
