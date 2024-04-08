@@ -165,15 +165,6 @@ func Test_Informer_JSchema(t *testing.T) {
 						"description": "property annotation 2"
 					}`,
 				},
-				{
-					optional:   false,
-					annotation: "property annotation 3",
-					openapi: `{
-						"type": "string",
-						"example": "v3",
-						"description": "property annotation 3"
-					}`,
-				},
 			},
 		},
 		{
@@ -286,6 +277,241 @@ func Test_Informer_JSchema(t *testing.T) {
 				},
 			},
 		},
+		{
+			`{ // {allOf: "@base23"} - object annotation
+				"k1": "v1" // property annotation 1
+			}`,
+			[]testUserType{
+				{
+					name: "@base23",
+					jsight: `{
+						"k2": "v2", // {optional: true} - property annotation 2
+						"k3": "v3" // property annotation 3
+					}`,
+				},
+			},
+			[]SchemaInfoType{SchemaInfoTypeObject},
+			"object annotation",
+			[]testPropertiesInfos{
+				{
+					optional:   false,
+					key:        "k1",
+					annotation: "property annotation 1",
+					openapi: `{
+						"type": "string",
+						"example": "v1",
+						"description": "property annotation 1"
+					}`,
+				},
+				{
+					optional:   true,
+					key:        "k2",
+					annotation: "property annotation 2",
+					openapi: `{
+						"type": "string",
+						"example": "v2",
+						"description": "property annotation 2"
+					}`,
+				},
+				{
+					optional:   false,
+					key:        "k3",
+					annotation: "property annotation 3",
+					openapi: `{
+						"type": "string",
+						"example": "v3",
+						"description": "property annotation 3"
+					}`,
+				},
+			},
+		},
+		{
+			`{ // { allOf: ["@base2","@base3"] } - object annotation
+				"k1": "v1" // property annotation 1
+			}`,
+			[]testUserType{
+				{
+					name: "@base2",
+					jsight: `{
+						"k2": "v2" // {optional: true} - property annotation 2
+					}`,
+				},
+				{
+					name: "@base3",
+					jsight: `{
+						"k3": "v3" // property annotation 3
+					}`,
+				},
+			},
+			[]SchemaInfoType{SchemaInfoTypeObject},
+			"object annotation",
+			[]testPropertiesInfos{
+				{
+					optional:   false,
+					key:        "k1",
+					annotation: "property annotation 1",
+					openapi: `{
+						"type": "string",
+						"example": "v1",
+						"description": "property annotation 1"
+					}`,
+				},
+				{
+					optional:   true,
+					key:        "k2",
+					annotation: "property annotation 2",
+					openapi: `{
+						"type": "string",
+						"example": "v2",
+						"description": "property annotation 2"
+					}`,
+				},
+				{
+					optional:   false,
+					key:        "k3",
+					annotation: "property annotation 3",
+					openapi: `{
+						"type": "string",
+						"example": "v3",
+						"description": "property annotation 3"
+					}`,
+				},
+			},
+		},
+		{
+			`@base23 // root annotation`,
+			[]testUserType{
+				{
+					name: "@base23",
+					jsight: `{
+						"k2": "v2", // {optional: true} - property annotation 2
+						"k3": "v3" // property annotation 3
+					}`,
+				},
+			},
+			[]SchemaInfoType{SchemaInfoTypeObject},
+			"root annotation",
+			[]testPropertiesInfos{
+				{
+					optional:   true,
+					key:        "k2",
+					annotation: "property annotation 2",
+					openapi: `{
+						"type": "string",
+						"example": "v2",
+						"description": "property annotation 2"
+					}`,
+				},
+				{
+					optional:   false,
+					key:        "k3",
+					annotation: "property annotation 3",
+					openapi: `{
+						"type": "string",
+						"example": "v3",
+						"description": "property annotation 3"
+					}`,
+				},
+			},
+		},
+		{
+			`@base2 // root annotation`,
+			[]testUserType{
+				{
+					name: "@base2",
+					jsight: `{ // {allOf: "@base3"}
+						"k2": "v2" // {optional: true} - property annotation 2
+					}`,
+				},
+				{
+					name: "@base3",
+					jsight: `{
+						"k3": "v3" // property annotation 3
+					}`,
+				},
+			},
+			[]SchemaInfoType{SchemaInfoTypeObject},
+			"root annotation",
+			[]testPropertiesInfos{
+				{
+					optional:   true,
+					key:        "k2",
+					annotation: "property annotation 2",
+					openapi: `{
+						"type": "string",
+						"example": "v2",
+						"description": "property annotation 2"
+					}`,
+				},
+				{
+					optional:   false,
+					key:        "k3",
+					annotation: "property annotation 3",
+					openapi: `{
+						"type": "string",
+						"example": "v3",
+						"description": "property annotation 3"
+					}`,
+				},
+			},
+		},
+		{
+			`@base1 // root annotation`,
+			[]testUserType{
+				{
+					name: "@base1",
+					jsight: `{ // {allOf: ["@base2", "@base3"]}
+						"k1": "v1" // property annotation 1
+					}`,
+				},
+				{
+					name: "@base2",
+					jsight: `{
+						"k2": "v2" // {optional: true} - property annotation 2
+					}`,
+				},
+				{
+					name: "@base3",
+					jsight: `{
+						"k3": "v3" // property annotation 3
+					}`,
+				},
+			},
+			[]SchemaInfoType{SchemaInfoTypeObject},
+			"root annotation",
+			[]testPropertiesInfos{
+				{
+					optional:   false,
+					key:        "k1",
+					annotation: "property annotation 1",
+					openapi: `{
+						"type": "string",
+						"example": "v1",
+						"description": "property annotation 1"
+					}`,
+				},
+				{
+					optional:   true,
+					key:        "k2",
+					annotation: "property annotation 2",
+					openapi: `{
+						"type": "string",
+						"example": "v2",
+						"description": "property annotation 2"
+					}`,
+				},
+				{
+					optional:   false,
+					key:        "k3",
+					annotation: "property annotation 3",
+					openapi: `{
+						"type": "string",
+						"example": "v3",
+						"description": "property annotation 3"
+					}`,
+				},
+			},
+		},
 	}
 	for _, data := range tests {
 		t.Run(data.name(), func(t *testing.T) {
@@ -318,6 +544,8 @@ func assertInfo(t *testing.T, data testInfoData) {
 			}
 		}
 	}
+
+	require.Equal(t, len(data.expectedPropertiesInfos), expectedPropertyIndex)
 }
 
 func assertRInfo(t *testing.T, data testInfoData) {
