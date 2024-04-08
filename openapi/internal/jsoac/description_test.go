@@ -86,6 +86,25 @@ func Test_description(t *testing.T) {
 				"description": "Multiline annotation in several lines."
 			}`,
 		},
+		{
+			`{
+				"prt1": 1 // Type integer.
+			}`,
+			`{
+    			"type": "object",
+    			"properties": {
+        			"prt1": {
+            			"type": "integer",
+            			"example": 1,
+            			"description": "Type integer."
+        			}
+    			},
+    			"required": [
+        			"prt1"
+    			],
+    			"additionalProperties": false
+			}`,
+		},
 	}
 	for _, data := range tests {
 		t.Run(data.name(), func(t *testing.T) {
