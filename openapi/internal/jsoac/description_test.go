@@ -55,21 +55,21 @@ func Test_description(t *testing.T) {
 		},
 		{
 			`{
-				"prt1": 1 // Type integer. 			
+				"prt1": 1 // Type integer.
 			}`,
 			`{
-    		"type": "object",
-    		"properties": {
-        	"prt1": {
-            "type": "integer",
-            "example": 1,
-            "description": "Type integer."
-        	}
-    		},
-    		"required": [
-        	"prt1"
-    		],
-    		"additionalProperties": false
+    			"type": "object",
+    			"properties": {
+        			"prt1": {
+            			"type": "integer",
+            			"example": 1,
+            			"description": "Type integer."
+        			}
+    			},
+    			"required": [
+        			"prt1"
+    			],
+    			"additionalProperties": false
 			}`,
 		},
 	}
