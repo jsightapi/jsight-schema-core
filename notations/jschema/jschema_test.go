@@ -1327,7 +1327,7 @@ func TestSchema_Check(t *testing.T) {
 				given: `"foo" // {enum: ["foo", "bar", "bar"]}`,
 			},
 
-			`ERROR (code 302): Invalid character '2' in object key (inside comment)
+			`ERROR (code 302): Invalid character '2' in the object key. See the rules for annotations here: https://jsight.io/docs/jsight-schema-0-3#rules
 	in line 2 on file 
 	> "one": 1 // {min 25}
 	-------------------^`: {

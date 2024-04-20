@@ -217,7 +217,7 @@ var errorFormat = map[Code]string{
 
 	// scanner
 	ErrInvalidCharacter:                      "Invalid character %q %s",
-	ErrInvalidCharacterInAnnotationObjectKey: "Invalid character %s in object key (inside comment)",
+	ErrInvalidCharacterInAnnotationObjectKey: "Invalid character %s in the object key. See the rules for annotations here: https://jsight.io/docs/jsight-schema-0-3#rules",
 	ErrUnexpectedEOF:                         "Unexpected end of file",
 	ErrAnnotationNotAllowed:                  "The annotation is not allowed here. The ANNOTATION cannot be placed on lines containing more than one EXAMPLE element to which the ANNOTATION may apply. For more information, please refer to: https://jsight.io/docs/jsight-schema-0-3#rules",
 	ErrEmptySetOfLexicalEvents:               "Empty set of found lexical events",
