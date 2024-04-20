@@ -65,7 +65,7 @@ func TestMinItems_ValidateTheArray(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		assert.PanicsWithError(t, `The number of array elements does not match the "minItems" rule`, func() {
+		assert.PanicsWithError(t, `The number of the array elements does not match the "minItems" rule`, func() {
 			NewMinItems(bytes.NewBytes("2")).ValidateTheArray(1)
 		})
 	})

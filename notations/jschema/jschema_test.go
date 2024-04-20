@@ -1497,7 +1497,7 @@ func TestSchema_Check(t *testing.T) {
 				given: "42 // {min: 30, max: 41}",
 			},
 
-			`ERROR (code 608): The number of array elements does not match the "minItems" rule
+			`ERROR (code 608): The number of the array elements does not match the "minItems" rule
 	in line 1 on file 
 	> [ // {minItems: 2, maxItems: 3}
 	--^`: {
@@ -1506,7 +1506,7 @@ func TestSchema_Check(t *testing.T) {
   ]`,
 			},
 
-			`ERROR (code 609): The number of array elements does not match the "maxItems" rule
+			`ERROR (code 609): The number of the array elements does not match the "maxItems" rule
 	in line 1 on file 
 	> [ // {minItems: 1, maxItems: 2}
 	--^`: {
