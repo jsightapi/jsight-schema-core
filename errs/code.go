@@ -299,7 +299,7 @@ var errorFormat = map[Code]string{
 	ErrNotFoundRuleOr:                            `The rule "or" is not found (required for the "mixed" type)`,
 	ErrIncompatibleTypes:                         `The value in the example does not match the specified type in the "type" rule (%s)`,
 	// ErrUnknownAdditionalPropertiesTypes:          "Unknown type of additionalProperties (%s)",
-	ErrUnexpectedConstraint: "The %q constraint can't be used for the %q type",
+	ErrUnexpectedConstraint: "The rule %q is not compatible with the %q type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules",
 
 	// checker
 	ErrChecker:                               `Checker error`,

@@ -371,7 +371,7 @@ func TestSchemaCompiler_precisionConstraint(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		assert.PanicsWithError(t, `The "precision" constraint can't be used for the "foo" type`, func() {
+		assert.PanicsWithError(t, `The rule "precision" is not compatible with the "foo" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules`, func() {
 			n := mocks.NewNode(t)
 			n.On("Constraint", constraint.PrecisionConstraintType).Return(constraint.Precision{})
 			n.On("Constraint", constraint.TypeConstraintType).Return(constraint.NewType(

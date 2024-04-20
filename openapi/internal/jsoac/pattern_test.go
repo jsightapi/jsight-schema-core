@@ -22,7 +22,7 @@ func Test_pattern(t *testing.T) {
 				"pattern": "[A-Za-z ]+"
 			}`,
 		},
-		//TODO - ERROR (code 1117): The "regex" constraint can't be used for the "email" type
+		//TODO - ERROR (code 1117): The rule "regex" is not compatible with the "email" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 		/*
 			{
 				`"info@mail.com" // { type: "email", regex: "[A-Za-z ]+" }`,

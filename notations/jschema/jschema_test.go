@@ -830,14 +830,14 @@ func TestSchema_Check(t *testing.T) {
 				given: "[1, 2, 3] // {const: false}",
 			},
 
-			`ERROR (code 1117): The "const" constraint can't be used for the "object" type
+			`ERROR (code 1117): The rule "const" is not compatible with the "object" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> {} // {const: true}
 	--^`: {
 				given: "{} // {const: true}",
 			},
 
-			`ERROR (code 1117): The "const" constraint can't be used for the "object" type
+			`ERROR (code 1117): The rule "const" is not compatible with the "object" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> { // {const: true}
 	--^`: {
@@ -846,14 +846,14 @@ func TestSchema_Check(t *testing.T) {
 }`,
 			},
 
-			`ERROR (code 1117): The "const" constraint can't be used for the "array" type
+			`ERROR (code 1117): The rule "const" is not compatible with the "array" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> [] // {const: true}
 	--^`: {
 				given: "[] // {const: true}",
 			},
 
-			`ERROR (code 1117): The "const" constraint can't be used for the "array" type
+			`ERROR (code 1117): The rule "const" is not compatible with the "array" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> [ // {const: true}
 	--^`: {
@@ -979,84 +979,84 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 1117): The "minLength" constraint can't be used for the "email" type
+			`ERROR (code 1117): The rule "minLength" is not compatible with the "email" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "user@example.com" // {type: "email", minLength: 2}
 	--^`: {
 				given: `"user@example.com" // {type: "email", minLength: 2}`,
 			},
 
-			`ERROR (code 1117): The "maxLength" constraint can't be used for the "email" type
+			`ERROR (code 1117): The rule "maxLength" is not compatible with the "email" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "user@example.com" // {type: "email", maxLength: 256}
 	--^`: {
 				given: `"user@example.com" // {type: "email", maxLength: 256}`,
 			},
 
-			`ERROR (code 1117): The "minLength" constraint can't be used for the "uri" type
+			`ERROR (code 1117): The rule "minLength" is not compatible with the "uri" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "http://example.com" // {type: "uri", minLength: 2}
 	--^`: {
 				given: `"http://example.com" // {type: "uri", minLength: 2}`,
 			},
 
-			`ERROR (code 1117): The "maxLength" constraint can't be used for the "uri" type
+			`ERROR (code 1117): The rule "maxLength" is not compatible with the "uri" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "http://example.com" // {type: "uri", maxLength: 256}
 	--^`: {
 				given: `"http://example.com" // {type: "uri", maxLength: 256}`,
 			},
 
-			`ERROR (code 1117): The "minLength" constraint can't be used for the "date" type
+			`ERROR (code 1117): The rule "minLength" is not compatible with the "date" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "2022-02-27" // {type: "date", minLength: 2}
 	--^`: {
 				given: `"2022-02-27" // {type: "date", minLength: 2}`,
 			},
 
-			`ERROR (code 1117): The "maxLength" constraint can't be used for the "date" type
+			`ERROR (code 1117): The rule "maxLength" is not compatible with the "date" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "2022-02-27" // {type: "date", maxLength: 256}
 	--^`: {
 				given: `"2022-02-27" // {type: "date", maxLength: 256}`,
 			},
 
-			`ERROR (code 1117): The "minLength" constraint can't be used for the "datetime" type
+			`ERROR (code 1117): The rule "minLength" is not compatible with the "datetime" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "2022-02-27T10:19:48+06:00" // {type: "datetime", minLength: 2}
 	--^`: {
 				given: `"2022-02-27T10:19:48+06:00" // {type: "datetime", minLength: 2}`,
 			},
 
-			`ERROR (code 1117): The "maxLength" constraint can't be used for the "datetime" type
+			`ERROR (code 1117): The rule "maxLength" is not compatible with the "datetime" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "2022-02-27T10:19:48+06:00" // {type: "datetime", maxLength: 256}
 	--^`: {
 				given: `"2022-02-27T10:19:48+06:00" // {type: "datetime", maxLength: 256}`,
 			},
 
-			`ERROR (code 1117): The "minLength" constraint can't be used for the "uuid" type
+			`ERROR (code 1117): The rule "minLength" is not compatible with the "uuid" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "95f362d6-87df-4dd4-a948-9f84f65a3468" // {type: "uuid", minLength: 2}
 	--^`: {
 				given: `"95f362d6-87df-4dd4-a948-9f84f65a3468" // {type: "uuid", minLength: 2}`,
 			},
 
-			`ERROR (code 1117): The "maxLength" constraint can't be used for the "uuid" type
+			`ERROR (code 1117): The rule "maxLength" is not compatible with the "uuid" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "95f362d6-87df-4dd4-a948-9f84f65a3468" // {type: "uuid", maxLength: 256}
 	--^`: {
 				given: `"95f362d6-87df-4dd4-a948-9f84f65a3468" // {type: "uuid", maxLength: 256}`,
 			},
 
-			`ERROR (code 1117): The "regex" constraint can't be used for the "uuid" type
+			`ERROR (code 1117): The rule "regex" is not compatible with the "uuid" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "95f362d6-87df-4dd4-a948-9f84f65a3468" // {type: "uuid", regex: ".+"}
 	--^`: {
 				given: `"95f362d6-87df-4dd4-a948-9f84f65a3468" // {type: "uuid", regex: ".+"}`,
 			},
 
-			`ERROR (code 1117): The "const" constraint can't be used for the "any" type
+			`ERROR (code 1117): The rule "const" is not compatible with the "any" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> 42 // {type: "any", const: true}
 	--^`: {
@@ -1099,7 +1099,7 @@ func TestSchema_Check(t *testing.T) {
 }`,
 			},
 
-			`ERROR (code 1117): The "minLength" constraint can't be used for the "float" type
+			`ERROR (code 1117): The rule "minLength" is not compatible with the "float" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> 1.23 /* {precision: 2,
 	--^`: {
@@ -1108,7 +1108,7 @@ func TestSchema_Check(t *testing.T) {
                 }*/`,
 			},
 
-			`ERROR (code 1117): The "minLength" constraint can't be used for the "decimal" type
+			`ERROR (code 1117): The rule "minLength" is not compatible with the "decimal" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> 1.23 /* {type: "decimal", precision: 2,
 	--^`: {
@@ -1117,70 +1117,70 @@ func TestSchema_Check(t *testing.T) {
                 }*/`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "string" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "string" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "user@example.com" // {precision: 2}
 	--^`: {
 				given: `"user@example.com" // {precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "email" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "email" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "user@example.com" // {type: "email", precision: 2}
 	--^`: {
 				given: `"user@example.com" // {type: "email", precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "string" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "string" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "2022-02-27" // {precision: 2}
 	--^`: {
 				given: `"2022-02-27" // {precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "date" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "date" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "2022-02-27" // {type: "date", precision: 2}
 	--^`: {
 				given: `"2022-02-27" // {type: "date", precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "string" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "string" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "2021-02-27T16:40:00+06:00" // {precision: 2}
 	--^`: {
 				given: `"2021-02-27T16:40:00+06:00" // {precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "datetime" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "datetime" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "2021-02-27T16:40:00+06:00" // {type: "datetime", precision: 2}
 	--^`: {
 				given: `"2021-02-27T16:40:00+06:00" // {type: "datetime", precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "string" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "string" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "https://example.com" // {precision: 2}
 	--^`: {
 				given: `"https://example.com" // {precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "uri" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "uri" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "https://example.com" // {type: "uri", precision: 2}
 	--^`: {
 				given: `"https://example.com" // {type: "uri", precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "string" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "string" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "bea58dd8-5f05-4350-9705-18bcf10e70fa" // {precision: 2}
 	--^`: {
 				given: `"bea58dd8-5f05-4350-9705-18bcf10e70fa" // {precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "uuid" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "uuid" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "bea58dd8-5f05-4350-9705-18bcf10e70fa" // {type: "uuid", precision: 2}
 	--^`: {
@@ -4223,7 +4223,7 @@ line
 				schema: "1.\n",
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "float" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "float" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> 1.1 // {type: "float", precision: 2}
 	--^`: {
