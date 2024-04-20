@@ -299,7 +299,7 @@ func TestSchema_AddType(t *testing.T) {
 
 		t.Run("invalid schema name", func(t *testing.T) {
 			err := New("", "42").AddType("invalid", New("invalid", "42"))
-			assert.EqualError(t, err, "Invalid schema name (invalid)")
+			assert.EqualError(t, err, `The type name "invalid" is not valid. Learn more about the user types here: https://jsight.io/docs/jsight-schema-0-3#user-types`)
 		})
 	})
 }

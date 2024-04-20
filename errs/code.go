@@ -253,8 +253,8 @@ var errorFormat = map[Code]string{
 	ErrValueOfOneConstraintGreaterOrEqualToAnother: "The value of the rule %q should be less than the value of the rule %q",
 
 	// loader
-	ErrInvalidSchemaName:                "Invalid schema name (%s)",
-	ErrInvalidSchemaNameInAllOfRule:     `Invalid schema name (%s) in "allOf" rule`,
+	ErrInvalidSchemaName:                `The type name "%s" is not valid. Learn more about the user types here: https://jsight.io/docs/jsight-schema-0-3#user-types`,
+	ErrInvalidSchemaNameInAllOfRule:     "The type name \"%s\" is not valid. Learn more about the `allOf` rule here: https://jsight.io/docs/jsight-schema-0-3#rule-allof",
 	ErrUnacceptableRecursionInAllOfRule: `Unacceptable recursion in "allOf" rule`,
 	ErrUnacceptableUserTypeInAllOfRule:  `Unacceptable type. The "%s" type in the "allOf" rule must be an object`,
 	ErrConflictAdditionalProperties:     `Conflicting value in AdditionalProperties rules when inheriting from allOf`,
