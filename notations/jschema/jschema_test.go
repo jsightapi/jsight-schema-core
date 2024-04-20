@@ -968,7 +968,7 @@ func TestSchema_Check(t *testing.T) {
 }`,
 			},
 
-			`ERROR (code 1301): Incorrect type of user type
+			`ERROR (code 1301): The value in the example does not match the rules!
 	in line 1 on file 
 	> 123 // {or: ["@cat", "@dog"]}
 	--^`: {
@@ -4237,7 +4237,7 @@ line
 				schema: "@foo",
 			},
 
-			`ERROR (code 1301): Incorrect type of user type
+			`ERROR (code 1301): The value in the example does not match the rules!
 	in line 1 on file 
 	> 123 // {or: ["@cat", "@dog"]}
 	--^`: {
