@@ -878,7 +878,7 @@ func TestSchema_Check(t *testing.T) {
 				given: "@foo | @bar // {const: true}",
 			},
 
-			`ERROR (code 1114): Not found the rule "or" for the "mixed" type
+			`ERROR (code 1114): The rule "or" is not found (required for the "mixed" type)
 	in line 1 on file 
 	> 42 // {type: "mixed", const: true}
 	--^`: {
@@ -1401,49 +1401,49 @@ func TestSchema_Check(t *testing.T) {
   }`,
 			},
 
-			`ERROR (code 1115): Incompatible value of example and "type" rule (decimal)
+			`ERROR (code 1115): The value in the example does not match the specified type in the "type" rule (decimal)
 	in line 1 on file 
 	> "2" // {type: "decimal", precision: 2}
 	--^`: {
 				given: `"2" // {type: "decimal", precision: 2}`,
 			},
 
-			`ERROR (code 1115): Incompatible value of example and "type" rule (decimal)
+			`ERROR (code 1115): The value in the example does not match the specified type in the "type" rule (decimal)
 	in line 1 on file 
 	> 2 // {type: "decimal", precision: 2}
 	--^`: {
 				given: `2 // {type: "decimal", precision: 2}`,
 			},
 
-			`ERROR (code 1115): Incompatible value of example and "type" rule (email)
+			`ERROR (code 1115): The value in the example does not match the specified type in the "type" rule (email)
 	in line 1 on file 
 	> 10 // {type: "email"}
 	--^`: {
 				given: `10 // {type: "email"}`,
 			},
 
-			`ERROR (code 1115): Incompatible value of example and "type" rule (uri)
+			`ERROR (code 1115): The value in the example does not match the specified type in the "type" rule (uri)
 	in line 1 on file 
 	> 10 // {type: "uri"}
 	--^`: {
 				given: `10 // {type: "uri"}`,
 			},
 
-			`ERROR (code 1115): Incompatible value of example and "type" rule (uuid)
+			`ERROR (code 1115): The value in the example does not match the specified type in the "type" rule (uuid)
 	in line 1 on file 
 	> 10 // {type: "uuid"}
 	--^`: {
 				given: `10 // {type: "uuid"}`,
 			},
 
-			`ERROR (code 1115): Incompatible value of example and "type" rule (date)
+			`ERROR (code 1115): The value in the example does not match the specified type in the "type" rule (date)
 	in line 1 on file 
 	> 10 // {type: "date"}
 	--^`: {
 				given: `10 // {type: "date"}`,
 			},
 
-			`ERROR (code 1115): Incompatible value of example and "type" rule (datetime)
+			`ERROR (code 1115): The value in the example does not match the specified type in the "type" rule (datetime)
 	in line 1 on file 
 	> 10 // {type: "datetime"}
 	--^`: {
@@ -1680,7 +1680,7 @@ func TestSchema_Check(t *testing.T) {
 			// 				areKeysCaseInsensitive: true,
 			// 			},
 
-			"ERROR (code 1115): Incompatible value of example and \"type\" rule (email)\n\tin line 1 on file \n\t> 123 // {type: \"email\"}\n\t--^": {
+			"ERROR (code 1115): The value in the example does not match the specified type in the \"type\" rule (email)\n\tin line 1 on file \n\t> 123 // {type: \"email\"}\n\t--^": {
 				given: `123 // {type: "email"}`,
 			},
 		}
