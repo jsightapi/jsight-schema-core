@@ -1529,7 +1529,7 @@ func TestSchema_Check(t *testing.T) {
 				given: `"foo" // {minLength: 1, maxLength: 2}`,
 			},
 
-			`ERROR (code 1304): Key shortcut "@foo" should be string but "integer" given
+			`ERROR (code 1304): Reference in the object key "@foo" must be string, not "integer". Learn more about referencing user types in object properties here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-property-key
 	in line 2 on file 
 	> @foo: 42
 	--^`: {
@@ -1541,7 +1541,7 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 1304): Key shortcut "@foo" should be string but "float" given
+			`ERROR (code 1304): Reference in the object key "@foo" must be string, not "float". Learn more about referencing user types in object properties here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-property-key
 	in line 2 on file 
 	> @foo: 42
 	--^`: {
@@ -1553,7 +1553,7 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 1304): Key shortcut "@foo" should be string but "boolean" given
+			`ERROR (code 1304): Reference in the object key "@foo" must be string, not "boolean". Learn more about referencing user types in object properties here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-property-key
 	in line 2 on file 
 	> @foo: 42
 	--^`: {
@@ -1565,7 +1565,7 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 1304): Key shortcut "@foo" should be string but "null" given
+			`ERROR (code 1304): Reference in the object key "@foo" must be string, not "null". Learn more about referencing user types in object properties here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-property-key
 	in line 2 on file 
 	> @foo: 42
 	--^`: {
@@ -1577,7 +1577,7 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 1304): Key shortcut "@foo" should be string but "array" given
+			`ERROR (code 1304): Reference in the object key "@foo" must be string, not "array". Learn more about referencing user types in object properties here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-property-key
 	in line 2 on file 
 	> @foo: 42
 	--^`: {
@@ -1589,7 +1589,7 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 1304): Key shortcut "@foo" should be string but "object" given
+			`ERROR (code 1304): Reference in the object key "@foo" must be string, not "object". Learn more about referencing user types in object properties here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-property-key
 	in line 2 on file 
 	> @foo: 42
 	--^`: {

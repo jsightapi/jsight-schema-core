@@ -309,8 +309,8 @@ var errorFormat = map[Code]string{
 	// link checker
 	ErrIncorrectUserType: "The value in the example does not match the rules!",
 	ErrUserTypeNotFound:  "Type %q not found",
-	ErrImpossibleToDetermineTheJsonTypeDueToRecursion: `It is impossible to determine the json type due to recursion of type %q`, //nolint:lll
-	ErrInvalidKeyShortcutType:                         "Key shortcut %q should be string but %q given",
+	ErrImpossibleToDetermineTheJsonTypeDueToRecursion: `It is impossible to determine the type due to the recursion of the type %q`, //nolint:lll
+	ErrInvalidKeyShortcutType:                         "Reference in the object key %q must be string, not %q. Learn more about referencing user types in object properties here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-property-key",
 
 	// sdk
 	ErrEmptyType:                          `Type "%s" must not be empty`,
