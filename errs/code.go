@@ -265,14 +265,14 @@ var errorFormat = map[Code]string{
 	ErrIncorrectRuleValueType:           "Invalid rule value. Learn more about rules here: https://jsight.io/docs/jsight-schema-0-3#rules",
 	ErrIncorrectRuleWithoutExample:      "You cannot place a RULE on a line without an EXAMPLE",
 	ErrIncorrectRuleForSeveralNode:      "You cannot place a RULE on a line that contain more than one EXAMPLE value. The only exception is when an object key and its value are found in one line. Learn more about rules here: https://jsight.io/docs/jsight-schema-0-3#rules", //nolint:lll
-	ErrLiteralValueExpected:             "Literal value expected",
+	ErrLiteralValueExpected:             "Scalar value expected",
 	ErrInvalidValueInEnumRule:           `An array or rule name was expected as a value for the "enum"`,
-	ErrIncorrectArrayItemTypeInEnumRule: `Incorrect array item type in "enum". Only literals are allowed.`,
-	ErrUnacceptableValueInAllOfRule:     `Incorrect value in "allOf" rule. A type name, or list of type names, is expected.`, //nolint:lll
-	ErrTypeNameNotFoundInAllOfRule:      `Type name not found in "allOf" rule`,
-	ErrDuplicationInEnumRule:            `%s value duplicates in "enum"`,
-	ErrRuleIsAlreadyCompiled:            "Rule is already compiled",
-	ErrRuleIsNil:                        "Rule is nil",
+	ErrIncorrectArrayItemTypeInEnumRule: `Enums cannot contain arrays.`,
+	ErrUnacceptableValueInAllOfRule:     "Incorrect value in the `allOf` rule. A type name or a list of type names are expected. Learn more about the `allOf` rule here: https://jsight.io/docs/jsight-schema-0-3#rule-allof", //nolint:lll
+	ErrTypeNameNotFoundInAllOfRule:      "The `allOf` rule must contain a type name or an array of type names. Learn more about the `allOf` rule here: https://jsight.io/docs/jsight-schema-0-3#rule-allof",
+	ErrDuplicationInEnumRule:            `The value %s is repeated in the "enum" rule!`,
+	ErrRuleIsAlreadyCompiled:            "The rule is already compiled",
+	ErrRuleIsNil:                        "The rule is nil",
 
 	// "or" rule loader
 	ErrArrayWasExpectedInOrRule:       `An array was expected as a value for the "or" rule`,

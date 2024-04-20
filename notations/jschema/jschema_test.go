@@ -326,7 +326,7 @@ func TestSchema_AddRule(t *testing.T) {
 
 			err := s.AddRule("foo", mocks.NewRule(t))
 
-			assert.EqualError(t, err, "Rule is already compiled")
+			assert.EqualError(t, err, "The rule is already compiled")
 			assert.Len(t, s.Rules, 0)
 		})
 
@@ -335,7 +335,7 @@ func TestSchema_AddRule(t *testing.T) {
 
 			err := s.AddRule("", nil)
 
-			assert.EqualError(t, err, "Rule is nil")
+			assert.EqualError(t, err, "The rule is nil")
 			assert.Len(t, s.Rules, 0)
 		})
 
@@ -1313,14 +1313,14 @@ func TestSchema_Check(t *testing.T) {
 				given: `2e+2 // {type: "decimal"}`,
 			},
 
-			`ERROR (code 810): 42 value duplicates in "enum"
+			`ERROR (code 810): The value 42 is repeated in the "enum" rule!
 	in line 1 on file 
 	> 42 // {enum: [42, 43, 42]}
 	------------------------^`: {
 				given: "42 // {enum: [42, 43, 42]}",
 			},
 
-			`ERROR (code 810): "bar" value duplicates in "enum"
+			`ERROR (code 810): The value "bar" is repeated in the "enum" rule!
 	in line 1 on file 
 	> "foo" // {enum: ["foo", "bar", "bar"]}
 	---------------------------------^`: {
@@ -1616,7 +1616,7 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 810): "\u0061" value duplicates in "enum"
+			`ERROR (code 810): The value "\u0061" is repeated in the "enum" rule!
 	in line 1 on file 
 	> "a" // {enum: ["a", "\u0061"]}
 	----------------------^`: {
