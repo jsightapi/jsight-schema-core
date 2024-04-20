@@ -284,10 +284,10 @@ var errorFormat = map[Code]string{
 
 	// compiler
 	ErrRuleOptionalAppliesOnlyToObjectProperties: `The rule "optional" can be applied only to object properties!`,
-	ErrCannotSpecifyOtherRulesWithTypeReference:  `Invalid rule set shared with a type reference`,
-	ErrShouldBeNoOtherRulesInSetWithOr:           `Invalid rule set shared with "or"`,
-	ErrShouldBeNoOtherRulesInSetWithEnum:         `Invalid rule set shared with "enum"`,
-	ErrShouldBeNoOtherRulesInSetWithAny:          `Invalid rule set shared with "any"`,
+	ErrCannotSpecifyOtherRulesWithTypeReference:  `Some of the rules can not be applied to the user type reference. Learn more about type referencing here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-example-value`,
+	ErrShouldBeNoOtherRulesInSetWithOr:           `Some of the rules are not compatible with the "or" rule. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or`,
+	ErrShouldBeNoOtherRulesInSetWithEnum:         `Some of the rules are not compatible with the "enum" rule. Learn more about the "enum" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-enum`,
+	ErrShouldBeNoOtherRulesInSetWithAny:          `Some of the rules are not compatible with the "any" type. Learn more about types and rules compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules`,
 	ErrInvalidNestedElementsFoundForTypeAny:      `Invalid nested elements found for an element of type "any"`,
 	ErrInvalidChildNodeTogetherWithTypeReference: `You cannot specify child node if you use a type reference`,
 	ErrInvalidChildNodeTogetherWithOrRule:        `You cannot specify child node if you use a "or" rule`,

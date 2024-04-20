@@ -864,14 +864,14 @@ func TestSchema_Check(t *testing.T) {
 ]`,
 			},
 
-			`ERROR (code 1102): Invalid rule set shared with a type reference
+			`ERROR (code 1102): Some of the rules can not be applied to the user type reference. Learn more about type referencing here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-example-value
 	in line 1 on file 
 	> @foo // {const: true}
 	--^`: {
 				given: "@foo // {const: true}",
 			},
 
-			`ERROR (code 1103): Invalid rule set shared with "or"
+			`ERROR (code 1103): Some of the rules are not compatible with the "or" rule. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or
 	in line 1 on file 
 	> @foo | @bar // {const: true}
 	--^`: {
@@ -885,21 +885,21 @@ func TestSchema_Check(t *testing.T) {
 				given: `42 // {type: "mixed", const: true}`,
 			},
 
-			`ERROR (code 1103): Invalid rule set shared with "or"
+			`ERROR (code 1103): Some of the rules are not compatible with the "or" rule. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or
 	in line 1 on file 
 	> 42 // {type: "mixed", or: ["@foo", "@bar"], const: true}
 	--^`: {
 				given: `42 // {type: "mixed", or: ["@foo", "@bar"], const: true}`,
 			},
 
-			`ERROR (code 1103): Invalid rule set shared with "or"
+			`ERROR (code 1103): Some of the rules are not compatible with the "or" rule. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or
 	in line 1 on file 
 	> 42 // {or: [{type: "integer"}, {type: "string"}], const: true}
 	--^`: {
 				given: `42 // {or: [{type: "integer"}, {type: "string"}], const: true}`,
 			},
 
-			`ERROR (code 1102): Invalid rule set shared with a type reference
+			`ERROR (code 1102): Some of the rules can not be applied to the user type reference. Learn more about type referencing here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-example-value
 	in line 1 on file 
 	> 42 // {type: "@foo", const: true}
 	--^`: {
