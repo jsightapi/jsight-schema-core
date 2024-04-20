@@ -1804,7 +1804,7 @@ func TestSchema_Check(t *testing.T) {
 
 				"Type is required inside the \"or\" rule (1)": {
 					given: `"foo" // {or: [ {min: 100}, {type: "string"} ]}`,
-					expected: `ERROR (code 906): Type is required inside the "or" rule 
+					expected: `ERROR (code 906): The "type" rule is missed inside the "or" rule. Specify the "type" rule inside. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or
 	in line 1 on file 
 	> "foo" // {or: [ {min: 100}, {type: "string"} ]}
 	------------------^`,
@@ -1812,7 +1812,7 @@ func TestSchema_Check(t *testing.T) {
 
 				"Type is required inside the \"or\" rule (2)": {
 					given: `"foo" // {or: [ {min: 100}, "string" ]}`,
-					expected: `ERROR (code 906): Type is required inside the "or" rule 
+					expected: `ERROR (code 906): The "type" rule is missed inside the "or" rule. Specify the "type" rule inside. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or
 	in line 1 on file 
 	> "foo" // {or: [ {min: 100}, "string" ]}
 	------------------^`,
