@@ -28,7 +28,7 @@ func TestNewMaxItems(t *testing.T) {
 
 		for _, s := range ss {
 			t.Run(s, func(t *testing.T) {
-				assert.PanicsWithError(t, `Invalid value of "maxItems" constraint`, func() {
+				assert.PanicsWithError(t, `Invalid value in the "maxItems" rule. Learn about the rules here: https://jsight.io/docs/jsight-schema-0-3#rules`, func() {
 					NewMaxItems(bytes.NewBytes(s))
 				})
 			})

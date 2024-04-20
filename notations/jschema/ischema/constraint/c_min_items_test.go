@@ -28,7 +28,7 @@ func TestNewMinItems(t *testing.T) {
 
 		for _, s := range ss {
 			t.Run(s, func(t *testing.T) {
-				assert.PanicsWithError(t, `Invalid value of "minItems" constraint`, func() {
+				assert.PanicsWithError(t, `Invalid value in the "minItems" rule. Learn about the rules here: https://jsight.io/docs/jsight-schema-0-3#rules`, func() {
 					NewMinItems(bytes.NewBytes(s))
 				})
 			})

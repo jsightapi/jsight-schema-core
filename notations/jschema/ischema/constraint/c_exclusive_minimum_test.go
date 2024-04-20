@@ -29,7 +29,7 @@ func TestNewExclusiveMinimum(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		assert.PanicsWithError(t, `Invalid value of "exclusiveMinimum" constraint`, func() {
+		assert.PanicsWithError(t, `Invalid value in the "exclusiveMinimum" rule. Learn about the rules here: https://jsight.io/docs/jsight-schema-0-3#rules`, func() {
 			NewExclusiveMinimum(bytes.NewBytes("42"))
 		})
 	})
