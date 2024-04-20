@@ -1345,7 +1345,7 @@ func TestSchema_Check(t *testing.T) {
 }`,
 			},
 
-			`ERROR (code 1602): Enum rule "@enum" not found
+			`ERROR (code 1602): Enum "@enum" is not found
 	in line 1 on file 
 	> "foo" // {enum: @enum}
 	------------------^`: {

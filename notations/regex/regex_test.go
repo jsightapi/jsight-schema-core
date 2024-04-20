@@ -43,7 +43,7 @@ func TestSchema_Pattern(t *testing.T) {
 
 	t.Run("negative", func(t *testing.T) {
 		_, err := New("", "invalid").Pattern()
-		assert.EqualError(t, err, `ERROR (code 1500): Regex should starts with '/' character, but found 'i'
+		assert.EqualError(t, err, `ERROR (code 1500): Regular expression should start with the '/' character, not with 'i'
 	in line 1 on file 
 	> invalid
 	--^`)
@@ -59,7 +59,7 @@ func TestSchema_Len(t *testing.T) {
 
 	t.Run("negative", func(t *testing.T) {
 		_, err := New("", "invalid").Len()
-		assert.EqualError(t, err, `ERROR (code 1500): Regex should starts with '/' character, but found 'i'
+		assert.EqualError(t, err, `ERROR (code 1500): Regular expression should start with the '/' character, not with 'i'
 	in line 1 on file 
 	> invalid
 	--^`)
@@ -88,7 +88,7 @@ func TestSchema_Example(t *testing.T) {
 
 	t.Run("negative", func(t *testing.T) {
 		_, err := New("", "invalid").Len()
-		assert.EqualError(t, err, `ERROR (code 1500): Regex should starts with '/' character, but found 'i'
+		assert.EqualError(t, err, `ERROR (code 1500): Regular expression should start with the '/' character, not with 'i'
 	in line 1 on file 
 	> invalid
 	--^`)
@@ -113,7 +113,7 @@ func TestSchema_Check(t *testing.T) {
 
 	t.Run("negative", func(t *testing.T) {
 		err := New("", "invalid").Check()
-		assert.EqualError(t, err, `ERROR (code 1500): Regex should starts with '/' character, but found 'i'
+		assert.EqualError(t, err, `ERROR (code 1500): Regular expression should start with the '/' character, not with 'i'
 	in line 1 on file 
 	> invalid
 	--^`)
@@ -134,7 +134,7 @@ func TestSchema_GetAST(t *testing.T) {
 
 	t.Run("negative", func(t *testing.T) {
 		_, err := New("", "invalid").GetAST()
-		assert.EqualError(t, err, `ERROR (code 1500): Regex should starts with '/' character, but found 'i'
+		assert.EqualError(t, err, `ERROR (code 1500): Regular expression should start with the '/' character, not with 'i'
 	in line 1 on file 
 	> invalid
 	--^`)
@@ -169,15 +169,15 @@ func TestSchema_doCompile(t *testing.T) {
 
 	t.Run("negative", func(t *testing.T) {
 		cc := map[string]string{
-			"foo": `ERROR (code 1500): Regex should starts with '/' character, but found 'f'
+			"foo": `ERROR (code 1500): Regular expression should start with the '/' character, not with 'f'
 	in line 1 on file 
 	> foo
 	--^`,
-			"/foo": `ERROR (code 1501): Regex should ends with '/' character, but found 'o'
+			"/foo": `ERROR (code 1501): Regular expression should end with the '/' character, not with 'o'
 	in line 1 on file 
 	> /foo
 	-----^`,
-			"/[-1}/": `ERROR (code 1502): Invalid regex /[-1}/
+			"/[-1}/": `ERROR (code 1502): The regular expression is invalid: /[-1}/
 	in line 1 on file 
 	> /[-1}/
 	--^`,

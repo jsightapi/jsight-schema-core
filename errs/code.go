@@ -315,22 +315,22 @@ var errorFormat = map[Code]string{
 	// sdk
 	ErrEmptyType:                          `Type "%s" must not be empty`,
 	ErrUnnecessaryLexemeAfterTheEndOfEnum: `An unnecessary non-space character after the end of the enum`,
-	ErrRegexUnexpectedStart:               "Regex should starts with '/' character, but found %s",
-	ErrRegexUnexpectedEnd:                 "Regex should ends with '/' character, but found %s",
-	ErrRegexInvalid:                       "Invalid regex %s",
+	ErrRegexUnexpectedStart:               "Regular expression should start with the '/' character, not with %s",
+	ErrRegexUnexpectedEnd:                 "Regular expression should end with the '/' character, not with %s",
+	ErrRegexInvalid:                       "The regular expression is invalid: %s",
 
 	// enum
 	ErrEnumArrayExpected:  `An array was expected as a value for the "enum"`,
 	ErrEnumIsHoldRuleName: "Can't append specific value to enum initialized with rule name",
-	ErrEnumRuleNotFound:   "Enum rule %q not found",
-	ErrNotAnEnumRule:      "Rule %q not an Enum",
+	ErrEnumRuleNotFound:   "Enum %q is not found",
+	ErrNotAnEnumRule:      "Rule %q is not an Enum",
 	ErrInvalidEnumValues:  "Invalid enum values %q: %s",
 
 	// value
-	ErrInvalidBoolValue:         "Invalid bool value",
+	ErrInvalidBoolValue:         "Invalid boolean value",
 	ErrNotEnoughDataInParseUint: "Not enough data in ParseUint",
 	ErrInvalidByteInParseUint:   "Invalid byte %q in ParseUint %q",
-	ErrTooMuchDataForInt:        "Too much data for int",
+	ErrTooMuchDataForInt:        "The value exceeds the maximum integer value",
 	ErrIncorrectNumberValue:     "Incorrect number value %q",
 	ErrURNPrefix:                "Invalid URN prefix: %q",
 	ErrUUIDLength:               "Invalid UUID length: %d",
@@ -340,7 +340,7 @@ var errorFormat = map[Code]string{
 
 	// example & ast
 	ErrRegexExample:          "generate example for Regex type: %w",
-	ErrCantCollectRulesTypes: `Can't collect rules: "types" constraint is required with "or" constraint`,
+	ErrCantCollectRulesTypes: `Can't collect rules: "types" constraint is required with "or" constraint. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or`,
 
 	// tests
 	ErrInTheTest: "Error in the test: %s",
