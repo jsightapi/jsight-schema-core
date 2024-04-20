@@ -1352,7 +1352,7 @@ func TestSchema_Check(t *testing.T) {
 				given: `"foo" // {enum: @enum}`,
 			},
 
-			`ERROR (code 610): Does not match any of the enumeration values
+			`ERROR (code 610): The value in the example does not match any of the enumeration values.
 	in line 1 on file 
 	> 42 // {enum: @enum}
 	--^`: {
@@ -1362,7 +1362,7 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 610): Does not match any of the enumeration values
+			`ERROR (code 610): The value in the example does not match any of the enumeration values.
 	in line 2 on file 
 	> "foo": 42 // {enum: @enum}
 	---------^`: {
@@ -1623,7 +1623,7 @@ func TestSchema_Check(t *testing.T) {
 				given: `"a" // {enum: ["a", "\u0061"]}`,
 			},
 
-			`ERROR (code 610): Does not match any of the enumeration values
+			`ERROR (code 610): The value in the example does not match any of the enumeration values.
 	in line 1 on file 
 	> "c" // {enum: ["a", "\u0062"]}
 	--^`: {
