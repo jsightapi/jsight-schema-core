@@ -229,7 +229,7 @@ var errorFormat = map[Code]string{
 	ErrDuplicationOfNameOfTypes: "Duplication of the name of the types (%s)",
 
 	// node
-	ErrDuplicateRule:          "Duplicate %q rule",
+	ErrDuplicateRule:          "Duplicate rule %q",
 	ErrUnexpectedLexicalEvent: "Unexpected lexical event %q %s",
 
 	// constraint
