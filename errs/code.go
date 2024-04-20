@@ -237,7 +237,7 @@ var errorFormat = map[Code]string{
 	ErrConstraintValidation:                        "The value in the example violates the rule `%q: %s` %s",
 	ErrConstraintStringLengthValidation:            "The length of the string in the example violates the rule `%q: %q`",
 	ErrInvalidValueOfConstraint:                    "Invalid value in the %q rule. Learn about the rules here: https://jsight.io/docs/jsight-schema-0-3#rules",
-	ErrZeroPrecision:                               "Precision can't be zero",
+	ErrZeroPrecision:                               "Precision can not be zero",
 	ErrEmptyEmail:                                  "Empty email",
 	ErrInvalidEmail:                                "Invalid email (%s)",
 	ErrConstraintMinItemsValidation:                `The number of array elements does not match the "minItems" rule`,

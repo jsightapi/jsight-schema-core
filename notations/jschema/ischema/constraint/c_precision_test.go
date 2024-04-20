@@ -20,7 +20,7 @@ func TestNewPrecision(t *testing.T) {
 	t.Run("negative", func(t *testing.T) {
 		cc := map[string]string{
 			"-10":  `Invalid value in the "precision" rule. Learn about the rules here: https://jsight.io/docs/jsight-schema-0-3#rules`,
-			"0":    "Precision can't be zero",
+			"0":    "Precision can not be zero",
 			"3.14": `Invalid value in the "precision" rule. Learn about the rules here: https://jsight.io/docs/jsight-schema-0-3#rules`,
 		}
 
