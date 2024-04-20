@@ -65,7 +65,7 @@ func TestMaxLength_Validate(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		assert.PanicsWithError(t, `Invalid string length for "maxLength" = "10" constraint`, func() {
+		assert.PanicsWithError(t, "The length of the string in the example violates the rule `\"maxLength\": \"10\"`", func() {
 			NewMaxLength(bytes.NewBytes("10")).Validate(bytes.NewBytes("0123456789A"))
 		})
 	})

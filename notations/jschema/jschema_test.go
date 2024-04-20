@@ -1515,14 +1515,14 @@ func TestSchema_Check(t *testing.T) {
   ]`,
 			},
 
-			`ERROR (code 603): Invalid string length for "minLength" = "4" constraint
+			"ERROR (code 603): The length of the string in the example violates the rule `\"minLength\": \"4\"`" + `
 	in line 1 on file 
 	> "foo" // {minLength: 4, maxLength: 5}
 	--^`: {
 				given: `"foo" // {minLength: 4, maxLength: 5}`,
 			},
 
-			`ERROR (code 603): Invalid string length for "maxLength" = "2" constraint
+			"ERROR (code 603): The length of the string in the example violates the rule `\"maxLength\": \"2\"`" + `
 	in line 1 on file 
 	> "foo" // {minLength: 1, maxLength: 2}
 	--^`: {
