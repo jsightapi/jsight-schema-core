@@ -1460,14 +1460,14 @@ func TestSchema_Check(t *testing.T) {
 }`,
 			},
 
-			`ERROR (code 617): Value of constraint "min" should be less or equal to value of "max" constraint
+			`ERROR (code 617): The value of the rule "min" should be less or equal to the value of the rule "max"
 	in line 1 on file 
 	> 42 // {min: 45, max: 42}
 	--^`: {
 				given: "42 // {min: 45, max: 42}",
 			},
 
-			`ERROR (code 617): Value of constraint "minItems" should be less or equal to value of "maxItems" constraint
+			`ERROR (code 617): The value of the rule "minItems" should be less or equal to the value of the rule "maxItems"
 	in line 1 on file 
 	> [ // {minItems: 2, maxItems: 1}
 	--^`: {
@@ -1476,7 +1476,7 @@ func TestSchema_Check(t *testing.T) {
   ]`,
 			},
 
-			`ERROR (code 617): Value of constraint "minLength" should be less or equal to value of "maxLength" constraint
+			`ERROR (code 617): The value of the rule "minLength" should be less or equal to the value of the rule "maxLength"
 	in line 1 on file 
 	> "foo" // {minLength: 2, maxLength: 1}
 	--^`: {

@@ -249,8 +249,8 @@ var errorFormat = map[Code]string{
 	ErrInvalidUUID:                                 "UUID parsing error: %s",
 	ErrInvalidConst:                                "Does not match expected value (%s)",
 	ErrInvalidDate:                                 "Date parsing error (%s)",
-	ErrValueOfOneConstraintGreaterThanAnother:      "Value of constraint %q should be less or equal to value of %q constraint", //nolint:lll
-	ErrValueOfOneConstraintGreaterOrEqualToAnother: "Value of constraint %q should be less than value of %q constraint",
+	ErrValueOfOneConstraintGreaterThanAnother:      "The value of the rule %q should be less or equal to the value of the rule %q", //nolint:lll
+	ErrValueOfOneConstraintGreaterOrEqualToAnother: "The value of the rule %q should be less than the value of the rule %q",
 
 	// loader
 	ErrInvalidSchemaName:                "Invalid schema name (%s)",

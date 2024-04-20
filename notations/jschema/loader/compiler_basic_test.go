@@ -122,7 +122,7 @@ func TestSchemaCompiler_checkMinAndMax(t *testing.T) {
 				m.On("Constraint", constraint.MaxConstraintType).Return(constraint.NewMax(bytes.NewBytes("1")))
 				return m
 			},
-			expectedErr: `Value of constraint "min" should be less than value of "max" constraint`,
+			expectedErr: `The value of the rule "min" should be less than the value of the rule "max"`,
 		},
 		"min = max (exclusive)": {
 			node: func(t *testing.T) ischema.Node {
@@ -133,7 +133,7 @@ func TestSchemaCompiler_checkMinAndMax(t *testing.T) {
 				m.On("Constraint", constraint.MaxConstraintType).Return(max)
 				return m
 			},
-			expectedErr: `Value of constraint "min" should be less than value of "max" constraint`,
+			expectedErr: `The value of the rule "min" should be less than the value of the rule "max"`,
 		},
 		"min (exclusive) = max (exclusive)": {
 			node: func(t *testing.T) ischema.Node {
@@ -146,7 +146,7 @@ func TestSchemaCompiler_checkMinAndMax(t *testing.T) {
 				m.On("Constraint", constraint.MaxConstraintType).Return(max)
 				return m
 			},
-			expectedErr: `Value of constraint "min" should be less than value of "max" constraint`,
+			expectedErr: `The value of the rule "min" should be less than the value of the rule "max"`,
 		},
 		"min > max": {
 			node: func(t *testing.T) ischema.Node {
@@ -155,7 +155,7 @@ func TestSchemaCompiler_checkMinAndMax(t *testing.T) {
 				m.On("Constraint", constraint.MaxConstraintType).Return(constraint.NewMax(bytes.NewBytes("1")))
 				return m
 			},
-			expectedErr: `Value of constraint "min" should be less or equal to value of "max" constraint`,
+			expectedErr: `The value of the rule "min" should be less or equal to the value of the rule "max"`,
 		},
 		"min (exclusive) > max": {
 			node: func(t *testing.T) ischema.Node {
@@ -166,7 +166,7 @@ func TestSchemaCompiler_checkMinAndMax(t *testing.T) {
 				m.On("Constraint", constraint.MaxConstraintType).Return(constraint.NewMax(bytes.NewBytes("1")))
 				return m
 			},
-			expectedErr: `Value of constraint "min" should be less than value of "max" constraint`,
+			expectedErr: `The value of the rule "min" should be less than the value of the rule "max"`,
 		},
 		"min > max (exclusive)": {
 			node: func(t *testing.T) ischema.Node {
@@ -177,7 +177,7 @@ func TestSchemaCompiler_checkMinAndMax(t *testing.T) {
 				m.On("Constraint", constraint.MaxConstraintType).Return(max)
 				return m
 			},
-			expectedErr: `Value of constraint "min" should be less than value of "max" constraint`,
+			expectedErr: `The value of the rule "min" should be less than the value of the rule "max"`,
 		},
 		"min (exclusive) > max (exclusive)": {
 			node: func(t *testing.T) ischema.Node {
@@ -190,7 +190,7 @@ func TestSchemaCompiler_checkMinAndMax(t *testing.T) {
 				m.On("Constraint", constraint.MaxConstraintType).Return(max)
 				return m
 			},
-			expectedErr: `Value of constraint "min" should be less than value of "max" constraint`,
+			expectedErr: `The value of the rule "min" should be less than the value of the rule "max"`,
 		},
 	}
 
@@ -258,7 +258,7 @@ func TestSchemaCompiler_checkMinLengthAndMaxLength(t *testing.T) {
 				m.On("Constraint", constraint.MaxLengthConstraintType).Return(constraint.NewMaxLength(bytes.NewBytes("1")))
 				return m
 			},
-			expectedErr: `Value of constraint "minLength" should be less or equal to value of "maxLength" constraint`,
+			expectedErr: `The value of the rule "minLength" should be less or equal to the value of the rule "maxLength"`,
 		},
 	}
 
@@ -326,7 +326,7 @@ func TestSchemaCompiler_checkMinItemsAndMaxItems(t *testing.T) {
 				m.On("Constraint", constraint.MaxItemsConstraintType).Return(constraint.NewMaxItems(bytes.NewBytes("1")))
 				return m
 			},
-			expectedErr: `Value of constraint "minItems" should be less or equal to value of "maxItems" constraint`,
+			expectedErr: `The value of the rule "minItems" should be less or equal to the value of the rule "maxItems"`,
 		},
 	}
 
