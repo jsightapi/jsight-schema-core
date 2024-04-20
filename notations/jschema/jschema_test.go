@@ -1450,7 +1450,7 @@ func TestSchema_Check(t *testing.T) {
 				given: `10 // {type: "datetime"}`,
 			},
 
-			`ERROR (code 402): Duplicate keys (@catId) in the schema
+			`ERROR (code 402): Duplicate key "@catId"
 	in line 3 on file 
 	> "@catId": 2
 	--^`: {
@@ -1601,7 +1601,7 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 402): Duplicate keys (@catId) in the schema
+			`ERROR (code 402): Duplicate key "@catId"
 	in line 4 on file 
 	> "@catId": 3,
 	--^`: {
@@ -1642,7 +1642,7 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			// 			`ERROR (code 402): Duplicate keys (aaa) in the schema
+			// 			`ERROR (code 402): Duplicate key "aaa"
 			// 	in line 1 on file
 			// 	> {"aaa": 1, "AAA": 2}
 			// 	--^`: {
@@ -1650,7 +1650,7 @@ func TestSchema_Check(t *testing.T) {
 			// 				areKeysCaseInsensitive: true,
 			// 			},
 			//
-			// 			`ERROR (code 402): Duplicate keys (bbb) in the schema
+			// 			`ERROR (code 402): Duplicate key "bbb"
 			// 	in line 1 on file
 			// 	> {"aaa": {"bbb": 1, "BBB": 2}}
 			// 	----------^`: {
@@ -1658,7 +1658,7 @@ func TestSchema_Check(t *testing.T) {
 			// 				areKeysCaseInsensitive: true,
 			// 			},
 			//
-			// 			`ERROR (code 402): Duplicate keys (bbb) in the schema
+			// 			`ERROR (code 402): Duplicate key "bbb"
 			// 	in line 1 on file
 			// 	> [{"bbb": 1, "BBB": 2}]
 			// 	---^`: {
@@ -1666,7 +1666,7 @@ func TestSchema_Check(t *testing.T) {
 			// 				areKeysCaseInsensitive: true,
 			// 			},
 			//
-			// 			`ERROR (code 402): Duplicate keys (aaa) in the schema
+			// 			`ERROR (code 402): Duplicate key "aaa"
 			// 	in line 2 on file
 			// 	> { // {allOf: "@obj"}
 			// 	--^`: {

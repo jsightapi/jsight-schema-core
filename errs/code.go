@@ -225,7 +225,7 @@ var errorFormat = map[Code]string{
 
 	// schema
 	ErrNodeGrow:                 "Node grow error",
-	ErrDuplicateKeysInSchema:    "Duplicate keys (%s) in the schema",
+	ErrDuplicateKeysInSchema:    "Duplicate key \"%s\"",
 	ErrDuplicationOfNameOfTypes: "Duplication of the name of the types (%s)",
 
 	// node
