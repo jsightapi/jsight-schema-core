@@ -1707,7 +1707,7 @@ func TestSchema_Check(t *testing.T) {
 
 		t.Run("req.jschema.rules.type.reference 0.2", func(t *testing.T) {
 			cc := map[string]string{
-				`ERROR (code 1107): You cannot specify child node if you use a type reference
+				`ERROR (code 1107): Only scalar types can be referenced in the "type" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-example-value
 	in line 2 on file 
 	> "myCat": { // {type: "@cat"}
 	-----------^`: `{
@@ -1716,7 +1716,7 @@ func TestSchema_Check(t *testing.T) {
 		"name": "Tom"
 	}
 }`,
-				`ERROR (code 1107): You cannot specify child node if you use a type reference
+				`ERROR (code 1107): Only scalar types can be referenced in the "type" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-example-value
 	in line 2 on file 
 	> "myCatList": [ // {type: "@catList"}
 	---------------^`: `{
@@ -1724,11 +1724,11 @@ func TestSchema_Check(t *testing.T) {
 						@cat
 					]
 				}`,
-				`ERROR (code 1107): You cannot specify child node if you use a type reference
+				`ERROR (code 1107): Only scalar types can be referenced in the "type" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-example-value
 	in line 1 on file 
 	> {} // {type: "@foo"}
 	--^`: `{} // {type: "@foo"}`,
-				`ERROR (code 1107): You cannot specify child node if you use a type reference
+				`ERROR (code 1107): Only scalar types can be referenced in the "type" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-example-value
 	in line 1 on file 
 	> [] // {type: "@foo"}
 	--^`: `[] // {type: "@foo"}`,
@@ -1754,7 +1754,7 @@ func TestSchema_Check(t *testing.T) {
 		"name": "Tom"
 	}
 }`,
-					expected: `ERROR (code 1108): You cannot specify child node if you use a "or" rule
+					expected: `ERROR (code 1108): Only scalar values can be in an example when using the "or" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-several-user-types-in-the-value-of-the-example
 	in line 2 on file 
 	> "myPet1": { // {or: ["@cat", "@dog"]}
 	------------^`,
@@ -1766,7 +1766,7 @@ func TestSchema_Check(t *testing.T) {
 		@cat
 	]
 }`,
-					expected: `ERROR (code 1108): You cannot specify child node if you use a "or" rule
+					expected: `ERROR (code 1108): Only scalar values can be in an example when using the "or" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-several-user-types-in-the-value-of-the-example
 	in line 2 on file 
 	> "myPets": [ // {or: ["@catList", "@dogList"]}
 	------------^`,
@@ -1786,7 +1786,7 @@ func TestSchema_Check(t *testing.T) {
 					given: `{
 	"id": {} // {or: ["@cat", "@dog"]}
 }`,
-					expected: `ERROR (code 1108): You cannot specify child node if you use a "or" rule
+					expected: `ERROR (code 1108): Only scalar values can be in an example when using the "or" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-several-user-types-in-the-value-of-the-example
 	in line 2 on file 
 	> "id": {} // {or: ["@cat", "@dog"]}
 	--------^`,
@@ -1796,7 +1796,7 @@ func TestSchema_Check(t *testing.T) {
 					given: `{
 	"myPet3" : @cat // {or: ["@cat", "@dog"]}  # --ERROR! It is wrong.
 }`,
-					expected: `ERROR (code 1108): You cannot specify child node if you use a "or" rule
+					expected: `ERROR (code 1108): Only scalar values can be in an example when using the "or" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-several-user-types-in-the-value-of-the-example
 	in line 2 on file 
 	> "myPet3" : @cat // {or: ["@cat", "@dog"]}  # --ERROR! It is wrong.
 	-------------^`,
@@ -4173,7 +4173,7 @@ line
 }`,
 			},
 
-			`ERROR (code 1108): You cannot specify child node if you use a "or" rule
+			`ERROR (code 1108): Only scalar values can be in an example when using the "or" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-several-user-types-in-the-value-of-the-example
 	in line 2 on file 
 	> "foo" : @fizz // {or: ["@fizz", "@buzz"]}
 	----------^`: {
@@ -4182,7 +4182,7 @@ line
 }`,
 			},
 
-			`ERROR (code 1108): You cannot specify child node if you use a "or" rule
+			`ERROR (code 1108): Only scalar values can be in an example when using the "or" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-several-user-types-in-the-value-of-the-example
 	in line 2 on file 
 	> "foo": {} // {or: ["@fizz", "@buzz"]}
 	---------^`: {
@@ -4191,7 +4191,7 @@ line
 }`,
 			},
 
-			`ERROR (code 1107): You cannot specify child node if you use a type reference
+			`ERROR (code 1107): Only scalar types can be referenced in the "type" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-example-value
 	in line 2 on file 
 	> "foo" : @fizz // {type: "@fizz"}
 	----------^`: {
@@ -4200,7 +4200,7 @@ line
 }`,
 			},
 
-			`ERROR (code 1107): You cannot specify child node if you use a type reference
+			`ERROR (code 1107): Only scalar types can be referenced in the "type" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-example-value
 	in line 2 on file 
 	> "foo": {} // {type: "@fizz"}
 	---------^`: {
