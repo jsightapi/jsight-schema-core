@@ -816,7 +816,7 @@ func TestSchema_Check(t *testing.T) {
 				given: `42 // {type: "@foo"}`,
 			},
 
-			`ERROR (code 804): You cannot place a RULE on lines that contain more than one EXAMPLE node to which any RULES can apply. The only exception is when an object key and its value are found in one line.
+			`ERROR (code 804): You cannot place a RULE on a line that contain more than one EXAMPLE value. The only exception is when an object key and its value are found in one line. Learn more about rules here: https://jsight.io/docs/jsight-schema-0-3#rules
 	in line 1 on file 
 	> {"foo": "bar"} // {const: false}
 	----------------------------^`: {
@@ -928,7 +928,7 @@ func TestSchema_Check(t *testing.T) {
 }`,
 			},
 
-			`ERROR (code 802): Incorrect rule value type
+			`ERROR (code 802): Invalid rule value. Learn more about rules here: https://jsight.io/docs/jsight-schema-0-3#rules
 	in line 2 on file 
 	> {} // {type: @json}
 	---------------^`: {

@@ -255,16 +255,16 @@ var errorFormat = map[Code]string{
 	// loader
 	ErrInvalidSchemaName:                `The type name "%s" is not valid. Learn more about the user types here: https://jsight.io/docs/jsight-schema-0-3#user-types`,
 	ErrInvalidSchemaNameInAllOfRule:     "The type name \"%s\" is not valid. Learn more about the `allOf` rule here: https://jsight.io/docs/jsight-schema-0-3#rule-allof",
-	ErrUnacceptableRecursionInAllOfRule: `Unacceptable recursion in "allOf" rule`,
+	ErrUnacceptableRecursionInAllOfRule: "The unacceptable recursion in the `allOf` rule",
 	ErrUnacceptableUserTypeInAllOfRule:  `Unacceptable type. The "%s" type in the "allOf" rule must be an object`,
-	ErrConflictAdditionalProperties:     `Conflicting value in AdditionalProperties rules when inheriting from allOf`,
+	ErrConflictAdditionalProperties:     `Conflicting value in additionalProperties rules when inheriting from allOf`,
 	ErrLoadError:                        "load error: %w",
 
 	// rule loader
 	ErrLoader:                           "Loader error", // error somewhere in the loader code
-	ErrIncorrectRuleValueType:           "Incorrect rule value type",
-	ErrIncorrectRuleWithoutExample:      "You cannot place a RULE on line without EXAMPLE",
-	ErrIncorrectRuleForSeveralNode:      "You cannot place a RULE on lines that contain more than one EXAMPLE node to which any RULES can apply. The only exception is when an object key and its value are found in one line.", //nolint:lll
+	ErrIncorrectRuleValueType:           "Invalid rule value. Learn more about rules here: https://jsight.io/docs/jsight-schema-0-3#rules",
+	ErrIncorrectRuleWithoutExample:      "You cannot place a RULE on a line without an EXAMPLE",
+	ErrIncorrectRuleForSeveralNode:      "You cannot place a RULE on a line that contain more than one EXAMPLE value. The only exception is when an object key and its value are found in one line. Learn more about rules here: https://jsight.io/docs/jsight-schema-0-3#rules", //nolint:lll
 	ErrLiteralValueExpected:             "Literal value expected",
 	ErrInvalidValueInEnumRule:           `An array or rule name was expected as a value for the "enum"`,
 	ErrIncorrectArrayItemTypeInEnumRule: `Incorrect array item type in "enum". Only literals are allowed.`,
