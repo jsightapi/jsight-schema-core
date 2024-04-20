@@ -52,7 +52,7 @@ func TestPrecision_Validate(t *testing.T) {
 			"3.14":  "",
 			"3.1":   "",
 			"3":     "",
-			"3.142": `Invalid value for "precision" = 2 constraint (exclusive)`,
+			"3.142": "The value in the example violates the rule `\"precision\": 2` (exclusive)",
 		}
 
 		for given, expectedError := range cc {

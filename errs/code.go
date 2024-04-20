@@ -234,7 +234,7 @@ var errorFormat = map[Code]string{
 
 	// constraint
 	ErrUnknownRule:                                 `Unknown rule "%s". See the list of all possible rules here: https://jsight.io/docs/jsight-schema-0-3#rules`,
-	ErrConstraintValidation:                        "Invalid value for %q = %s constraint %s",
+	ErrConstraintValidation:                        "The value in the example violates the rule `%q: %s` %s",
 	ErrConstraintStringLengthValidation:            "Invalid string length for %q = %q constraint",
 	ErrInvalidValueOfConstraint:                    "Invalid value of %q constraint",
 	ErrZeroPrecision:                               "Precision can't be zero",

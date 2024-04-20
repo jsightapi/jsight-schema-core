@@ -93,12 +93,12 @@ func TestMin_Validate(t *testing.T) {
 			"3.14 >= 3.14": {
 				cnstr: newMin("3.14", true),
 				value: "3.14",
-				error: `Invalid value for "min" = 3.14 constraint (exclusive)`,
+				error: "The value in the example violates the rule `\"min\": 3.14` (exclusive)",
 			},
 			"3.14 >= 2": {
 				cnstr: newMin("3.14", true),
 				value: "2",
-				error: `Invalid value for "min" = 3.14 constraint (exclusive)`,
+				error: "The value in the example violates the rule `\"min\": 3.14` (exclusive)",
 			},
 			"3.14 > 3.14": {
 				cnstr: newMin("3.14", false),
@@ -107,7 +107,7 @@ func TestMin_Validate(t *testing.T) {
 			"3.14 > 2": {
 				cnstr: newMin("3.14", false),
 				value: "2",
-				error: `Invalid value for "min" = 3.14 constraint `,
+				error: "The value in the example violates the rule `\"min\": 3.14` ",
 			},
 			"3.14 >= 4": {
 				cnstr: newMin("3.14", true),

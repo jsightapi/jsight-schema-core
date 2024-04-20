@@ -1483,14 +1483,14 @@ func TestSchema_Check(t *testing.T) {
 				given: `"foo" // {minLength: 2, maxLength: 1}`,
 			},
 
-			`ERROR (code 602): Invalid value for "min" = 43 constraint 
+			"ERROR (code 602): The value in the example violates the rule `\"min\": 43` " + `
 	in line 1 on file 
 	> 42 // {min: 43, max: 44}
 	--^`: {
 				given: "42 // {min: 43, max: 44}",
 			},
 
-			`ERROR (code 602): Invalid value for "max" = 41 constraint 
+			"ERROR (code 602): The value in the example violates the rule `\"max\": 41` " + `
 	in line 1 on file 
 	> 42 // {min: 30, max: 41}
 	--^`: {
