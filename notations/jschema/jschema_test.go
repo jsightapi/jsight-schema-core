@@ -1776,7 +1776,7 @@ func TestSchema_Check(t *testing.T) {
 					given: `{
 	"myPet4" : @cat | @dog // {or: ["@cat", "@dog"]}
 }`,
-					expected: `ERROR (code 501): Duplicate "types" rule
+					expected: `ERROR (code 501): Duplicate rule "types"
 	in line 2 on file 
 	> "myPet4" : @cat | @dog // {or: ["@cat", "@dog"]}
 	---------------------------------^`,

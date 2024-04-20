@@ -233,7 +233,7 @@ var errorFormat = map[Code]string{
 	ErrUnexpectedLexicalEvent: "Unexpected lexical event %q %s",
 
 	// constraint
-	ErrUnknownRule:                                 `Unknown rule "%s"`,
+	ErrUnknownRule:                                 `Unknown rule "%s". See the list of all possible rules here: https://jsight.io/docs/jsight-schema-0-3#rules`,
 	ErrConstraintValidation:                        "Invalid value for %q = %s constraint %s",
 	ErrConstraintStringLengthValidation:            "Invalid string length for %q = %q constraint",
 	ErrInvalidValueOfConstraint:                    "Invalid value of %q constraint",
