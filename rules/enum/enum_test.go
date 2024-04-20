@@ -182,19 +182,19 @@ func TestEnum_Check(t *testing.T) {
 	in line 1 on file enum
 	> xxx [1,2,3]
 	--^`,
-			"[1,]": `ERROR (code 301): Invalid character "]" looking for beginning of value
+			"[1,]": `ERROR (code 301): Invalid character "]" — scalar value expected (number, string, boolean, or null)
 	in line 1 on file enum
 	> [1,]
 	-----^`,
-			"[,1]": `ERROR (code 301): Invalid character "," looking for beginning of value
+			"[,1]": `ERROR (code 301): Invalid character "," — scalar value expected (number, string, boolean, or null)
 	in line 1 on file enum
 	> [,1]
 	---^`,
-			"[ {} ]": `ERROR (code 301): Invalid character "{" looking for beginning of value
+			"[ {} ]": `ERROR (code 301): Invalid character "{" — scalar value expected (number, string, boolean, or null)
 	in line 1 on file enum
 	> [ {} ]
 	----^`,
-			"[ [] ]": `ERROR (code 301): Invalid character "[" looking for beginning of value
+			"[ [] ]": `ERROR (code 301): Invalid character "[" — scalar value expected (number, string, boolean, or null)
 	in line 1 on file enum
 	> [ [] ]
 	----^`,

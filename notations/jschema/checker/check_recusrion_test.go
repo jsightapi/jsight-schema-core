@@ -70,5 +70,5 @@ func TestRecursionChecker_createError(t *testing.T) {
 	}).
 		createError()
 
-	assert.EqualError(t, err, "Infinity recursion detected @foo -> @bar -> @fizz -> @buzz -> @foo")
+	assert.EqualError(t, err, "The infinite type recursion has been detected: @foo -> @bar -> @fizz -> @buzz -> @foo. Use rules `optional: false` or `nullable: true` to stop the recursion.")
 }

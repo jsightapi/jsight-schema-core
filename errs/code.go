@@ -17,7 +17,7 @@ const (
 	ErrUserTypeFound                       Code = 101
 	ErrUnknownValueOfTheTypeRule           Code = 102
 	ErrUnknownJSchemaType                  Code = 103
-	ErrInfinityRecursionDetected           Code = 104
+	ErrInfiniteRecursionDetected           Code = 104
 	ErrNodeTypeCantBeGuessed               Code = 105
 	ErrUnableToDetermineTheTypeOfJsonValue Code = 106
 
@@ -193,17 +193,17 @@ var errorFormat = map[Code]string{
 
 	// main & common
 	ErrUserTypeFound:                       "Found an invalid reference to the type",
-	ErrUnknownValueOfTheTypeRule:           "Unknown value of the type rule %q",
-	ErrUnknownJSchemaType:                  "Unknown JSchema type %q",
-	ErrInfinityRecursionDetected:           "Infinity recursion detected %s",
-	ErrNodeTypeCantBeGuessed:               "Node type can't be guessed by value (%s)",
-	ErrUnableToDetermineTheTypeOfJsonValue: "Unable to determine the type of JSON value",
+	ErrUnknownValueOfTheTypeRule:           `Type %q does not exist. See the list of possible types here: https://jsight.io/docs/jsight-schema-0-3#rule-type`,
+	ErrUnknownJSchemaType:                  `Type %q does not exist. See the list of possible types here: https://jsight.io/docs/jsight-schema-0-3#rule-type`,
+	ErrInfiniteRecursionDetected:           "The infinite type recursion has been detected: %s. Use rules `optional: false` or `nullable: true` to stop the recursion.",
+	ErrNodeTypeCantBeGuessed:               `Cannot determine the node type of the value "%s"`,
+	ErrUnableToDetermineTheTypeOfJsonValue: "Unable to determine the type of the JSON value",
 
 	// validator
 	ErrValidator:                       "Validator error",
 	ErrEmptySchema:                     "Empty schema",
 	ErrEmptyJson:                       "Empty JSON",
-	ErrOrRuleSetValidation:             `None of the rules in the "OR" set has been validated`,
+	ErrOrRuleSetValidation:             "The example value does not match any of the options in the `or` rule. Change the example value. Learn more about the `or` rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or",
 	ErrRequiredKeyNotFound:             `Required key(s) %q not found`,
 	ErrSchemaDoesNotSupportKey:         `Schema does not support key %q`,
 	ErrUnexpectedLexInLiteralValidator: `Invalid value, scalar expected`,
@@ -219,7 +219,7 @@ var errorFormat = map[Code]string{
 	ErrInvalidCharacter:                      "Invalid character %q %s",
 	ErrInvalidCharacterInAnnotationObjectKey: "Invalid character %s in object key (inside comment)",
 	ErrUnexpectedEOF:                         "Unexpected end of file",
-	ErrAnnotationNotAllowed:                  "Annotation not allowed here",
+	ErrAnnotationNotAllowed:                  "The annotation is not allowed here. The ANNOTATION cannot be placed on lines containing more than one EXAMPLE element to which the ANNOTATION may apply. For more information, please refer to: https://jsight.io/docs/jsight-schema-0-3#rules",
 	ErrEmptySetOfLexicalEvents:               "Empty set of found lexical events",
 	ErrIncorrectEndingOfTheLexicalEvent:      "Incorrect ending of the lexical event",
 

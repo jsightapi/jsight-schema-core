@@ -88,7 +88,7 @@ some extra text`: 26,
 
 	t.Run("negative", func(t *testing.T) {
 		_, err := New("foo", "invalid").Len()
-		assert.EqualError(t, err, `ERROR (code 301): Invalid character "i" looking for beginning of value
+		assert.EqualError(t, err, `ERROR (code 301): Invalid character "i" — JSON value expected (number, string, boolean, object, array, or null)
 	in line 1 on file foo
 	> invalid
 	--^`)
@@ -260,7 +260,7 @@ func TestSchema_Example(t *testing.T) {
 	t.Run("negative", func(t *testing.T) {
 		_, err := New("schema", "invalid").
 			Example()
-		assert.EqualError(t, err, `ERROR (code 301): Invalid character "i" looking for beginning of value
+		assert.EqualError(t, err, `ERROR (code 301): Invalid character "i" — JSON value expected (number, string, boolean, object, array, or null)
 	in line 1 on file schema
 	> invalid
 	--^`)
@@ -787,7 +787,7 @@ func TestSchema_Check(t *testing.T) {
 			given string
 			// areKeysCaseInsensitive bool
 		}{
-			`ERROR (code 301): Invalid character "i" looking for beginning of value
+			`ERROR (code 301): Invalid character "i" — JSON value expected (number, string, boolean, object, array, or null)
 	in line 1 on file 
 	> invalid
 	--^`: {
@@ -823,7 +823,7 @@ func TestSchema_Check(t *testing.T) {
 				given: `{"foo": "bar"} // {const: false}`,
 			},
 
-			`ERROR (code 304): Annotation not allowed here
+			`ERROR (code 304): The annotation is not allowed here. The ANNOTATION cannot be placed on lines containing more than one EXAMPLE element to which the ANNOTATION may apply. For more information, please refer to: https://jsight.io/docs/jsight-schema-0-3#rules
 	in line 1 on file 
 	> [1, 2, 3] // {const: false}
 	------------^`: {
@@ -906,7 +906,7 @@ func TestSchema_Check(t *testing.T) {
 				given: `42 // {type: "@foo", const: true}`,
 			},
 
-			`ERROR (code 301): Invalid character "/" looking for beginning of string
+			`ERROR (code 301): Invalid character "/" — string literal expected (starting with the quotation mark ` + "`\"`" + `)
 	in line 3 on file 
 	> // inline comment
 	--^`: {
@@ -1841,7 +1841,7 @@ func TestSchema_Check(t *testing.T) {
 				given string
 				types map[string]string
 			}{
-				"Infinity recursion detected @main -> @bar -> @main": {
+				"The infinite type recursion has been detected: @main -> @bar -> @main. Use rules `optional: false` or `nullable: true` to stop the recursion.": {
 					given: `{
 	"foo": @bar
 }`,
@@ -1852,7 +1852,7 @@ func TestSchema_Check(t *testing.T) {
 					},
 				},
 
-				"Infinity recursion detected @main -> @fizz -> @main": {
+				"The infinite type recursion has been detected: @main -> @fizz -> @main. Use rules `optional: false` or `nullable: true` to stop the recursion.": {
 					given: `{
 	"foo": @fizz | @buzz
 }`,
@@ -1866,7 +1866,7 @@ func TestSchema_Check(t *testing.T) {
 					},
 				},
 
-				"Infinity recursion detected @main -> @main": {
+				"The infinite type recursion has been detected: @main -> @main. Use rules `optional: false` or `nullable: true` to stop the recursion.": {
 					given: `{ // {allOf: ["@foo", "@bar"]}
 }`,
 					types: map[string]string{
@@ -4120,7 +4120,7 @@ line
 			schema string
 			types  map[string]string
 		}{
-			`ERROR (code 102): Unknown value of the type rule "foo"
+			`ERROR (code 102): Type "foo" does not exist. See the list of possible types here: https://jsight.io/docs/jsight-schema-0-3#rule-type
 	in line 1 on file 
 	> 42 // {type: "foo"}
 	--^`: {
@@ -4143,7 +4143,7 @@ line
 				schema: `@pig, // {or: ["@dog", "@pig"]}`,
 			},
 
-			`ERROR (code 304): Annotation not allowed here
+			`ERROR (code 304): The annotation is not allowed here. The ANNOTATION cannot be placed on lines containing more than one EXAMPLE element to which the ANNOTATION may apply. For more information, please refer to: https://jsight.io/docs/jsight-schema-0-3#rules
 	in line 2 on file 
 	> "ids": [1] // Ids
 	-------------^`: {
@@ -4152,7 +4152,7 @@ line
 }`,
 			},
 
-			`ERROR (code 304): Annotation not allowed here
+			`ERROR (code 304): The annotation is not allowed here. The ANNOTATION cannot be placed on lines containing more than one EXAMPLE element to which the ANNOTATION may apply. For more information, please refer to: https://jsight.io/docs/jsight-schema-0-3#rules
 	in line 3 on file 
 	> 1] // Ids
 	-----^`: {
@@ -4162,7 +4162,7 @@ line
 }`,
 			},
 
-			`ERROR (code 304): Annotation not allowed here
+			`ERROR (code 304): The annotation is not allowed here. The ANNOTATION cannot be placed on lines containing more than one EXAMPLE element to which the ANNOTATION may apply. For more information, please refer to: https://jsight.io/docs/jsight-schema-0-3#rules
 	in line 4 on file 
 	> ] // Ids
 	----^`: {
