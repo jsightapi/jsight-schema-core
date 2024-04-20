@@ -279,7 +279,7 @@ func TestScanner_Next(t *testing.T) {
 	in line 1 on file 
 	> {"key"}
 	--------^`,
-			`{"key":1:}`: `ERROR (code 301): Invalid character ":" after object key:value pair
+			`{"key":1:}`: `ERROR (code 301): Invalid character ":" after the object property, should be "," or "}"
 	in line 1 on file 
 	> {"key":1:}
 	----------^`,

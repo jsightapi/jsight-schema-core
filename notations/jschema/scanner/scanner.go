@@ -834,7 +834,7 @@ func stateAfterObjectValue(s *Scanner, c byte) state {
 	if c == '}' {
 		return stateFoundObjectEnd(s)
 	}
-	panic(s.newJSchemaErrorAtCharacter("after object key:value pair"))
+	panic(s.newJSchemaErrorAtCharacter("after the object property, \",\" or \"}\" might be forgotten"))
 }
 
 func stateAfterArrayItem(s *Scanner, c byte) state {

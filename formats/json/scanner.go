@@ -443,7 +443,7 @@ func stateAfterObjectValue(s *scanner, c byte) state {
 	if c == '}' {
 		return stateFoundObjectEnd(s)
 	}
-	panic(s.newJSchemaErrorAtCharacter("after object key:value pair"))
+	panic(s.newJSchemaErrorAtCharacter("after the object property, should be \",\" or \"}\""))
 }
 
 func stateAfterArrayItem(s *scanner, c byte) state {
