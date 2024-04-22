@@ -29,7 +29,7 @@ func TestNewExclusiveMaximum(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		assert.PanicsWithError(t, `Invalid value of "exclusiveMaximum" constraint`, func() {
+		assert.PanicsWithError(t, `Invalid value in the "exclusiveMaximum" rule. Learn about the rules here: https://jsight.io/docs/jsight-schema-0-3#rules`, func() {
 			NewExclusiveMaximum(bytes.NewBytes("42"))
 		})
 	})

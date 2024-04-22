@@ -26,7 +26,7 @@ func TestNewNullable(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		assert.PanicsWithError(t, `Invalid value of "nullable" constraint`, func() {
+		assert.PanicsWithError(t, `Invalid value in the "nullable" rule. Learn about the rules here: https://jsight.io/docs/jsight-schema-0-3#rules`, func() {
 			NewNullable(bytes.NewBytes("foo"))
 		})
 	})

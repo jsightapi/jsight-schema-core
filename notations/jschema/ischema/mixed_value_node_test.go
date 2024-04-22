@@ -107,7 +107,7 @@ func TestMixedValueNode_addTypeConstraint(t *testing.T) {
 		}
 
 		t.Run("not equal, new isn't mixed", func(t *testing.T) {
-			assert.PanicsWithError(t, `Duplicate "type" rule`, func() {
+			assert.PanicsWithError(t, `Duplicate rule "type"`, func() {
 				n := createFakeMixedValueNode()
 				n.schemaType = "should be changed"
 				n.baseNode.AddConstraint(createFakeTypeConstraint("@foo"))

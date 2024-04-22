@@ -26,7 +26,7 @@ func TestNewOptional(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		assert.PanicsWithError(t, `Invalid value of "optional" constraint`, func() {
+		assert.PanicsWithError(t, `Invalid value in the "optional" rule. Learn about the rules here: https://jsight.io/docs/jsight-schema-0-3#rules`, func() {
 			NewOptional(bytes.NewBytes("foo"))
 		})
 	})

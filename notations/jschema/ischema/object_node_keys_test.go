@@ -41,7 +41,7 @@ func TestObjectNodeKeys_Set(t *testing.T) {
 		"new isn't shortcut, exists isn't shortcut": {
 			keys:        fakeObjectNodeKeys(ObjectNodeKey{Key: "foo"}),
 			given:       ObjectNodeKey{Key: "foo"},
-			expectedErr: "Duplicate keys (foo) in the schema",
+			expectedErr: `Duplicate key "foo"`,
 		},
 
 		"new isn't shortcut, exists is shortcut": {
@@ -65,7 +65,7 @@ func TestObjectNodeKeys_Set(t *testing.T) {
 		"new is shortcut, exists is shortcut": {
 			keys:        fakeObjectNodeKeys(ObjectNodeKey{Key: "foo", IsShortcut: true}),
 			given:       ObjectNodeKey{Key: "foo", IsShortcut: true},
-			expectedErr: "Duplicate keys (foo) in the schema",
+			expectedErr: `Duplicate key "foo"`,
 		},
 	}
 

@@ -147,11 +147,11 @@ func TestScanner_Next(t *testing.T) {
 
 	t.Run("negative", func(t *testing.T) {
 		cc := map[string]string{
-			"+1": `ERROR (code 301): Invalid character "+" looking for beginning of value
+			"+1": `ERROR (code 301): Invalid character "+" — JSON value expected (number, string, boolean, object, array, or null)
 	in line 1 on file 
 	> +1
 	--^`,
-			"zzz": `ERROR (code 301): Invalid character "z" looking for beginning of value
+			"zzz": `ERROR (code 301): Invalid character "z" — JSON value expected (number, string, boolean, object, array, or null)
 	in line 1 on file 
 	> zzz
 	--^`,
@@ -259,11 +259,11 @@ func TestScanner_Next(t *testing.T) {
 	in line 1 on file 
 	> 1.23e+Z
 	--------^`,
-			"[}": `ERROR (code 301): Invalid character "}" looking for beginning of value
+			"[}": `ERROR (code 301): Invalid character "}" — JSON value expected (number, string, boolean, object, array, or null)
 	in line 1 on file 
 	> [}
 	---^`,
-			"[1,]": `ERROR (code 301): Invalid character "]" looking for beginning of value
+			"[1,]": `ERROR (code 301): Invalid character "]" — JSON value expected (number, string, boolean, object, array, or null)
 	in line 1 on file 
 	> [1,]
 	-----^`,
@@ -279,11 +279,11 @@ func TestScanner_Next(t *testing.T) {
 	in line 1 on file 
 	> {"key"}
 	--------^`,
-			`{"key":1:}`: `ERROR (code 301): Invalid character ":" after object key:value pair
+			`{"key":1:}`: `ERROR (code 301): Invalid character ":" after the object property, should be "," or "}"
 	in line 1 on file 
 	> {"key":1:}
 	----------^`,
-			`{"key": 1,:`: `ERROR (code 301): Invalid character ":" looking for beginning of string
+			`{"key": 1,:`: `ERROR (code 301): Invalid character ":" — string literal expected (starting with the quotation mark ` + "`\"`" + `)
 	in line 1 on file 
 	> {"key": 1,:
 	------------^`,
@@ -299,7 +299,7 @@ func TestScanner_Next(t *testing.T) {
 	in line 1 on file 
 	> "string without closing quotation mark
 	---------------------------------------^`,
-			`string without opening quotation mark"`: `ERROR (code 301): Invalid character "s" looking for beginning of value
+			`string without opening quotation mark"`: `ERROR (code 301): Invalid character "s" — JSON value expected (number, string, boolean, object, array, or null)
 	in line 1 on file 
 	> string without opening quotation mark"
 	--^`,

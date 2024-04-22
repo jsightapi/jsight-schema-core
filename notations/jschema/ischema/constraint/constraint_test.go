@@ -53,7 +53,7 @@ func TestNewConstraintFromRule(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		assert.PanicsWithError(t, `ERROR (code 601): Unknown rule "invalid"
+		assert.PanicsWithError(t, `ERROR (code 601): Unknown rule "invalid". See the list of all possible rules here: https://jsight.io/docs/jsight-schema-0-3#rules
 	in line 1 on file 
 	> invalid
 	--^`, func() {

@@ -93,7 +93,7 @@ func TestMax_Validate(t *testing.T) {
 			"3.14 <= 3.14": {
 				cnstr: newMax("3.14", true),
 				value: "3.14",
-				error: `Invalid value for "max" = 3.14 constraint (exclusive)`,
+				error: "The value in the example violates the rule `\"max\": 3.14` (exclusive)",
 			},
 			"3.14 <= 2": {
 				cnstr: newMax("3.14", true),
@@ -110,12 +110,12 @@ func TestMax_Validate(t *testing.T) {
 			"3.14 <= 4": {
 				cnstr: newMax("3.14", true),
 				value: "4",
-				error: `Invalid value for "max" = 3.14 constraint (exclusive)`,
+				error: "The value in the example violates the rule `\"max\": 3.14` (exclusive)",
 			},
 			"3.14 < 4": {
 				cnstr: newMax("3.14", false),
 				value: "4",
-				error: `Invalid value for "max" = 3.14 constraint `,
+				error: "The value in the example violates the rule `\"max\": 3.14` ",
 			},
 		}
 

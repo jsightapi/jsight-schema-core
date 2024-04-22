@@ -182,54 +182,54 @@ func TestEnum_Check(t *testing.T) {
 	in line 1 on file enum
 	> xxx [1,2,3]
 	--^`,
-			"[1,]": `ERROR (code 301): Invalid character "]" looking for beginning of value
+			"[1,]": `ERROR (code 301): Invalid character "]" — scalar value expected (number, string, boolean, or null)
 	in line 1 on file enum
 	> [1,]
 	-----^`,
-			"[,1]": `ERROR (code 301): Invalid character "," looking for beginning of value
+			"[,1]": `ERROR (code 301): Invalid character "," — scalar value expected (number, string, boolean, or null)
 	in line 1 on file enum
 	> [,1]
 	---^`,
-			"[ {} ]": `ERROR (code 301): Invalid character "{" looking for beginning of value
+			"[ {} ]": `ERROR (code 301): Invalid character "{" — scalar value expected (number, string, boolean, or null)
 	in line 1 on file enum
 	> [ {} ]
 	----^`,
-			"[ [] ]": `ERROR (code 301): Invalid character "[" looking for beginning of value
+			"[ [] ]": `ERROR (code 301): Invalid character "[" — scalar value expected (number, string, boolean, or null)
 	in line 1 on file enum
 	> [ [] ]
 	----^`,
 
-			"[1, 1]": `ERROR (code 810): 1 value duplicates in "enum"
+			"[1, 1]": `ERROR (code 810): The value 1 is repeated in the "enum" rule!
 	in line 1 on file enum
 	> [1, 1]
 	------^`,
 
-			"[3.14, 3.14]": `ERROR (code 810): 3.14 value duplicates in "enum"
+			"[3.14, 3.14]": `ERROR (code 810): The value 3.14 is repeated in the "enum" rule!
 	in line 1 on file enum
 	> [3.14, 3.14]
 	---------^`,
 
-			`["foo", "bar", "foo"]`: `ERROR (code 810): "foo" value duplicates in "enum"
+			`["foo", "bar", "foo"]`: `ERROR (code 810): The value "foo" is repeated in the "enum" rule!
 	in line 1 on file enum
 	> ["foo", "bar", "foo"]
 	-----------------^`,
 
-			"[true, true]": `ERROR (code 810): true value duplicates in "enum"
+			"[true, true]": `ERROR (code 810): The value true is repeated in the "enum" rule!
 	in line 1 on file enum
 	> [true, true]
 	---------^`,
 
-			"[null, null]": `ERROR (code 810): null value duplicates in "enum"
+			"[null, null]": `ERROR (code 810): The value null is repeated in the "enum" rule!
 	in line 1 on file enum
 	> [null, null]
 	---------^`,
 
-			"[   1\t,\n\n  1\t]": `ERROR (code 810): 1 value duplicates in "enum"
+			"[   1\t,\n\n  1\t]": `ERROR (code 810): The value 1 is repeated in the "enum" rule!
 	in line 3 on file enum
 	> 1	]
 	--^`,
 
-			`["a", "\u0061"]`: `ERROR (code 810): "\u0061" value duplicates in "enum"
+			`["a", "\u0061"]`: `ERROR (code 810): The value "\u0061" is repeated in the "enum" rule!
 	in line 1 on file enum
 	> ["a", "\u0061"]
 	--------^`,

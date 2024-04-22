@@ -35,7 +35,7 @@ func TestLoadSchemaWithoutCompile(t *testing.T) {
 
 	t.Run("negative", func(t *testing.T) {
 		ss := map[string]string{
-			`ERROR (code 301): Invalid character "k" looking for beginning of string
+			`ERROR (code 301): Invalid character "k" — string literal expected (starting with the quotation mark ` + "`\"`" + `)
 	in line 1 on file 
 	> {key: 1}
 	---^`: "{key: 1}",

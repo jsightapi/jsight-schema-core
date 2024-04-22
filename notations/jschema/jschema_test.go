@@ -88,7 +88,7 @@ some extra text`: 26,
 
 	t.Run("negative", func(t *testing.T) {
 		_, err := New("foo", "invalid").Len()
-		assert.EqualError(t, err, `ERROR (code 301): Invalid character "i" looking for beginning of value
+		assert.EqualError(t, err, `ERROR (code 301): Invalid character "i" — JSON value expected (number, string, boolean, object, array, or null)
 	in line 1 on file foo
 	> invalid
 	--^`)
@@ -260,7 +260,7 @@ func TestSchema_Example(t *testing.T) {
 	t.Run("negative", func(t *testing.T) {
 		_, err := New("schema", "invalid").
 			Example()
-		assert.EqualError(t, err, `ERROR (code 301): Invalid character "i" looking for beginning of value
+		assert.EqualError(t, err, `ERROR (code 301): Invalid character "i" — JSON value expected (number, string, boolean, object, array, or null)
 	in line 1 on file schema
 	> invalid
 	--^`)
@@ -299,7 +299,7 @@ func TestSchema_AddType(t *testing.T) {
 
 		t.Run("invalid schema name", func(t *testing.T) {
 			err := New("", "42").AddType("invalid", New("invalid", "42"))
-			assert.EqualError(t, err, "Invalid schema name (invalid)")
+			assert.EqualError(t, err, `The type name "invalid" is not valid. Learn more about the user types here: https://jsight.io/docs/jsight-schema-0-3#user-types`)
 		})
 	})
 }
@@ -326,7 +326,7 @@ func TestSchema_AddRule(t *testing.T) {
 
 			err := s.AddRule("foo", mocks.NewRule(t))
 
-			assert.EqualError(t, err, "Rule is already compiled")
+			assert.EqualError(t, err, "The rule is already compiled")
 			assert.Len(t, s.Rules, 0)
 		})
 
@@ -335,7 +335,7 @@ func TestSchema_AddRule(t *testing.T) {
 
 			err := s.AddRule("", nil)
 
-			assert.EqualError(t, err, "Rule is nil")
+			assert.EqualError(t, err, "The rule is nil")
 			assert.Len(t, s.Rules, 0)
 		})
 
@@ -787,7 +787,7 @@ func TestSchema_Check(t *testing.T) {
 			given string
 			// areKeysCaseInsensitive bool
 		}{
-			`ERROR (code 301): Invalid character "i" looking for beginning of value
+			`ERROR (code 301): Invalid character "i" — JSON value expected (number, string, boolean, object, array, or null)
 	in line 1 on file 
 	> invalid
 	--^`: {
@@ -816,28 +816,28 @@ func TestSchema_Check(t *testing.T) {
 				given: `42 // {type: "@foo"}`,
 			},
 
-			`ERROR (code 804): You cannot place a RULE on lines that contain more than one EXAMPLE node to which any RULES can apply. The only exception is when an object key and its value are found in one line.
+			`ERROR (code 804): You cannot place a RULE on a line that contain more than one EXAMPLE value. The only exception is when an object key and its value are found in one line. Learn more about rules here: https://jsight.io/docs/jsight-schema-0-3#rules
 	in line 1 on file 
 	> {"foo": "bar"} // {const: false}
 	----------------------------^`: {
 				given: `{"foo": "bar"} // {const: false}`,
 			},
 
-			`ERROR (code 304): Annotation not allowed here
+			`ERROR (code 304): The annotation is not allowed here. The ANNOTATION cannot be placed on lines containing more than one EXAMPLE element to which the ANNOTATION may apply. For more information, please refer to: https://jsight.io/docs/jsight-schema-0-3#rules
 	in line 1 on file 
 	> [1, 2, 3] // {const: false}
 	------------^`: {
 				given: "[1, 2, 3] // {const: false}",
 			},
 
-			`ERROR (code 1117): The "const" constraint can't be used for the "object" type
+			`ERROR (code 1117): The rule "const" is not compatible with the "object" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> {} // {const: true}
 	--^`: {
 				given: "{} // {const: true}",
 			},
 
-			`ERROR (code 1117): The "const" constraint can't be used for the "object" type
+			`ERROR (code 1117): The rule "const" is not compatible with the "object" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> { // {const: true}
 	--^`: {
@@ -846,14 +846,14 @@ func TestSchema_Check(t *testing.T) {
 }`,
 			},
 
-			`ERROR (code 1117): The "const" constraint can't be used for the "array" type
+			`ERROR (code 1117): The rule "const" is not compatible with the "array" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> [] // {const: true}
 	--^`: {
 				given: "[] // {const: true}",
 			},
 
-			`ERROR (code 1117): The "const" constraint can't be used for the "array" type
+			`ERROR (code 1117): The rule "const" is not compatible with the "array" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> [ // {const: true}
 	--^`: {
@@ -864,49 +864,49 @@ func TestSchema_Check(t *testing.T) {
 ]`,
 			},
 
-			`ERROR (code 1102): Invalid rule set shared with a type reference
+			`ERROR (code 1102): Some of the rules can not be applied to the user type reference. Learn more about type referencing here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-example-value
 	in line 1 on file 
 	> @foo // {const: true}
 	--^`: {
 				given: "@foo // {const: true}",
 			},
 
-			`ERROR (code 1103): Invalid rule set shared with "or"
+			`ERROR (code 1103): Some of the rules are not compatible with the "or" rule. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or
 	in line 1 on file 
 	> @foo | @bar // {const: true}
 	--^`: {
 				given: "@foo | @bar // {const: true}",
 			},
 
-			`ERROR (code 1114): Not found the rule "or" for the "mixed" type
+			`ERROR (code 1114): The rule "or" is not found (required for the "mixed" type)
 	in line 1 on file 
 	> 42 // {type: "mixed", const: true}
 	--^`: {
 				given: `42 // {type: "mixed", const: true}`,
 			},
 
-			`ERROR (code 1103): Invalid rule set shared with "or"
+			`ERROR (code 1103): Some of the rules are not compatible with the "or" rule. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or
 	in line 1 on file 
 	> 42 // {type: "mixed", or: ["@foo", "@bar"], const: true}
 	--^`: {
 				given: `42 // {type: "mixed", or: ["@foo", "@bar"], const: true}`,
 			},
 
-			`ERROR (code 1103): Invalid rule set shared with "or"
+			`ERROR (code 1103): Some of the rules are not compatible with the "or" rule. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or
 	in line 1 on file 
 	> 42 // {or: [{type: "integer"}, {type: "string"}], const: true}
 	--^`: {
 				given: `42 // {or: [{type: "integer"}, {type: "string"}], const: true}`,
 			},
 
-			`ERROR (code 1102): Invalid rule set shared with a type reference
+			`ERROR (code 1102): Some of the rules can not be applied to the user type reference. Learn more about type referencing here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-example-value
 	in line 1 on file 
 	> 42 // {type: "@foo", const: true}
 	--^`: {
 				given: `42 // {type: "@foo", const: true}`,
 			},
 
-			`ERROR (code 301): Invalid character "/" looking for beginning of string
+			`ERROR (code 301): Invalid character "/" — string literal expected (starting with the quotation mark ` + "`\"`" + `)
 	in line 3 on file 
 	> // inline comment
 	--^`: {
@@ -928,7 +928,7 @@ func TestSchema_Check(t *testing.T) {
 }`,
 			},
 
-			`ERROR (code 802): Incorrect rule value type
+			`ERROR (code 802): Invalid rule value. Learn more about rules here: https://jsight.io/docs/jsight-schema-0-3#rules
 	in line 2 on file 
 	> {} // {type: @json}
 	---------------^`: {
@@ -968,7 +968,7 @@ func TestSchema_Check(t *testing.T) {
 }`,
 			},
 
-			`ERROR (code 1301): Incorrect type of user type
+			`ERROR (code 1301): The value in the example does not match the rules!
 	in line 1 on file 
 	> 123 // {or: ["@cat", "@dog"]}
 	--^`: {
@@ -979,84 +979,84 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 1117): The "minLength" constraint can't be used for the "email" type
+			`ERROR (code 1117): The rule "minLength" is not compatible with the "email" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "user@example.com" // {type: "email", minLength: 2}
 	--^`: {
 				given: `"user@example.com" // {type: "email", minLength: 2}`,
 			},
 
-			`ERROR (code 1117): The "maxLength" constraint can't be used for the "email" type
+			`ERROR (code 1117): The rule "maxLength" is not compatible with the "email" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "user@example.com" // {type: "email", maxLength: 256}
 	--^`: {
 				given: `"user@example.com" // {type: "email", maxLength: 256}`,
 			},
 
-			`ERROR (code 1117): The "minLength" constraint can't be used for the "uri" type
+			`ERROR (code 1117): The rule "minLength" is not compatible with the "uri" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "http://example.com" // {type: "uri", minLength: 2}
 	--^`: {
 				given: `"http://example.com" // {type: "uri", minLength: 2}`,
 			},
 
-			`ERROR (code 1117): The "maxLength" constraint can't be used for the "uri" type
+			`ERROR (code 1117): The rule "maxLength" is not compatible with the "uri" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "http://example.com" // {type: "uri", maxLength: 256}
 	--^`: {
 				given: `"http://example.com" // {type: "uri", maxLength: 256}`,
 			},
 
-			`ERROR (code 1117): The "minLength" constraint can't be used for the "date" type
+			`ERROR (code 1117): The rule "minLength" is not compatible with the "date" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "2022-02-27" // {type: "date", minLength: 2}
 	--^`: {
 				given: `"2022-02-27" // {type: "date", minLength: 2}`,
 			},
 
-			`ERROR (code 1117): The "maxLength" constraint can't be used for the "date" type
+			`ERROR (code 1117): The rule "maxLength" is not compatible with the "date" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "2022-02-27" // {type: "date", maxLength: 256}
 	--^`: {
 				given: `"2022-02-27" // {type: "date", maxLength: 256}`,
 			},
 
-			`ERROR (code 1117): The "minLength" constraint can't be used for the "datetime" type
+			`ERROR (code 1117): The rule "minLength" is not compatible with the "datetime" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "2022-02-27T10:19:48+06:00" // {type: "datetime", minLength: 2}
 	--^`: {
 				given: `"2022-02-27T10:19:48+06:00" // {type: "datetime", minLength: 2}`,
 			},
 
-			`ERROR (code 1117): The "maxLength" constraint can't be used for the "datetime" type
+			`ERROR (code 1117): The rule "maxLength" is not compatible with the "datetime" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "2022-02-27T10:19:48+06:00" // {type: "datetime", maxLength: 256}
 	--^`: {
 				given: `"2022-02-27T10:19:48+06:00" // {type: "datetime", maxLength: 256}`,
 			},
 
-			`ERROR (code 1117): The "minLength" constraint can't be used for the "uuid" type
+			`ERROR (code 1117): The rule "minLength" is not compatible with the "uuid" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "95f362d6-87df-4dd4-a948-9f84f65a3468" // {type: "uuid", minLength: 2}
 	--^`: {
 				given: `"95f362d6-87df-4dd4-a948-9f84f65a3468" // {type: "uuid", minLength: 2}`,
 			},
 
-			`ERROR (code 1117): The "maxLength" constraint can't be used for the "uuid" type
+			`ERROR (code 1117): The rule "maxLength" is not compatible with the "uuid" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "95f362d6-87df-4dd4-a948-9f84f65a3468" // {type: "uuid", maxLength: 256}
 	--^`: {
 				given: `"95f362d6-87df-4dd4-a948-9f84f65a3468" // {type: "uuid", maxLength: 256}`,
 			},
 
-			`ERROR (code 1117): The "regex" constraint can't be used for the "uuid" type
+			`ERROR (code 1117): The rule "regex" is not compatible with the "uuid" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "95f362d6-87df-4dd4-a948-9f84f65a3468" // {type: "uuid", regex: ".+"}
 	--^`: {
 				given: `"95f362d6-87df-4dd4-a948-9f84f65a3468" // {type: "uuid", regex: ".+"}`,
 			},
 
-			`ERROR (code 1117): The "const" constraint can't be used for the "any" type
+			`ERROR (code 1117): The rule "const" is not compatible with the "any" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> 42 // {type: "any", const: true}
 	--^`: {
@@ -1099,7 +1099,7 @@ func TestSchema_Check(t *testing.T) {
 }`,
 			},
 
-			`ERROR (code 1117): The "minLength" constraint can't be used for the "float" type
+			`ERROR (code 1117): The rule "minLength" is not compatible with the "float" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> 1.23 /* {precision: 2,
 	--^`: {
@@ -1108,7 +1108,7 @@ func TestSchema_Check(t *testing.T) {
                 }*/`,
 			},
 
-			`ERROR (code 1117): The "minLength" constraint can't be used for the "decimal" type
+			`ERROR (code 1117): The rule "minLength" is not compatible with the "decimal" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> 1.23 /* {type: "decimal", precision: 2,
 	--^`: {
@@ -1117,70 +1117,70 @@ func TestSchema_Check(t *testing.T) {
                 }*/`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "string" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "string" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "user@example.com" // {precision: 2}
 	--^`: {
 				given: `"user@example.com" // {precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "email" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "email" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "user@example.com" // {type: "email", precision: 2}
 	--^`: {
 				given: `"user@example.com" // {type: "email", precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "string" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "string" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "2022-02-27" // {precision: 2}
 	--^`: {
 				given: `"2022-02-27" // {precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "date" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "date" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "2022-02-27" // {type: "date", precision: 2}
 	--^`: {
 				given: `"2022-02-27" // {type: "date", precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "string" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "string" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "2021-02-27T16:40:00+06:00" // {precision: 2}
 	--^`: {
 				given: `"2021-02-27T16:40:00+06:00" // {precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "datetime" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "datetime" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "2021-02-27T16:40:00+06:00" // {type: "datetime", precision: 2}
 	--^`: {
 				given: `"2021-02-27T16:40:00+06:00" // {type: "datetime", precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "string" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "string" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "https://example.com" // {precision: 2}
 	--^`: {
 				given: `"https://example.com" // {precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "uri" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "uri" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "https://example.com" // {type: "uri", precision: 2}
 	--^`: {
 				given: `"https://example.com" // {type: "uri", precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "string" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "string" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "bea58dd8-5f05-4350-9705-18bcf10e70fa" // {precision: 2}
 	--^`: {
 				given: `"bea58dd8-5f05-4350-9705-18bcf10e70fa" // {precision: 2}`,
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "uuid" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "uuid" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> "bea58dd8-5f05-4350-9705-18bcf10e70fa" // {type: "uuid", precision: 2}
 	--^`: {
@@ -1313,21 +1313,21 @@ func TestSchema_Check(t *testing.T) {
 				given: `2e+2 // {type: "decimal"}`,
 			},
 
-			`ERROR (code 810): 42 value duplicates in "enum"
+			`ERROR (code 810): The value 42 is repeated in the "enum" rule!
 	in line 1 on file 
 	> 42 // {enum: [42, 43, 42]}
 	------------------------^`: {
 				given: "42 // {enum: [42, 43, 42]}",
 			},
 
-			`ERROR (code 810): "bar" value duplicates in "enum"
+			`ERROR (code 810): The value "bar" is repeated in the "enum" rule!
 	in line 1 on file 
 	> "foo" // {enum: ["foo", "bar", "bar"]}
 	---------------------------------^`: {
 				given: `"foo" // {enum: ["foo", "bar", "bar"]}`,
 			},
 
-			`ERROR (code 302): Invalid character '2' in object key (inside comment)
+			`ERROR (code 302): Invalid character '2' in the object key. See the rules for annotations here: https://jsight.io/docs/jsight-schema-0-3#rules
 	in line 2 on file 
 	> "one": 1 // {min 25}
 	-------------------^`: {
@@ -1345,14 +1345,14 @@ func TestSchema_Check(t *testing.T) {
 }`,
 			},
 
-			`ERROR (code 1602): Enum rule "@enum" not found
+			`ERROR (code 1602): Enum "@enum" is not found
 	in line 1 on file 
 	> "foo" // {enum: @enum}
 	------------------^`: {
 				given: `"foo" // {enum: @enum}`,
 			},
 
-			`ERROR (code 610): Does not match any of the enumeration values
+			`ERROR (code 610): The value in the example does not match any of the enumeration values.
 	in line 1 on file 
 	> 42 // {enum: @enum}
 	--^`: {
@@ -1362,7 +1362,7 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 610): Does not match any of the enumeration values
+			`ERROR (code 610): The value in the example does not match any of the enumeration values.
 	in line 2 on file 
 	> "foo": 42 // {enum: @enum}
 	---------^`: {
@@ -1401,56 +1401,56 @@ func TestSchema_Check(t *testing.T) {
   }`,
 			},
 
-			`ERROR (code 1115): Incompatible value of example and "type" rule (decimal)
+			`ERROR (code 1115): The value in the example does not match the specified type in the "type" rule (decimal)
 	in line 1 on file 
 	> "2" // {type: "decimal", precision: 2}
 	--^`: {
 				given: `"2" // {type: "decimal", precision: 2}`,
 			},
 
-			`ERROR (code 1115): Incompatible value of example and "type" rule (decimal)
+			`ERROR (code 1115): The value in the example does not match the specified type in the "type" rule (decimal)
 	in line 1 on file 
 	> 2 // {type: "decimal", precision: 2}
 	--^`: {
 				given: `2 // {type: "decimal", precision: 2}`,
 			},
 
-			`ERROR (code 1115): Incompatible value of example and "type" rule (email)
+			`ERROR (code 1115): The value in the example does not match the specified type in the "type" rule (email)
 	in line 1 on file 
 	> 10 // {type: "email"}
 	--^`: {
 				given: `10 // {type: "email"}`,
 			},
 
-			`ERROR (code 1115): Incompatible value of example and "type" rule (uri)
+			`ERROR (code 1115): The value in the example does not match the specified type in the "type" rule (uri)
 	in line 1 on file 
 	> 10 // {type: "uri"}
 	--^`: {
 				given: `10 // {type: "uri"}`,
 			},
 
-			`ERROR (code 1115): Incompatible value of example and "type" rule (uuid)
+			`ERROR (code 1115): The value in the example does not match the specified type in the "type" rule (uuid)
 	in line 1 on file 
 	> 10 // {type: "uuid"}
 	--^`: {
 				given: `10 // {type: "uuid"}`,
 			},
 
-			`ERROR (code 1115): Incompatible value of example and "type" rule (date)
+			`ERROR (code 1115): The value in the example does not match the specified type in the "type" rule (date)
 	in line 1 on file 
 	> 10 // {type: "date"}
 	--^`: {
 				given: `10 // {type: "date"}`,
 			},
 
-			`ERROR (code 1115): Incompatible value of example and "type" rule (datetime)
+			`ERROR (code 1115): The value in the example does not match the specified type in the "type" rule (datetime)
 	in line 1 on file 
 	> 10 // {type: "datetime"}
 	--^`: {
 				given: `10 // {type: "datetime"}`,
 			},
 
-			`ERROR (code 402): Duplicate keys (@catId) in the schema
+			`ERROR (code 402): Duplicate key "@catId"
 	in line 3 on file 
 	> "@catId": 2
 	--^`: {
@@ -1460,14 +1460,14 @@ func TestSchema_Check(t *testing.T) {
 }`,
 			},
 
-			`ERROR (code 617): Value of constraint "min" should be less or equal to value of "max" constraint
+			`ERROR (code 617): The value of the rule "min" should be less or equal to the value of the rule "max"
 	in line 1 on file 
 	> 42 // {min: 45, max: 42}
 	--^`: {
 				given: "42 // {min: 45, max: 42}",
 			},
 
-			`ERROR (code 617): Value of constraint "minItems" should be less or equal to value of "maxItems" constraint
+			`ERROR (code 617): The value of the rule "minItems" should be less or equal to the value of the rule "maxItems"
 	in line 1 on file 
 	> [ // {minItems: 2, maxItems: 1}
 	--^`: {
@@ -1476,28 +1476,28 @@ func TestSchema_Check(t *testing.T) {
   ]`,
 			},
 
-			`ERROR (code 617): Value of constraint "minLength" should be less or equal to value of "maxLength" constraint
+			`ERROR (code 617): The value of the rule "minLength" should be less or equal to the value of the rule "maxLength"
 	in line 1 on file 
 	> "foo" // {minLength: 2, maxLength: 1}
 	--^`: {
 				given: `"foo" // {minLength: 2, maxLength: 1}`,
 			},
 
-			`ERROR (code 602): Invalid value for "min" = 43 constraint 
+			"ERROR (code 602): The value in the example violates the rule `\"min\": 43` " + `
 	in line 1 on file 
 	> 42 // {min: 43, max: 44}
 	--^`: {
 				given: "42 // {min: 43, max: 44}",
 			},
 
-			`ERROR (code 602): Invalid value for "max" = 41 constraint 
+			"ERROR (code 602): The value in the example violates the rule `\"max\": 41` " + `
 	in line 1 on file 
 	> 42 // {min: 30, max: 41}
 	--^`: {
 				given: "42 // {min: 30, max: 41}",
 			},
 
-			`ERROR (code 608): The number of array elements does not match the "minItems" rule
+			`ERROR (code 608): The number of the array elements does not match the "minItems" rule
 	in line 1 on file 
 	> [ // {minItems: 2, maxItems: 3}
 	--^`: {
@@ -1506,7 +1506,7 @@ func TestSchema_Check(t *testing.T) {
   ]`,
 			},
 
-			`ERROR (code 609): The number of array elements does not match the "maxItems" rule
+			`ERROR (code 609): The number of the array elements does not match the "maxItems" rule
 	in line 1 on file 
 	> [ // {minItems: 1, maxItems: 2}
 	--^`: {
@@ -1515,21 +1515,21 @@ func TestSchema_Check(t *testing.T) {
   ]`,
 			},
 
-			`ERROR (code 603): Invalid string length for "minLength" = "4" constraint
+			"ERROR (code 603): The length of the string in the example violates the rule `\"minLength\": \"4\"`" + `
 	in line 1 on file 
 	> "foo" // {minLength: 4, maxLength: 5}
 	--^`: {
 				given: `"foo" // {minLength: 4, maxLength: 5}`,
 			},
 
-			`ERROR (code 603): Invalid string length for "maxLength" = "2" constraint
+			"ERROR (code 603): The length of the string in the example violates the rule `\"maxLength\": \"2\"`" + `
 	in line 1 on file 
 	> "foo" // {minLength: 1, maxLength: 2}
 	--^`: {
 				given: `"foo" // {minLength: 1, maxLength: 2}`,
 			},
 
-			`ERROR (code 1304): Key shortcut "@foo" should be string but "integer" given
+			`ERROR (code 1304): Reference in the object key "@foo" must be string, not "integer". Learn more about referencing user types in object properties here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-property-key
 	in line 2 on file 
 	> @foo: 42
 	--^`: {
@@ -1541,7 +1541,7 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 1304): Key shortcut "@foo" should be string but "float" given
+			`ERROR (code 1304): Reference in the object key "@foo" must be string, not "float". Learn more about referencing user types in object properties here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-property-key
 	in line 2 on file 
 	> @foo: 42
 	--^`: {
@@ -1553,7 +1553,7 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 1304): Key shortcut "@foo" should be string but "boolean" given
+			`ERROR (code 1304): Reference in the object key "@foo" must be string, not "boolean". Learn more about referencing user types in object properties here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-property-key
 	in line 2 on file 
 	> @foo: 42
 	--^`: {
@@ -1565,7 +1565,7 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 1304): Key shortcut "@foo" should be string but "null" given
+			`ERROR (code 1304): Reference in the object key "@foo" must be string, not "null". Learn more about referencing user types in object properties here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-property-key
 	in line 2 on file 
 	> @foo: 42
 	--^`: {
@@ -1577,7 +1577,7 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 1304): Key shortcut "@foo" should be string but "array" given
+			`ERROR (code 1304): Reference in the object key "@foo" must be string, not "array". Learn more about referencing user types in object properties here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-property-key
 	in line 2 on file 
 	> @foo: 42
 	--^`: {
@@ -1589,7 +1589,7 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 1304): Key shortcut "@foo" should be string but "object" given
+			`ERROR (code 1304): Reference in the object key "@foo" must be string, not "object". Learn more about referencing user types in object properties here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-property-key
 	in line 2 on file 
 	> @foo: 42
 	--^`: {
@@ -1601,7 +1601,7 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 402): Duplicate keys (@catId) in the schema
+			`ERROR (code 402): Duplicate key "@catId"
 	in line 4 on file 
 	> "@catId": 3,
 	--^`: {
@@ -1616,14 +1616,14 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			`ERROR (code 810): "\u0061" value duplicates in "enum"
+			`ERROR (code 810): The value "\u0061" is repeated in the "enum" rule!
 	in line 1 on file 
 	> "a" // {enum: ["a", "\u0061"]}
 	----------------------^`: {
 				given: `"a" // {enum: ["a", "\u0061"]}`,
 			},
 
-			`ERROR (code 610): Does not match any of the enumeration values
+			`ERROR (code 610): The value in the example does not match any of the enumeration values.
 	in line 1 on file 
 	> "c" // {enum: ["a", "\u0062"]}
 	--^`: {
@@ -1642,7 +1642,7 @@ func TestSchema_Check(t *testing.T) {
 				},
 			},
 
-			// 			`ERROR (code 402): Duplicate keys (aaa) in the schema
+			// 			`ERROR (code 402): Duplicate key "aaa"
 			// 	in line 1 on file
 			// 	> {"aaa": 1, "AAA": 2}
 			// 	--^`: {
@@ -1650,7 +1650,7 @@ func TestSchema_Check(t *testing.T) {
 			// 				areKeysCaseInsensitive: true,
 			// 			},
 			//
-			// 			`ERROR (code 402): Duplicate keys (bbb) in the schema
+			// 			`ERROR (code 402): Duplicate key "bbb"
 			// 	in line 1 on file
 			// 	> {"aaa": {"bbb": 1, "BBB": 2}}
 			// 	----------^`: {
@@ -1658,7 +1658,7 @@ func TestSchema_Check(t *testing.T) {
 			// 				areKeysCaseInsensitive: true,
 			// 			},
 			//
-			// 			`ERROR (code 402): Duplicate keys (bbb) in the schema
+			// 			`ERROR (code 402): Duplicate key "bbb"
 			// 	in line 1 on file
 			// 	> [{"bbb": 1, "BBB": 2}]
 			// 	---^`: {
@@ -1666,7 +1666,7 @@ func TestSchema_Check(t *testing.T) {
 			// 				areKeysCaseInsensitive: true,
 			// 			},
 			//
-			// 			`ERROR (code 402): Duplicate keys (aaa) in the schema
+			// 			`ERROR (code 402): Duplicate key "aaa"
 			// 	in line 2 on file
 			// 	> { // {allOf: "@obj"}
 			// 	--^`: {
@@ -1680,7 +1680,7 @@ func TestSchema_Check(t *testing.T) {
 			// 				areKeysCaseInsensitive: true,
 			// 			},
 
-			"ERROR (code 1115): Incompatible value of example and \"type\" rule (email)\n\tin line 1 on file \n\t> 123 // {type: \"email\"}\n\t--^": {
+			"ERROR (code 1115): The value in the example does not match the specified type in the \"type\" rule (email)\n\tin line 1 on file \n\t> 123 // {type: \"email\"}\n\t--^": {
 				given: `123 // {type: "email"}`,
 			},
 		}
@@ -1707,7 +1707,7 @@ func TestSchema_Check(t *testing.T) {
 
 		t.Run("req.jschema.rules.type.reference 0.2", func(t *testing.T) {
 			cc := map[string]string{
-				`ERROR (code 1107): You cannot specify child node if you use a type reference
+				`ERROR (code 1107): Only scalar types can be referenced in the "type" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-example-value
 	in line 2 on file 
 	> "myCat": { // {type: "@cat"}
 	-----------^`: `{
@@ -1716,7 +1716,7 @@ func TestSchema_Check(t *testing.T) {
 		"name": "Tom"
 	}
 }`,
-				`ERROR (code 1107): You cannot specify child node if you use a type reference
+				`ERROR (code 1107): Only scalar types can be referenced in the "type" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-example-value
 	in line 2 on file 
 	> "myCatList": [ // {type: "@catList"}
 	---------------^`: `{
@@ -1724,11 +1724,11 @@ func TestSchema_Check(t *testing.T) {
 						@cat
 					]
 				}`,
-				`ERROR (code 1107): You cannot specify child node if you use a type reference
+				`ERROR (code 1107): Only scalar types can be referenced in the "type" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-example-value
 	in line 1 on file 
 	> {} // {type: "@foo"}
 	--^`: `{} // {type: "@foo"}`,
-				`ERROR (code 1107): You cannot specify child node if you use a type reference
+				`ERROR (code 1107): Only scalar types can be referenced in the "type" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-example-value
 	in line 1 on file 
 	> [] // {type: "@foo"}
 	--^`: `[] // {type: "@foo"}`,
@@ -1754,7 +1754,7 @@ func TestSchema_Check(t *testing.T) {
 		"name": "Tom"
 	}
 }`,
-					expected: `ERROR (code 1108): You cannot specify child node if you use a "or" rule
+					expected: `ERROR (code 1108): Only scalar values can be in an example when using the "or" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-several-user-types-in-the-value-of-the-example
 	in line 2 on file 
 	> "myPet1": { // {or: ["@cat", "@dog"]}
 	------------^`,
@@ -1766,7 +1766,7 @@ func TestSchema_Check(t *testing.T) {
 		@cat
 	]
 }`,
-					expected: `ERROR (code 1108): You cannot specify child node if you use a "or" rule
+					expected: `ERROR (code 1108): Only scalar values can be in an example when using the "or" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-several-user-types-in-the-value-of-the-example
 	in line 2 on file 
 	> "myPets": [ // {or: ["@catList", "@dogList"]}
 	------------^`,
@@ -1776,7 +1776,7 @@ func TestSchema_Check(t *testing.T) {
 					given: `{
 	"myPet4" : @cat | @dog // {or: ["@cat", "@dog"]}
 }`,
-					expected: `ERROR (code 501): Duplicate "types" rule
+					expected: `ERROR (code 501): Duplicate rule "types"
 	in line 2 on file 
 	> "myPet4" : @cat | @dog // {or: ["@cat", "@dog"]}
 	---------------------------------^`,
@@ -1786,7 +1786,7 @@ func TestSchema_Check(t *testing.T) {
 					given: `{
 	"id": {} // {or: ["@cat", "@dog"]}
 }`,
-					expected: `ERROR (code 1108): You cannot specify child node if you use a "or" rule
+					expected: `ERROR (code 1108): Only scalar values can be in an example when using the "or" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-several-user-types-in-the-value-of-the-example
 	in line 2 on file 
 	> "id": {} // {or: ["@cat", "@dog"]}
 	--------^`,
@@ -1796,7 +1796,7 @@ func TestSchema_Check(t *testing.T) {
 					given: `{
 	"myPet3" : @cat // {or: ["@cat", "@dog"]}  # --ERROR! It is wrong.
 }`,
-					expected: `ERROR (code 1108): You cannot specify child node if you use a "or" rule
+					expected: `ERROR (code 1108): Only scalar values can be in an example when using the "or" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-several-user-types-in-the-value-of-the-example
 	in line 2 on file 
 	> "myPet3" : @cat // {or: ["@cat", "@dog"]}  # --ERROR! It is wrong.
 	-------------^`,
@@ -1804,7 +1804,7 @@ func TestSchema_Check(t *testing.T) {
 
 				"Type is required inside the \"or\" rule (1)": {
 					given: `"foo" // {or: [ {min: 100}, {type: "string"} ]}`,
-					expected: `ERROR (code 906): Type is required inside the "or" rule 
+					expected: `ERROR (code 906): The "type" rule is missed inside the "or" rule. Specify the "type" rule inside. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or
 	in line 1 on file 
 	> "foo" // {or: [ {min: 100}, {type: "string"} ]}
 	------------------^`,
@@ -1812,7 +1812,7 @@ func TestSchema_Check(t *testing.T) {
 
 				"Type is required inside the \"or\" rule (2)": {
 					given: `"foo" // {or: [ {min: 100}, "string" ]}`,
-					expected: `ERROR (code 906): Type is required inside the "or" rule 
+					expected: `ERROR (code 906): The "type" rule is missed inside the "or" rule. Specify the "type" rule inside. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or
 	in line 1 on file 
 	> "foo" // {or: [ {min: 100}, "string" ]}
 	------------------^`,
@@ -1841,7 +1841,7 @@ func TestSchema_Check(t *testing.T) {
 				given string
 				types map[string]string
 			}{
-				"Infinity recursion detected @main -> @bar -> @main": {
+				"The infinite type recursion has been detected: @main -> @bar -> @main. Use rules `optional: false` or `nullable: true` to stop the recursion.": {
 					given: `{
 	"foo": @bar
 }`,
@@ -1852,7 +1852,7 @@ func TestSchema_Check(t *testing.T) {
 					},
 				},
 
-				"Infinity recursion detected @main -> @fizz -> @main": {
+				"The infinite type recursion has been detected: @main -> @fizz -> @main. Use rules `optional: false` or `nullable: true` to stop the recursion.": {
 					given: `{
 	"foo": @fizz | @buzz
 }`,
@@ -1866,7 +1866,7 @@ func TestSchema_Check(t *testing.T) {
 					},
 				},
 
-				"Infinity recursion detected @main -> @main": {
+				"The infinite type recursion has been detected: @main -> @main. Use rules `optional: false` or `nullable: true` to stop the recursion.": {
 					given: `{ // {allOf: ["@foo", "@bar"]}
 }`,
 					types: map[string]string{
@@ -4120,7 +4120,7 @@ line
 			schema string
 			types  map[string]string
 		}{
-			`ERROR (code 102): Unknown value of the type rule "foo"
+			`ERROR (code 102): Type "foo" does not exist. See the list of possible types here: https://jsight.io/docs/jsight-schema-0-3#rule-type
 	in line 1 on file 
 	> 42 // {type: "foo"}
 	--^`: {
@@ -4143,7 +4143,7 @@ line
 				schema: `@pig, // {or: ["@dog", "@pig"]}`,
 			},
 
-			`ERROR (code 304): Annotation not allowed here
+			`ERROR (code 304): The annotation is not allowed here. The ANNOTATION cannot be placed on lines containing more than one EXAMPLE element to which the ANNOTATION may apply. For more information, please refer to: https://jsight.io/docs/jsight-schema-0-3#rules
 	in line 2 on file 
 	> "ids": [1] // Ids
 	-------------^`: {
@@ -4152,7 +4152,7 @@ line
 }`,
 			},
 
-			`ERROR (code 304): Annotation not allowed here
+			`ERROR (code 304): The annotation is not allowed here. The ANNOTATION cannot be placed on lines containing more than one EXAMPLE element to which the ANNOTATION may apply. For more information, please refer to: https://jsight.io/docs/jsight-schema-0-3#rules
 	in line 3 on file 
 	> 1] // Ids
 	-----^`: {
@@ -4162,7 +4162,7 @@ line
 }`,
 			},
 
-			`ERROR (code 304): Annotation not allowed here
+			`ERROR (code 304): The annotation is not allowed here. The ANNOTATION cannot be placed on lines containing more than one EXAMPLE element to which the ANNOTATION may apply. For more information, please refer to: https://jsight.io/docs/jsight-schema-0-3#rules
 	in line 4 on file 
 	> ] // Ids
 	----^`: {
@@ -4173,7 +4173,7 @@ line
 }`,
 			},
 
-			`ERROR (code 1108): You cannot specify child node if you use a "or" rule
+			`ERROR (code 1108): Only scalar values can be in an example when using the "or" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-several-user-types-in-the-value-of-the-example
 	in line 2 on file 
 	> "foo" : @fizz // {or: ["@fizz", "@buzz"]}
 	----------^`: {
@@ -4182,7 +4182,7 @@ line
 }`,
 			},
 
-			`ERROR (code 1108): You cannot specify child node if you use a "or" rule
+			`ERROR (code 1108): Only scalar values can be in an example when using the "or" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-several-user-types-in-the-value-of-the-example
 	in line 2 on file 
 	> "foo": {} // {or: ["@fizz", "@buzz"]}
 	---------^`: {
@@ -4191,7 +4191,7 @@ line
 }`,
 			},
 
-			`ERROR (code 1107): You cannot specify child node if you use a type reference
+			`ERROR (code 1107): Only scalar types can be referenced in the "type" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-example-value
 	in line 2 on file 
 	> "foo" : @fizz // {type: "@fizz"}
 	----------^`: {
@@ -4200,7 +4200,7 @@ line
 }`,
 			},
 
-			`ERROR (code 1107): You cannot specify child node if you use a type reference
+			`ERROR (code 1107): Only scalar types can be referenced in the "type" rule. Use type references right in the example for referencing objects or arrays. See the examples here: https://jsight.io/docs/jsight-schema-0-3#reference-to-the-user-type-in-the-example-value
 	in line 2 on file 
 	> "foo": {} // {type: "@fizz"}
 	---------^`: {
@@ -4223,7 +4223,7 @@ line
 				schema: "1.\n",
 			},
 
-			`ERROR (code 1117): The "precision" constraint can't be used for the "float" type
+			`ERROR (code 1117): The rule "precision" is not compatible with the "float" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules
 	in line 1 on file 
 	> 1.1 // {type: "float", precision: 2}
 	--^`: {
@@ -4237,7 +4237,7 @@ line
 				schema: "@foo",
 			},
 
-			`ERROR (code 1301): Incorrect type of user type
+			`ERROR (code 1301): The value in the example does not match the rules!
 	in line 1 on file 
 	> 123 // {or: ["@cat", "@dog"]}
 	--^`: {

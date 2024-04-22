@@ -29,7 +29,7 @@ func TestNewConst(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		assert.PanicsWithError(t, `Invalid value of "const" constraint`, func() {
+		assert.PanicsWithError(t, `Invalid value in the "const" rule. Learn about the rules here: https://jsight.io/docs/jsight-schema-0-3#rules`, func() {
 			fakeConst("foo", "")
 		})
 	})

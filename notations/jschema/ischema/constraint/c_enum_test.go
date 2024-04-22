@@ -92,9 +92,9 @@ func TestEnum_Append(t *testing.T) {
 
 	t.Run("negative", func(t *testing.T) {
 		cc := map[string]string{
-			`"foo" value duplicates in "enum"`:  `"foo"`,
-			` "foo" value duplicates in "enum"`: ` "foo"`,
-			`"foo"  value duplicates in "enum"`: `"foo" `,
+			`The value "foo" is repeated in the "enum" rule!`:  `"foo"`,
+			`The value  "foo" is repeated in the "enum" rule!`: ` "foo"`,
+			`The value "foo"  is repeated in the "enum" rule!`: `"foo" `,
 		}
 
 		for expected, given := range cc {

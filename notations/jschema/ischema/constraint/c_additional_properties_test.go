@@ -53,7 +53,7 @@ func TestNewAdditionalProperties(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		assert.PanicsWithError(t, `Unknown JSchema type "foo"`, func() {
+		assert.PanicsWithError(t, `Type "foo" does not exist. See the list of possible types here: https://jsight.io/docs/jsight-schema-0-3#rule-type`, func() {
 			NewAdditionalProperties(bytes.NewBytes("foo"))
 		})
 	})

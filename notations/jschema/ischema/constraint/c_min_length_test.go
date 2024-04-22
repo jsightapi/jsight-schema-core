@@ -27,7 +27,7 @@ func TestNewMinLength(t *testing.T) {
 
 		for _, s := range ss {
 			t.Run(s, func(t *testing.T) {
-				assert.PanicsWithError(t, `Invalid value of "minLength" constraint`, func() {
+				assert.PanicsWithError(t, `Invalid value in the "minLength" rule. Learn about the rules here: https://jsight.io/docs/jsight-schema-0-3#rules`, func() {
 					NewMinLength(bytes.NewBytes(s))
 				})
 			})
@@ -65,7 +65,7 @@ func TestMinLength_Validate(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		assert.PanicsWithError(t, `Invalid string length for "minLength" = "10" constraint`, func() {
+		assert.PanicsWithError(t, "The length of the string in the example violates the rule `\"minLength\": \"10\"`", func() {
 			NewMinLength(bytes.NewBytes("10")).Validate(bytes.NewBytes("012345678"))
 		})
 	})

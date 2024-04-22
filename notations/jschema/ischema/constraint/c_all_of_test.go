@@ -59,7 +59,7 @@ func TestAllOf_Append(t *testing.T) {
 		})
 
 		t.Run("not a type", func(t *testing.T) {
-			assert.PanicsWithError(t, `Invalid schema name (foo) in "allOf" rule`, func() {
+			assert.PanicsWithError(t, "The type name \"foo\" is not valid. Learn more about the `allOf` rule here: https://jsight.io/docs/jsight-schema-0-3#rule-allof", func() {
 				NewAllOf().Append(bytes.NewBytes(`"foo"`))
 			})
 		})

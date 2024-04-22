@@ -220,7 +220,7 @@ func TestBytes_ParseBool(t *testing.T) {
 		for _, s := range ss {
 			t.Run(s, func(t *testing.T) {
 				_, err := NewBytes(s).ParseBool()
-				assert.EqualError(t, err, "Invalid bool value")
+				assert.EqualError(t, err, "Invalid boolean value")
 			})
 		}
 	})
@@ -295,7 +295,7 @@ func TestBytes_ParseInt(t *testing.T) {
 	t.Run("negative", func(t *testing.T) {
 		cc := map[string]string{
 			"3.2":                           "Invalid byte \".\" in ParseUint \"3.2\"",
-			strconv.Itoa(math.MaxInt) + "0": "Too much data for int",
+			strconv.Itoa(math.MaxInt) + "0": "The value exceeds the maximum integer value",
 		}
 		for given, expected := range cc {
 			t.Run(given, func(t *testing.T) {

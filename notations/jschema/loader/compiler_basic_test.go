@@ -122,7 +122,7 @@ func TestSchemaCompiler_checkMinAndMax(t *testing.T) {
 				m.On("Constraint", constraint.MaxConstraintType).Return(constraint.NewMax(bytes.NewBytes("1")))
 				return m
 			},
-			expectedErr: `Value of constraint "min" should be less than value of "max" constraint`,
+			expectedErr: `The value of the rule "min" should be less than the value of the rule "max"`,
 		},
 		"min = max (exclusive)": {
 			node: func(t *testing.T) ischema.Node {
@@ -133,7 +133,7 @@ func TestSchemaCompiler_checkMinAndMax(t *testing.T) {
 				m.On("Constraint", constraint.MaxConstraintType).Return(max)
 				return m
 			},
-			expectedErr: `Value of constraint "min" should be less than value of "max" constraint`,
+			expectedErr: `The value of the rule "min" should be less than the value of the rule "max"`,
 		},
 		"min (exclusive) = max (exclusive)": {
 			node: func(t *testing.T) ischema.Node {
@@ -146,7 +146,7 @@ func TestSchemaCompiler_checkMinAndMax(t *testing.T) {
 				m.On("Constraint", constraint.MaxConstraintType).Return(max)
 				return m
 			},
-			expectedErr: `Value of constraint "min" should be less than value of "max" constraint`,
+			expectedErr: `The value of the rule "min" should be less than the value of the rule "max"`,
 		},
 		"min > max": {
 			node: func(t *testing.T) ischema.Node {
@@ -155,7 +155,7 @@ func TestSchemaCompiler_checkMinAndMax(t *testing.T) {
 				m.On("Constraint", constraint.MaxConstraintType).Return(constraint.NewMax(bytes.NewBytes("1")))
 				return m
 			},
-			expectedErr: `Value of constraint "min" should be less or equal to value of "max" constraint`,
+			expectedErr: `The value of the rule "min" should be less or equal to the value of the rule "max"`,
 		},
 		"min (exclusive) > max": {
 			node: func(t *testing.T) ischema.Node {
@@ -166,7 +166,7 @@ func TestSchemaCompiler_checkMinAndMax(t *testing.T) {
 				m.On("Constraint", constraint.MaxConstraintType).Return(constraint.NewMax(bytes.NewBytes("1")))
 				return m
 			},
-			expectedErr: `Value of constraint "min" should be less than value of "max" constraint`,
+			expectedErr: `The value of the rule "min" should be less than the value of the rule "max"`,
 		},
 		"min > max (exclusive)": {
 			node: func(t *testing.T) ischema.Node {
@@ -177,7 +177,7 @@ func TestSchemaCompiler_checkMinAndMax(t *testing.T) {
 				m.On("Constraint", constraint.MaxConstraintType).Return(max)
 				return m
 			},
-			expectedErr: `Value of constraint "min" should be less than value of "max" constraint`,
+			expectedErr: `The value of the rule "min" should be less than the value of the rule "max"`,
 		},
 		"min (exclusive) > max (exclusive)": {
 			node: func(t *testing.T) ischema.Node {
@@ -190,7 +190,7 @@ func TestSchemaCompiler_checkMinAndMax(t *testing.T) {
 				m.On("Constraint", constraint.MaxConstraintType).Return(max)
 				return m
 			},
-			expectedErr: `Value of constraint "min" should be less than value of "max" constraint`,
+			expectedErr: `The value of the rule "min" should be less than the value of the rule "max"`,
 		},
 	}
 
@@ -258,7 +258,7 @@ func TestSchemaCompiler_checkMinLengthAndMaxLength(t *testing.T) {
 				m.On("Constraint", constraint.MaxLengthConstraintType).Return(constraint.NewMaxLength(bytes.NewBytes("1")))
 				return m
 			},
-			expectedErr: `Value of constraint "minLength" should be less or equal to value of "maxLength" constraint`,
+			expectedErr: `The value of the rule "minLength" should be less or equal to the value of the rule "maxLength"`,
 		},
 	}
 
@@ -326,7 +326,7 @@ func TestSchemaCompiler_checkMinItemsAndMaxItems(t *testing.T) {
 				m.On("Constraint", constraint.MaxItemsConstraintType).Return(constraint.NewMaxItems(bytes.NewBytes("1")))
 				return m
 			},
-			expectedErr: `Value of constraint "minItems" should be less or equal to value of "maxItems" constraint`,
+			expectedErr: `The value of the rule "minItems" should be less or equal to the value of the rule "maxItems"`,
 		},
 	}
 
@@ -371,7 +371,7 @@ func TestSchemaCompiler_precisionConstraint(t *testing.T) {
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		assert.PanicsWithError(t, `The "precision" constraint can't be used for the "foo" type`, func() {
+		assert.PanicsWithError(t, `The rule "precision" is not compatible with the "foo" type. Learn more about the rules and types compatibility here: https://jsight.io/docs/jsight-schema-0-3#appendix-1-a-table-of-all-built-in-types-and-rules`, func() {
 			n := mocks.NewNode(t)
 			n.On("Constraint", constraint.PrecisionConstraintType).Return(constraint.Precision{})
 			n.On("Constraint", constraint.TypeConstraintType).Return(constraint.NewType(

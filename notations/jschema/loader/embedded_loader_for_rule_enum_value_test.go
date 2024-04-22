@@ -606,8 +606,8 @@ func TestEnumValueLoader_ruleName(t *testing.T) {
 		}
 
 		cc := map[string]map[string]schema.Rule{
-			`Enum rule "ruleName" not found`: {},
-			`Rule "ruleName" not an Enum`: {
+			`Enum "ruleName" is not found`: {},
+			`Rule "ruleName" is not an Enum`: {
 				"ruleName": mocks.NewRule(t),
 			},
 			`Invalid enum values "ruleName": An array was expected as a value for the "enum"`: {
