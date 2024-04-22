@@ -1,3 +1,4 @@
+//nolint:lll
 package errs
 
 import (
@@ -278,7 +279,7 @@ var errorFormat = map[Code]string{
 	ErrArrayWasExpectedInOrRule:       `The "or" rule must contain an array. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or`,
 	ErrEmptyArrayInOrRule:             `The empty array in the "or" rule! The "or" rule must contain a non-empty array. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or`,
 	ErrOneElementInArrayInOrRule:      `The rule "or" must have at least two elements in the array. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or`,
-	ErrIncorrectArrayItemTypeInOrRule: `Incorect value in the "or" rule. The "or" array must contain strings (names of types) or objects with other rules. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or`,
+	ErrIncorrectArrayItemTypeInOrRule: `Incorrect value in the "or" rule. The "or" array must contain strings (names of types) or objects with other rules. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or`,
 	ErrEmptyRuleSet:                   `The object with the rules is empty! The "or" array must contain strings (names of types) or non-empty objects with other rules. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or`,
 	ErrTypIsRequiredInsideOr:          `The "type" rule is missed inside the "or" rule. Specify the "type" rule inside. Learn more about the "or" rule here: https://jsight.io/docs/jsight-schema-0-3#rule-or`,
 
