@@ -36,16 +36,20 @@ func TestBytes_Sub(t *testing.T) {
 func TestBytes_Unquote(t *testing.T) {
 	cc := map[string]string{
 		// trimmed
-		`""`:    "",
-		`"123"`: `123`,
-		`"\\n"`: `\n`,
+		`""`:               ``,
+		`"123"`:            `123`,
+		`"abc"`:            `abc`,
+		`"\\n"`:            `\n`,
+		`"aa \" bb \" cc"`: `aa " bb " cc`,
+		`"aa \\ bb \\ cc"`: `aa \ bb \ cc`,
 
 		// no trimmed
-		"":     "",
-		`"`:    `"`,
-		"123":  "123",
-		`"123`: `"123`,
-		`123"`: `123"`,
+		``:               ``,
+		`"`:              `"`,
+		`123`:            `123`,
+		`"123`:           `"123`,
+		`123"`:           `123"`,
+		`aa \" bb \" cc`: `aa \" bb \" cc`,
 
 		`"\"\u0061bc\""`: `"abc"`,
 	}
