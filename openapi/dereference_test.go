@@ -23,9 +23,14 @@ var obj = testUserType{
 	`{ "key": "value" }`,
 }
 
+var obj2 = testUserType{
+	"@obj2",
+	`{ "key": "value" }`,
+}
+
 var refToObj = testUserType{
 	"@refToObj",
-	`@obj`,
+	`@obj2`,
 }
 
 var arr = testUserType{
@@ -52,7 +57,7 @@ func Test_Dereference(t *testing.T) {
 		},
 		{
 			`@refToObj`,
-			[]testUserType{refToObj, obj},
+			[]testUserType{refToObj, obj2},
 			[]SchemaInfoType{SchemaInfoTypeObject},
 		},
 		{
@@ -71,71 +76,89 @@ func Test_Dereference(t *testing.T) {
 			[]SchemaInfoType{SchemaInfoTypeScalar},
 		},
 		{
-			`123 // {type: "any"}`,
+			`1 // {type: "any"}`,
 			[]testUserType{objOrArr, obj, arr},
 			[]SchemaInfoType{SchemaInfoTypeAny},
 		},
 		{
-			`123 // { or: [ {type: "integer"}, {type: "string"} ] }`,
+			`2 // { or: [ {type: "integer"}, {type: "string"} ] }`,
 			[]testUserType{},
 			[]SchemaInfoType{SchemaInfoTypeScalar, SchemaInfoTypeScalar},
 		},
 		// TODO SERV-355
 		// ERROR (code 906): Type is required inside the "or" rule
 		//{
-		//	`123 // {or: [ {minLength: 1}, {type: "integer"} ]}`,
+		//	`3 // {or: [ {minLength: 1}, {type: "integer"} ]}`,
 		//	[]testUserType{},
 		//	[]SchemaInfoType{SchemaInfoTypeScalar, SchemaInfoTypeScalar},
 		//},
 		//{
-		//	`123 // {or: [ {minItems: 0}, {type: "integer"} ]}`,
+		//	`4 // {or: [ {minItems: 0}, {type: "integer"} ]}`,
 		//	[]testUserType{},
 		//	[]SchemaInfoType{SchemaInfoTypeArray, SchemaInfoTypeScalar},
 		//},
 		//{
-		//	`123 // {or: [ {additionalProperties: true}, {type: "integer"} ]}`,
+		//	`5 // {or: [ {additionalProperties: true}, {type: "integer"} ]}`,
 		//	[]testUserType{},
 		//	[]SchemaInfoType{SchemaInfoTypeObject, SchemaInfoTypeScalar},
 		//},
 		{
-			`123 // { or: [ "integer", "string" ] }`,
+			`6 // { or: [ "integer", "string" ] }`,
 			[]testUserType{},
 			[]SchemaInfoType{SchemaInfoTypeScalar, SchemaInfoTypeScalar},
 		},
 		{
-			`123 // { or: [ "uuid", "integer" ] }`,
+			`7 // { or: [ "uuid", "integer" ] }`,
 			[]testUserType{},
 			[]SchemaInfoType{SchemaInfoTypeScalar, SchemaInfoTypeScalar},
 		},
 		{
-			`123 // { or: [ {type: "email"}, "integer"] }`,
+			`8 // { or: [ {type: "email"}, "integer"] }`,
 			[]testUserType{},
 			[]SchemaInfoType{SchemaInfoTypeScalar, SchemaInfoTypeScalar},
 		},
 		{
-			`123 // { or: [ {type: "null"}, "integer" ] }`,
+			`9 // { or: [ {type: "null"}, "integer" ] }`,
 			[]testUserType{},
 			[]SchemaInfoType{SchemaInfoTypeScalar, SchemaInfoTypeScalar},
 		},
 		{
-			`123 // { or: [ "any", "integer" ] }`,
+			`10 // { or: [ "any", "integer" ] }`,
 			[]testUserType{},
 			[]SchemaInfoType{SchemaInfoTypeAny, SchemaInfoTypeScalar},
 		},
 		{
-			`123 // { or: [ "@obj", "@arr", "@refToObj", "integer" ] }`,
-			[]testUserType{obj, arr, refToObj},
+			`11 // { or: [ "@obj", "@arr", "@refToObj", "integer" ] }`,
+			[]testUserType{obj, obj2, arr, refToObj},
 			[]SchemaInfoType{SchemaInfoTypeObject, SchemaInfoTypeArray, SchemaInfoTypeObject, SchemaInfoTypeScalar},
 		},
 		{
-			`123 // { or: [ {type: "@obj"}, {type: "@arr"}, {type: "@refToObj"}, "integer" ] }`,
-			[]testUserType{obj, arr, refToObj},
+			`12 // { or: [ {type: "@obj"}, {type: "@arr"}, {type: "@refToObj"}, "integer" ] }`,
+			[]testUserType{obj, obj2, arr, refToObj},
 			[]SchemaInfoType{SchemaInfoTypeObject, SchemaInfoTypeArray, SchemaInfoTypeObject, SchemaInfoTypeScalar},
 		},
 		{
-			`123 // { or: [ {type: "integer", min: 0}, "string", "@obj", {type: "@arr"}, "@refToObj" ] }`,
-			[]testUserType{obj, arr, refToObj},
+			`13 // { or: [ {type: "integer", min: 0}, "string", "@obj", {type: "@arr"}, "@refToObj" ] }`,
+			[]testUserType{obj, obj2, arr, refToObj},
 			[]SchemaInfoType{SchemaInfoTypeScalar, SchemaInfoTypeScalar, SchemaInfoTypeObject, SchemaInfoTypeArray, SchemaInfoTypeObject},
+		},
+		{
+			`@query1`,
+			[]testUserType{
+				{
+					"@query1",
+					`@query1 | @query2`,
+				},
+				{
+					"@query2",
+					`@query2 | @query3`,
+				},
+				{
+					"@query3",
+					`{}`,
+				},
+			},
+			[]SchemaInfoType{SchemaInfoTypeObject},
 		},
 	}
 	for _, data := range tests {
