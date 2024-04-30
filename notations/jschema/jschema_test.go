@@ -601,6 +601,15 @@ func TestSchema_Check(t *testing.T) {
 }`,
 				},
 			},
+			`{
+	"nullable": @bar
+}`: {
+				types: map[string]string{
+					"@bar": `{
+	"bar": @main // {nullable: true}
+}`,
+				},
+			},
 
 			`{
 	"foo": [@main]

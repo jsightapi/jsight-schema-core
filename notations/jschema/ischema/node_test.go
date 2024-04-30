@@ -98,3 +98,66 @@ func TestIsOptionalNode(t *testing.T) {
 		})
 	})
 }
+
+func TestIsNullableNode(t *testing.T) {
+	t.Run("positive", func(t *testing.T) {
+		cc := map[string]struct {
+			given    func(*testing.T) Node
+			expected bool
+		}{
+			"node without nullable constraints": {
+				func(t *testing.T) Node {
+					n := NewMockNode(t)
+					n.
+						On("Constraint", constraint.NullableConstraintType).
+						Return(nil)
+					return n
+				},
+				false,
+			},
+			"not a bool keeper": {
+				func(t *testing.T) Node {
+					n := NewMockNode(t)
+					n.
+						On("Constraint", constraint.NullableConstraintType).
+						Return(constraint.Max{})
+					return n
+				},
+				false,
+			},
+			"false": {
+				func(t *testing.T) Node {
+					n := NewMockNode(t)
+					n.
+						On("Constraint", constraint.NullableConstraintType).
+						Return(constraint.NewNullable(bytes.NewBytes("false")))
+					return n
+				},
+				false,
+			},
+			"true": {
+				func(t *testing.T) Node {
+					n := NewMockNode(t)
+					n.
+						On("Constraint", constraint.NullableConstraintType).
+						Return(constraint.NewNullable(bytes.NewBytes("true")))
+					return n
+				},
+				true,
+			},
+		}
+
+		for n, c := range cc {
+			t.Run(n, func(t *testing.T) {
+				actual := IsNullableNode(c.given(t))
+				assert.Equal(t, c.expected, actual)
+			})
+		}
+	})
+
+	t.Run("negative", func(t *testing.T) {
+		assert.Panics(t, func() {
+			IsNullableNode(nil)
+		})
+	})
+}
